@@ -1,0 +1,93 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<div class="page">
+<!--
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+-->
+    <main>
+        <!--
+            <div class="top-row px-4">
+                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            </div>
+
+            <article class="content px-4">
+            </article>
+    -->
+        <div class="top-row px-4">
+            <p>Pokemon SV Damage Calculator</p>
+        </div>
+
+        <MudLayout>
+            <MudMainContent>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                            <MudForm>
+                                <MudRadioGroup @bind-SelectedOption="@SelectedOption1">
+                                    <MudRadio Option="@("Radio 1")">シングル</MudRadio>
+                                    <MudRadio Option="@("Radio 2")">ダブル</MudRadio>
+                                </MudRadioGroup>
+                            </MudForm>
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                            <MudForm>
+                                <MudRadioGroup @bind-SelectedOption="@SelectedOption2">
+                                    <MudRadio Option="@("Radio 3")">‐</MudRadio>
+                                    <MudRadio Option="@("Radio 4")">晴れ</MudRadio>
+                                    <MudRadio Option="@("Radio 5")">雨</MudRadio>
+                                    <MudRadio Option="@("Radio 6")">砂嵐</MudRadio>
+                                    <MudRadio Option="@("Radio 7")">雪</MudRadio>
+                                </MudRadioGroup>
+                            </MudForm>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                            <MudForm>
+                                <MudRadioGroup @bind-SelectedOption="@SelectedOption3">
+                                    <MudRadio Option="@("Radio 8")">‐</MudRadio>
+                                    <MudRadio Option="@("Radio 9")">エレキフィールド</MudRadio>
+                                    <MudRadio Option="@("Radio 10")">グラスフィールド</MudRadio>
+                                    <MudRadio Option="@("Radio 11")">サイコフィールド</MudRadio>
+                                    <MudRadio Option="@("Radio 12")">ミストフィールド</MudRadio>
+                                </MudRadioGroup>
+                            </MudForm>
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="4">
+                        <MudPaper>xs=4</MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper>xs=4</MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper>xs=4</MudPaper>
+                    </MudItem>
+                </MudGrid>
+                @Body
+            </MudMainContent>
+        </MudLayout>
+    </main>
+</div>
+
+@code {
+    public string SelectedOption1 { get; set; }
+    public string SelectedOption2 { get; set; }
+    public string SelectedOption3 { get; set; }
+    private void Reset()
+    {
+        SelectedOption1 = null;
+        SelectedOption2 = null;
+        SelectedOption3 = null;
+    }
+}
