@@ -1,0 +1,56 @@
+﻿<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<h3>@Title</h3>
+    <main>
+        <MudLayout>
+            <MudMainContent>
+                <MudGrid Spacing="@spacing" Justify="Justify.Center">
+                <MudItem xs="4">
+                    <MudTextField @bind-Value="TextValue1" Label="ポケモン" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+                </MudItem>
+                <MudItem xs="5">
+                    <MudSelect T="string" Label="性格" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem Value="@("がんばりや")" />
+                        <MudSelectItem Value="@("さみしがり A+B-")" />
+                        <MudSelectItem Value="@("いじっぱり A+C-")" />
+                        <MudSelectItem Value="@("やんちゃ A+D-")" />
+                        <MudSelectItem Value="@("ゆうかん A+S-")" />
+                        <MudSelectItem Value="@("ずぶとい B+A-")" />
+                        <MudSelectItem Value="@("わんぱく B+C-")" />
+                        <MudSelectItem Value="@("のうてんき B+D-")" />
+                        <MudSelectItem Value="@("のんき B+S-")" />
+                        <MudSelectItem Value="@("ひかえめ C+A-")" />
+                        <MudSelectItem Value="@("おっとり C+B-")" />
+                        <MudSelectItem Value="@("うっかりや C+D-")" />
+                        <MudSelectItem Value="@("れいせい C+S-")" />
+                        <MudSelectItem Value="@("おだやか D+A-")" />
+                        <MudSelectItem Value="@("おとなしい D+B-")" />
+                        <MudSelectItem Value="@("しんちょう D+C-")" />
+                        <MudSelectItem Value="@("なまいき D+S-")" />
+                        <MudSelectItem Value="@("おくびょう S+A-")" />
+                        <MudSelectItem Value="@("せっかち S+B-")" />
+                        <MudSelectItem Value="@("ようき S+C-")" />
+                        <MudSelectItem Value="@("むじゃき S+D-")" />
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="1">
+                    <MudSpacer></MudSpacer>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudNumericField @bind-Value="Level" Label="レベル" Variant="Variant.Outlined" Min="1" Max="100"/>
+                </MudItem>
+            </MudGrid>
+            </MudMainContent>
+        </MudLayout>
+    </main>
+
+@code {
+    public int spacing { get; set; } = 2;
+
+    public string TextValue1 { get; set; }
+    public int Level { get; set; } = 50;
+
+    [Parameter] public string Title { get; set; }
+}

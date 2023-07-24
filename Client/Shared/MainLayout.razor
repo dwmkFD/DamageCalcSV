@@ -25,11 +25,11 @@
 
         <MudLayout>
             <MudMainContent>
-                <MudGrid>
+                <MudGrid Spacing="@spacing" Justify="Justify.Center">
                     <MudItem xs="12">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
-                                <MudRadioGroup @bind-SelectedOption="@SelectedOption1">
+                                <MudRadioGroup @bind-SelectedOption="@SelectedBattleStyle">
                                     <MudRadio Option="@("Radio 1")">シングル</MudRadio>
                                     <MudRadio Option="@("Radio 2")">ダブル</MudRadio>
                                 </MudRadioGroup>
@@ -38,9 +38,9 @@
                     </MudItem>
 
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
-                                <MudRadioGroup @bind-SelectedOption="@SelectedOption2">
+                                <MudRadioGroup @bind-SelectedOption="@SelectedWeatherSettings">
                                     <MudRadio Option="@("Radio 3")">‐</MudRadio>
                                     <MudRadio Option="@("Radio 4")">晴れ</MudRadio>
                                     <MudRadio Option="@("Radio 5")">雨</MudRadio>
@@ -51,9 +51,9 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
-                                <MudRadioGroup @bind-SelectedOption="@SelectedOption3">
+                                <MudRadioGroup @bind-SelectedOption="@SelectedFieldSettings">
                                     <MudRadio Option="@("Radio 8")">‐</MudRadio>
                                     <MudRadio Option="@("Radio 9")">エレキフィールド</MudRadio>
                                     <MudRadio Option="@("Radio 10")">グラスフィールド</MudRadio>
@@ -64,14 +64,62 @@
                         </MudPaper>
                     </MudItem>
 
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
+                            <MudForm>
+                                <MudCheckBox @bind-Checked="@Gravity" Label="じゅうりょく"></MudCheckBox>
+                            </MudForm>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
+                            <MudForm>
+                                <MudCheckBox @bind-Checked="@WonderRoom" Label="ワンダールーム"></MudCheckBox>
+                            </MudForm>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
+                            <MudForm>
+                                <MudCheckBox @bind-Checked="@PlasmaShower" Label="プラズマシャワー"></MudCheckBox>
+                            </MudForm>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
+                            <MudForm>
+                                <MudCheckBox @bind-Checked="@FairyAura" Label="フェアリーオーラ"></MudCheckBox>
+                            </MudForm>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
+                            <MudForm>
+                                <MudCheckBox @bind-Checked="@DarkAura" Label="ダークオーラ"></MudCheckBox>
+                            </MudForm>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
+                            <MudForm>
+                                <MudCheckBox @bind-Checked="@AuraBreak" Label="オーラブレイク"></MudCheckBox>
+                            </MudForm>
+                        </MudPaper>
+                    </MudItem>
+
                     <MudItem xs="4">
-                        <MudPaper>xs=4</MudPaper>
+                        <PokemonStatus Title="ポケモン1"></PokemonStatus>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudPaper>xs=4</MudPaper>
+                        <MudPaper>ダメージ計算一覧1</MudPaper>
+                        <SurveyPrompt></SurveyPrompt>
                     </MudItem>
                     <MudItem xs="4">
-                        <MudPaper>xs=4</MudPaper>
+                        <PokemonStatus Title="ポケモン2"></PokemonStatus>
+                    </MudItem>
+
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">ダメージ計算一覧2</MudPaper>
                     </MudItem>
                 </MudGrid>
                 @Body
@@ -81,13 +129,22 @@
 </div>
 
 @code {
-    public string SelectedOption1 { get; set; }
-    public string SelectedOption2 { get; set; }
-    public string SelectedOption3 { get; set; }
+    public int spacing { get; set; } = 2;
+
+    public string SelectedBattleStyle { get; set; }
+    public string SelectedWeatherSettings { get; set; }
+    public string SelectedFieldSettings { get; set; }
     private void Reset()
     {
-        SelectedOption1 = null;
-        SelectedOption2 = null;
-        SelectedOption3 = null;
+        SelectedBattleStyle = null;
+        SelectedWeatherSettings = null;
+        SelectedFieldSettings = null;
     }
+
+    public bool Gravity { get; set; } = false;
+    public bool WonderRoom { get; set; } = false;
+    public bool PlasmaShower { get; set; } = false;
+    public bool FairyAura { get; set; } = false;
+    public bool DarkAura { get; set; } = false;
+    public bool AuraBreak { get; set; } = false;
 }
