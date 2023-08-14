@@ -1,0 +1,15 @@
+﻿@inject ILogger<UnexpectedException> Logger
+
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    public void show( Exception e )
+    {
+        System.Diagnostics.Debug.WriteLine(e.Message + "\r\n" + e.StackTrace);
+        Logger.LogError( e.Message + "\r\n" + e.StackTrace );
+    }
+}

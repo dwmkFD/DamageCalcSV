@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject ILogger<MainLayout> Logger_
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -22,89 +23,102 @@
         <div class="top-row px-4">
             <p>Pokemon SV Damage Calculator</p>
         </div>
-
         <MudLayout>
             <MudMainContent>
                 <MudGrid Spacing="@spacing" Justify="Justify.Center">
-                    <MudItem xs="12">
+                    <MudItem xs="4" />
+                    <MudItem xs="4">
                         <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
-                            <MudForm>
-                                <MudRadioGroup @bind-SelectedOption="@SelectedBattleStyle">
-                                    <MudRadio Option="@("Radio 1")">シングル</MudRadio>
-                                    <MudRadio Option="@("Radio 2")">ダブル</MudRadio>
-                                </MudRadioGroup>
-                            </MudForm>
+                    <MudForm>
+                            <MudRadioGroup @bind-SelectedOption="@SelectedBattleStyle">
+                                <MudRadio Option="@("0")">シングル</MudRadio>
+                                <MudRadio Option="@("1")">ダブル</MudRadio>
+                            </MudRadioGroup>
+                        </MudForm>
                         </MudPaper>
                     </MudItem>
+                    <MudItem xs="4" />
 
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
                                 <MudRadioGroup @bind-SelectedOption="@SelectedWeatherSettings">
-                                    <MudRadio Option="@("Radio 3")">‐</MudRadio>
-                                    <MudRadio Option="@("Radio 4")">晴れ</MudRadio>
-                                    <MudRadio Option="@("Radio 5")">雨</MudRadio>
-                                    <MudRadio Option="@("Radio 6")">砂嵐</MudRadio>
-                                    <MudRadio Option="@("Radio 7")">雪</MudRadio>
+                                    <MudGrid Spacing="@spacing" Justify="Justify.Center">
+                                    <MudItem xs="1" />
+                                    <MudItem xs="2">
+                                        <MudRadio Option="@("0")" Size="Size.Small">‐</MudRadio>
+                                    </MudItem>
+                                    <MudItem xs="2">
+                                    <MudRadio Option="@("1")" Size="Size.Small">晴れ</MudRadio>
+                                    </MudItem>
+                                    <MudItem xs="2">
+                                    <MudRadio Option="@("2")" Size="Size.Small">雨</MudRadio>
+                                    </MudItem>
+                                    <MudItem xs="2">
+                                    <MudRadio Option="@("3")" Size="Size.Small">砂嵐</MudRadio>
+                                    </MudItem>
+                                    <MudItem xs="2">
+                                    <MudRadio Option="@("4")" Size="Size.Small">雪</MudRadio>
+                                    </MudItem>
+                                    <MudItem xs="1" />
+                                    </MudGrid>
                                 </MudRadioGroup>
                             </MudForm>
-                        </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
                                 <MudRadioGroup @bind-SelectedOption="@SelectedFieldSettings">
-                                    <MudRadio Option="@("Radio 8")">‐</MudRadio>
-                                    <MudRadio Option="@("Radio 9")">エレキフィールド</MudRadio>
-                                    <MudRadio Option="@("Radio 10")">グラスフィールド</MudRadio>
-                                    <MudRadio Option="@("Radio 11")">サイコフィールド</MudRadio>
-                                    <MudRadio Option="@("Radio 12")">ミストフィールド</MudRadio>
-                                </MudRadioGroup>
+                                    <MudGrid Spacing="@spacing" Justify="Justify.Center">
+                                    <MudItem xs="1" />
+                                    <MudItem xs="2">
+                                    <MudRadio Option="@("0")" Size="Size.Small">‐</MudRadio>
+                                    </MudItem>
+                                    <MudItem xs="2">
+                                        <MudRadio Option="@("1")" Size="Size.Small">エレキ</MudRadio>
+                                    </MudItem>
+                                    <MudItem xs="2">
+                                        <MudRadio Option="@("2")" Size="Size.Small">グラス</MudRadio>
+                                    </MudItem>
+                                    <MudItem xs="2">
+                                        <MudRadio Option="@("3")" Size="Size.Small">サイコ</MudRadio>
+                                    </MudItem>
+                                    <MudItem xs="2">
+                                        <MudRadio Option="@("4")" Size="Size.Small">ミスト</MudRadio>
+                                    </MudItem>
+                                    <MudItem xs="1" />
+                                </MudGrid>
+                            </MudRadioGroup>
                             </MudForm>
-                        </MudPaper>
                     </MudItem>
 
                     <MudItem xs="2">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
-                                <MudCheckBox @bind-Checked="@Gravity" Label="じゅうりょく"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@Gravity" Size="Size.Small" Label="じゅうりょく" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
-                        </MudPaper>
                     </MudItem>
                     <MudItem xs="2">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
-                                <MudCheckBox @bind-Checked="@WonderRoom" Label="ワンダールーム"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@WonderRoom" Size="Size.Small" Label="ワンダールーム" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
-                        </MudPaper>
                     </MudItem>
                     <MudItem xs="2">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
-                                <MudCheckBox @bind-Checked="@PlasmaShower" Label="プラズマシャワー"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@PlasmaShower" Size="Size.Small" Label="プラズマシャワー" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
-                        </MudPaper>
                     </MudItem>
                     <MudItem xs="2">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
-                                <MudCheckBox @bind-Checked="@FairyAura" Label="フェアリーオーラ"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@FairyAura" Size="Size.Small" Label="フェアリーオーラ" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
-                        </MudPaper>
                     </MudItem>
                     <MudItem xs="2">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
-                                <MudCheckBox @bind-Checked="@DarkAura" Label="ダークオーラ"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@DarkAura" Size="Size.Small" Label="ダークオーラ" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
-                        </MudPaper>
                     </MudItem>
                     <MudItem xs="2">
-                        <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                             <MudForm>
-                                <MudCheckBox @bind-Checked="@AuraBreak" Label="オーラブレイク"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@AuraBreak" Size="Size.Small" Label="オーラブレイク" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
-                        </MudPaper>
                     </MudItem>
 
                     <MudItem xs="4">
@@ -130,11 +144,12 @@
 </div>
 
 @code {
+    [CascadingParameter] private UnexpectedException UnexpectedException_ { get; set; }
     public int spacing { get; set; } = 2;
 
-    public string SelectedBattleStyle { get; set; }
-    public string SelectedWeatherSettings { get; set; }
-    public string SelectedFieldSettings { get; set; }
+    public string? SelectedBattleStyle { get; set; }
+    public string? SelectedWeatherSettings { get; set; }
+    public string? SelectedFieldSettings { get; set; }
     private void Reset()
     {
         SelectedBattleStyle = null;
