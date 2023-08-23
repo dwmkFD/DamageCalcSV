@@ -30,9 +30,9 @@
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                     <MudForm>
-                            <MudRadioGroup @bind-SelectedOption="@SelectedBattleStyle">
-                                <MudRadio Option="@("0")">シングル</MudRadio>
-                                <MudRadio Option="@("1")">ダブル</MudRadio>
+                                <MudRadioGroup @bind-SelectedOption="@DamageCalcSV.Shared.Models.DamageCalc.SelectedBattleStyle">
+                                <MudRadio Option="0">シングル</MudRadio>
+                                <MudRadio Option="1">ダブル</MudRadio>
                             </MudRadioGroup>
                         </MudForm>
                         </MudPaper>
@@ -41,23 +41,23 @@
 
                     <MudItem xs="6">
                             <MudForm>
-                                <MudRadioGroup @bind-SelectedOption="@SelectedWeatherSettings">
+                            <MudRadioGroup @bind-SelectedOption="@DamageCalcSV.Shared.Models.DamageCalc.SelectedWeatherSettings">
                                     <MudGrid Spacing="@spacing" Justify="Justify.Center">
                                     <MudItem xs="1" />
                                     <MudItem xs="2">
-                                        <MudRadio Option="@("0")" Size="Size.Small">‐</MudRadio>
+                                        <MudRadio Option="0" Size="Size.Small">‐</MudRadio>
                                     </MudItem>
                                     <MudItem xs="2">
-                                    <MudRadio Option="@("1")" Size="Size.Small">晴れ</MudRadio>
+                                    <MudRadio Option="1" Size="Size.Small">晴れ</MudRadio>
                                     </MudItem>
                                     <MudItem xs="2">
-                                    <MudRadio Option="@("2")" Size="Size.Small">雨</MudRadio>
+                                    <MudRadio Option="2" Size="Size.Small">雨</MudRadio>
                                     </MudItem>
                                     <MudItem xs="2">
-                                    <MudRadio Option="@("3")" Size="Size.Small">砂嵐</MudRadio>
+                                    <MudRadio Option="3" Size="Size.Small">砂嵐</MudRadio>
                                     </MudItem>
                                     <MudItem xs="2">
-                                    <MudRadio Option="@("4")" Size="Size.Small">雪</MudRadio>
+                                    <MudRadio Option="4" Size="Size.Small">雪</MudRadio>
                                     </MudItem>
                                     <MudItem xs="1" />
                                     </MudGrid>
@@ -66,23 +66,23 @@
                     </MudItem>
                     <MudItem xs="6">
                             <MudForm>
-                                <MudRadioGroup @bind-SelectedOption="@SelectedFieldSettings">
+                            <MudRadioGroup @bind-SelectedOption="@DamageCalcSV.Shared.Models.DamageCalc.SelectedFieldSettings">
                                     <MudGrid Spacing="@spacing" Justify="Justify.Center">
                                     <MudItem xs="1" />
                                     <MudItem xs="2">
-                                    <MudRadio Option="@("0")" Size="Size.Small">‐</MudRadio>
+                                    <MudRadio Option="0" Size="Size.Small">‐</MudRadio>
                                     </MudItem>
                                     <MudItem xs="2">
-                                        <MudRadio Option="@("1")" Size="Size.Small">エレキ</MudRadio>
+                                        <MudRadio Option="1" Size="Size.Small">エレキ</MudRadio>
                                     </MudItem>
                                     <MudItem xs="2">
-                                        <MudRadio Option="@("2")" Size="Size.Small">グラス</MudRadio>
+                                        <MudRadio Option="2" Size="Size.Small">グラス</MudRadio>
                                     </MudItem>
                                     <MudItem xs="2">
-                                        <MudRadio Option="@("3")" Size="Size.Small">サイコ</MudRadio>
+                                        <MudRadio Option="3" Size="Size.Small">サイコ</MudRadio>
                                     </MudItem>
                                     <MudItem xs="2">
-                                        <MudRadio Option="@("4")" Size="Size.Small">ミスト</MudRadio>
+                                        <MudRadio Option="4" Size="Size.Small">ミスト</MudRadio>
                                     </MudItem>
                                     <MudItem xs="1" />
                                 </MudGrid>
@@ -92,48 +92,48 @@
 
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@Gravity" Size="Size.Small" Label="じゅうりょく" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.Gravity" Size="Size.Small" Label="じゅうりょく" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
                     </MudItem>
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@WonderRoom" Size="Size.Small" Label="ワンダールーム" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.WonderRoom" Size="Size.Small" Label="ワンダールーム" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
                     </MudItem>
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@PlasmaShower" Size="Size.Small" Label="プラズマシャワー" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.PlasmaShower" Size="Size.Small" Label="プラズマシャワー" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
                     </MudItem>
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@FairyAura" Size="Size.Small" Label="フェアリーオーラ" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.FairyAura" Size="Size.Small" Label="フェアリーオーラ" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
                     </MudItem>
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@DarkAura" Size="Size.Small" Label="ダークオーラ" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.DarkAura" Size="Size.Small" Label="ダークオーラ" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
                     </MudItem>
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@AuraBreak" Size="Size.Small" Label="オーラブレイク" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.AuraBreak" Size="Size.Small" Label="オーラブレイク" Margin="Margin.Dense"></MudCheckBox>
                             </MudForm>
                     </MudItem>
 
                     <MudItem xs="4">
-                        <PokemonStatus Title="ポケモン1"></PokemonStatus>
+                        <PokemonStatus Title="ポケモン1" OnStatusChangeEventCallback="@((x) => CalcDamage( x, 1 ))"></PokemonStatus>
                     </MudItem>
                     <MudItem xs="4">
-                        <DamageResult Title="ダメージ計算一覧1"></DamageResult>
+                        <DamageResult Title="ダメージ計算一覧1" atk="pokemon1" def="pokemon2" damage_list="result1" damage_range="result2" damage_exp="result3" damage_min_max="result4"></DamageResult>
                     </MudItem>
                     <MudItem xs="4">
-                        <PokemonStatus Title="ポケモン2"></PokemonStatus>
+                        <PokemonStatus Title="ポケモン2" OnStatusChangeEventCallback="@((x) => CalcDamage( x, 2 ))"></PokemonStatus>
                     </MudItem>
 
                     <MudItem xs="4" />
                     <MudItem xs="4">
-                        <DamageResult Title="ダメージ計算一覧2"></DamageResult>
+                        <DamageResult Title="ダメージ計算一覧2" atk="pokemon2" def="pokemon1" damage_list="result5" damage_range="result6" damage_exp="result7" damage_min_max="result8"></DamageResult>
                     </MudItem>
                     <MudItem xs="4" />
                 </MudGrid>
@@ -147,20 +147,58 @@
     [CascadingParameter] private UnexpectedException UnexpectedException_ { get; set; }
     public int spacing { get; set; } = 2;
 
-    public string? SelectedBattleStyle { get; set; }
-    public string? SelectedWeatherSettings { get; set; }
-    public string? SelectedFieldSettings { get; set; }
-    private void Reset()
+    private DamageCalcSV.Shared.Models.PokemonDataReal? pokemon1 = null, pokemon2 = null;
+    private List<KeyValuePair<string, List<int>>>? result1 = null;
+    private Dictionary<string, string>? result2 = null;
+    private Dictionary<string, string>? result3 = null;
+    private Dictionary<string, Tuple<int, int>>? result4 = null;
+    private List<KeyValuePair<string, List<int>>>? result5 = null;
+    private Dictionary<string, string>? result6 = null;
+    private Dictionary<string, string>? result7 = null;
+    private Dictionary<string, Tuple<int, int>>? result8 = null;
+    private DamageCalcSV.Shared.Models.DamageCalc Damage = new DamageCalcSV.Shared.Models.DamageCalc();
+
+    private Tuple<List<KeyValuePair<string, List<int>>>, Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, Tuple<int, int>>> CalcDamageMain(DamageCalcSV.Shared.Models.PokemonDataReal atk, DamageCalcSV.Shared.Models.PokemonDataReal def)
     {
-        SelectedBattleStyle = null;
-        SelectedWeatherSettings = null;
-        SelectedFieldSettings = null;
+        var tmp_result = Damage.calc(atk, def);
+        List<KeyValuePair<string, int>> tmp = new List<KeyValuePair<string, int>>();
+        List<KeyValuePair<string, List<int>>> res1 = new List<KeyValuePair<string, List<int>>>();
+        Dictionary<string, string> res2 = new Dictionary<string, string>();
+        Dictionary<string, string> res3 = new Dictionary<string, string>();
+        Dictionary<string, Tuple<int, int>> res4 = new Dictionary<string, Tuple<int, int>>();
+
+        // 与えるダメージの期待値でソートする
+        foreach( var t in tmp_result )
+        {
+            tmp.Add(KeyValuePair.Create(t.Key, t.Value.Last()));
+        }
+        tmp.Sort( ( a, b ) => b.Value - a.Value );
+        foreach( var t in tmp )
+        {
+            res1.Add(KeyValuePair.Create(t.Key, tmp_result[t.Key]));
+        }
+
+        foreach( var r in res1 )
+        {
+            int min = Math.Max(def.HP - r.Value[0], 0);
+            int max = Math.Max(def.HP - r.Value[15], 0);
+            res2[r.Key] = (((double)r.Value[0] / def.HP) * 100.0).ToString("F1") + "% ～ " + (((double)r.Value[15] / def.HP) * 100.0).ToString("F1") + "%";
+            res3[r.Key] = (((double)r.Value.Last() / def.HP ) * 100.0).ToString( "F1") + "%";
+            res4[r.Key] = (Tuple.Create( max, min ));
+        }
+
+        return ( Tuple.Create( res1, res2, res3, res4 ) );
     }
 
-    public bool Gravity { get; set; } = false;
-    public bool WonderRoom { get; set; } = false;
-    public bool PlasmaShower { get; set; } = false;
-    public bool FairyAura { get; set; } = false;
-    public bool DarkAura { get; set; } = false;
-    public bool AuraBreak { get; set; } = false;
+    private void CalcDamage(DamageCalcSV.Shared.Models.PokemonDataReal p, int idx )
+    {
+        if (idx == 1) pokemon1 = p;
+        else if ( idx == 2 ) pokemon2 = p;
+
+        if (pokemon1 == null) return;
+        if (pokemon2 == null) return;
+
+        ( result1, result2, result3, result4 ) = CalcDamageMain(pokemon1, pokemon2);
+        ( result5, result6, result7, result8 ) = CalcDamageMain(pokemon2, pokemon1);
+    }
 }

@@ -3,10 +3,10 @@
             <MudGrid Spacing="@spacing" Justify="Justify.Center">
                 <MudItem xs="12"><MudText>@Title</MudText></MudItem>
                     <MudItem xs="6">
-                        <MudAutocomplete T="string" Label="ポケモン" @bind-Value="PokemonName" SearchFunc="@search_pokemon" Margin="Margin.Dense" />
+                        <MudAutocomplete T="string" Label="ポケモン" SearchFunc="@search_pokemon" CoerceText="false" Variant="Variant.Outlined" Margin="Margin.Dense" ValueChanged="OnPokemonNameSelected" />
                     </MudItem>
                     <MudItem xs="4">
-                    <MudSelect T="string" Label="性格" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense">
+                    <MudSelect T="string" Label="性格" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnNatureSelected">
                         @foreach( var n in nature )
                         {
                             <MudSelectItem T="string" Value="@n" />
@@ -15,7 +15,7 @@
                     </MudItem>
 
                     <MudItem xs="2">
-                        <MudNumericField @bind-Value="Level" Label="レベル" Variant="Variant.Outlined" Min="1" Max="100" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Label="レベル" Variant="Variant.Outlined" Min="1" Max="100" Margin="Margin.Dense" Value="@Level" ValueChanged="OnLevelChanged" />
                     </MudItem>
 
                     <MudItem xs="2">
@@ -53,22 +53,22 @@
                     <MudItem xs="12">
                         <MudGrid Spacing="0">
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="status[6]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[6]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(6, s))" />
                         </MudItem>
                         <MudItem sm="2">
-                            <MudNumericField @bind-Value="status[7]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[7]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(7, s))" />
                         </MudItem>
                         <MudItem xs="2">
-                            <MudNumericField @bind-Value="status[8]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[8]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(8, s))" />
                         </MudItem>
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="status[9]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[9]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(9, s))" />
                         </MudItem>
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="status[10]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[10]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(10, s))" />
                         </MudItem>
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="status[11]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[11]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(11, s))" />
                         </MudItem>
                     </MudGrid>
                 </MudItem>
@@ -82,22 +82,22 @@
                     <MudItem xs="12">
                         <MudGrid Spacing="0">
                         <MudItem xs="2">
-                            <MudNumericField @bind-Value="status[12]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[12]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(12, s))" />
                         </MudItem>
                         <MudItem sm="2">
-                        <MudNumericField @bind-Value="status[13]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[13]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(13, s))" />
                         </MudItem>
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="status[14]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[14]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(14, s))" />
                         </MudItem>
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="status[15]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[15]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(15, s))" />
                         </MudItem>
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="status[16]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[16]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(16, s))" />
                         </MudItem>
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="status[17]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@status[17]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(17, s))" />
                         </MudItem>
                     </MudGrid>
                 </MudItem>
@@ -137,31 +137,35 @@
                         <MudGrid Spacing="0">
                         <MudItem xs="2" />
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="rank[0]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@rank[0]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" ValueChanged="@(s => OnRankChanged( 0, s ))" />
                         </MudItem>
                         <MudItem sm="2">
-                        <MudNumericField @bind-Value="rank[1]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@rank[1]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" ValueChanged="@(s => OnRankChanged( 1, s ))" />
                         </MudItem>
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="rank[2]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@rank[2]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" ValueChanged="@(s => OnRankChanged( 2, s ))" />
                         </MudItem>
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="rank[3]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@rank[3]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" ValueChanged="@(s => OnRankChanged( 3, s ))" />
                         </MudItem>
                         <MudItem xs="2">
-                        <MudNumericField @bind-Value="rank[4]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" />
+                        <MudNumericField T="int" Value="@rank[4]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" ValueChanged="@(s => OnRankChanged( 4, s ))" />
                             </MudItem>
                         </MudGrid>
                 </MudItem>
                 </MudItem>
 
                 <MudItem xs="4">
-            <MudSelect T="string" Label="特性" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense">
+                    <MudSelect T="string" Label="特性" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnAbilitySelected">
                         <MudSelectItem Value="@("未発動")" />
+                        @foreach( var a in PokemonAbility )
+                        {
+                            <MudSelectItem T="string" Value="@a" />
+                        }
                     </MudSelect>
                 </MudItem>
                 <MudItem xs="5">
-            <MudSelect T="string" Label="道具" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense">
+            <MudSelect T="string" Label="道具" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnItemSelected">
                 @foreach( var i in PokemonItem )
                 {
                     <MudSelectItem T="string" Value="@i" />
@@ -169,7 +173,7 @@
                     </MudSelect>
                 </MudItem>
                 <MudItem xs="3">
-            <MudSelect T="string" Label="テラスタイプ" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense">
+            <MudSelect T="string" Label="テラスタイプ" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnTeraTypeSelected">
                 @foreach( var t in teratype )
                 {
                     <MudSelectItem T="string" Value="@t" />
@@ -247,22 +251,136 @@
     private string PokemonName;
     private List<string> PokemonNameList = new List<string>();
 
-    private string trans_katakana( string str )
+    private List<string> trans_katakana( string str )
     {
-        return (str);
+        List<string> result = new List<string>();
+        if ( str == "f" )
+        {
+            result.Add("ファ");
+            result.Add("フィ");
+            result.Add("フ");
+            result.Add("フェ");
+            result.Add("フォ");
+        }
+        result.Add(str);
+        return (result);
     }
 
     private async Task<IEnumerable<string>> search_pokemon( string str )
     {
-        string s = trans_katakana(str);
-        if (string.IsNullOrEmpty(s))
+        if (string.IsNullOrEmpty(str))
             return (PokemonNameList);
-        return (PokemonNameList.Where(x => x.Contains(s, StringComparison.InvariantCultureIgnoreCase)));
+
+        var s = trans_katakana(str);
+        var ll = PokemonNameList.Where(x => s.Contains(x)).ToList();
+        Title = "";
+        foreach ( var l in ll )
+        {
+            Title += l;
+        }
+        return (PokemonNameList.Where(x => s.Contains(x)));
+    }
+    private void OnPokemonNameSelected( string name ) // ポケモン名が入力された
+    {
+        PokemonName = name;
+        CalcStatus();
+    }
+    private void OnNatureSelected( string v )
+    {
+        nature_value = v;
+        CalcStatus();
+    }
+    private void OnLevelChanged( int l )
+    {
+        Level = l;
+        CalcStatus();
+    }
+    private void OnStatusChanged( int idx, int v )
+    {
+        status[idx] = v;
+        CalcStatus();
+    }
+    private void OnRankChanged( int idx, int v )
+    {
+        rank[idx] = v;
+        CalcStatus();
+    }
+    private void OnAbilitySelected( string s )
+    {
+        ability_value = s;
+        CalcStatus();
+    }
+    private void OnItemSelected( string s )
+    {
+        item_value = s;
+        CalcStatus();
+    }
+    private void OnTeraTypeSelected( string s )
+    {
+        teratype_value = s;
+        CalcStatus();
     }
 
-    public int Level { get; set; } = 50;
+    private void CalcStatus()
+    {
+        // レベル、種族値、個体値、努力値から実数値を計算する
+        var p = PokemonManager.GetPokemonData(PokemonName);
+        if (p == null) // そんな名前のポケモンは存在しない！
+            return;
+
+        // 特性を設定する
+        PokemonAbility.Clear();
+        foreach( var a in p.ability )
+        {
+            if ( string.IsNullOrEmpty( a ) == false )
+                PokemonAbility.Add( a );
+        }
+
+        // 種族値を入力
+        status[0] = p.HP;
+        status[1] = p.Attack;
+        status[2] = p.Block;
+        status[3] = p.Constant;
+        status[4] = p.Deffence;
+        status[5] = p.Speed;
+
+        // HPを計算する
+        status[0] = ( status[0] * 2 + status[6] + status[12] / 4 ) * Level / 100 + Level + 10;
+        // それ以外のステータスを計算する
+        for ( int i = 1; i < 6; ++i )
+        {
+            status[i] = ( status[i] * 2 + status[6 + i] + status[12 + i] / 4 ) * Level / 100 + 5;
+        }
+
+        // 性格補正する
+        int idx = Array.IndexOf(nature, nature_value);
+        if ( idx > 0 )
+        {
+            --idx;
+            int up_status = idx / 4;
+            int down_status = idx % 4;
+            if (down_status >= up_status)
+                down_status += 1;
+            status[1 + up_status] = (int)( status[1 + up_status] * 1.1 );
+            status[1 + down_status] = (int)(status[1 + down_status] * 0.9);
+        }
+
+        // 実ステータスを入力して親コンポーネントに返す
+        DamageCalcSV.Shared.Models.PokemonDataReal real_pokemon
+        = new DamageCalcSV.Shared.Models.PokemonDataReal(p.Name, p.type[0], p.type[1], teratype_value, Level, status[0], status[1], status[2], status[3], status[4], status[5],
+                                                          p.ZukanNo, p.Height, p.Weight, ability_value, item_value, rank, options, p.MoveList);
+
+        OnStatusChangeEventCallback.InvokeAsync( real_pokemon );
+    }
+
+    private int Level = 50;
 
     private List<string> PokemonAbility = new List<string>();
+    private string ability_value = "未発動";
+
+    private string item_value = "未発動";
+
+    private string teratype_value = "";
 
     private string[] nature = {
         "がんばりや",
@@ -272,6 +390,7 @@
         "おだやか D+A-", "おとなしい D+B-", "しんちょう D+C-", "なまいき D+S-",
         "おくびょう S+A-", "せっかち S+B-", "ようき S+C-", "むじゃき S+D-",
     };
+    private string nature_value = "がんばりや";
 
     private string[] PokemonItem = {
         "もちものなし", "(攻撃系)", "タイプ強化", "ノーマルジュエル",
@@ -294,7 +413,7 @@
     private DamageCalcSV.Shared.Models.PokemonDataManager PokemonManager = new DamageCalcSV.Shared.Models.PokemonDataManager();
 
     private int[] status = new int[18];
-    private int[] rank = new int[5];
+    private int[] rank = { 0, 0, 0, 0, 0 };
 
     private int[] _efvalToggleValue = new int[6];
     void _efvalToggleText( int idx )
@@ -309,17 +428,30 @@
             _efvalToggleValue[idx] = 252;
             status[12 + idx] = 0;
         }
+
+        CalcStatus();
     }
 
     private bool[] options = new bool[30];
 
     [Parameter] public string Title { get; set; }
+    [Parameter]
+    public EventCallback<DamageCalcSV.Shared.Models.PokemonDataReal> OnStatusChangeEventCallback { get; set; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        PokemonManager.InitializePokemonData();
+        // 一気に登録するとエラーが起きるので、世代ごとに分割
+        PokemonManager.InitializePokemonData1();
+        PokemonManager.InitializePokemonData2();
+        PokemonManager.InitializePokemonData3();
+        PokemonManager.InitializePokemonData4();
+        PokemonManager.InitializePokemonData5();
+        PokemonManager.InitializePokemonData6();
+        PokemonManager.InitializePokemonData7();
+        PokemonManager.InitializePokemonData8();
+        PokemonManager.InitializePokemonData9();
         PokemonNameList = PokemonManager.AllPokemonName();
 
         status[6] = status[7] = status[8] = status[9] = status[10] = status[11] = 31;

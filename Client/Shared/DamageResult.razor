@@ -1,25 +1,64 @@
 ﻿<main>
     <MudGrid Spacing="@spacing" Justify="Justify.Center">
-        <MudItem xs="12"><MudText>@Title</MudText></MudItem>
         <!-- for文的なやつで、技の種類分だけゲージを出したい -->
-        <MudProgressLinear Buffer="true" Size="Size.Large" Color="Color.Tertiary" Min="0" Max="100" Value="@damage_min[0]" BufferValue="@damage_max[0]">
-            <MudText><b>12.5%</b></MudText>
-        </MudProgressLinear>
+        <MudItem xs="2" />
+        <MudItem xs="8">
+            @if ( atk != null && def != null )
+            {
+                <MudText><b>@atk.Name -> @def.Name</b></MudText>
+            }
+            else
+            {
+                <MudText>@Title</MudText>
+            }
+        </MudItem>
+        <MudItem xs="2" />
+        @if (damage_list != null)
+        {
+            @if ( IsAllResult )
+            {
+                // 全行表示する
+                @foreach (var d in damage_list)
+                {
+                    <MudItem xs="12"><MudText>@d.Key / <b>@damage_range[d.Key]</b> / 期待値: @damage_exp[d.Key]%</MudText></MudItem>
+                    <MudItem xs="12">
+                        <MudProgressLinear Buffer="true" Size="Size.Large" Color="Color.Tertiary" Min="0" Max="@def.HP"
+                                           Value="@damage_min_max[d.Key].Item1" BufferValue="@damage_min_max[d.Key].Item2">
+                        </MudProgressLinear>
+                    </MudItem>
+                }
+            }
+            else
+            {
+                // ダメージが大きい方から10個だけ表示する
+                @for ( var i = 0; i < 10; ++i )
+                {
+                    <MudItem xs="12"><MudText>@damage_list[i].Key / <b>@damage_range[damage_list[i].Key]</b> / 期待値: @damage_exp[damage_list[i].Key]</MudText></MudItem>
+                    <MudItem xs="12">
+                        <MudProgressLinear Buffer="true" Size="Size.Large" Color="Color.Tertiary" Min="0" Max="@def.HP"
+                                           Value="@damage_min_max[damage_list[i].Key].Item1" BufferValue="@damage_min_max[damage_list[i].Key].Item2">
+                        </MudProgressLinear>
+                    </MudItem>
+                }
+            }
+        }
     </MudGrid>
 </main>
 
 @code {
     private static int spacing { get; set; } = 1;
-    public int[] damage_min = new int[100];
-    public int[] damage_max = new int[100];
+    private bool IsAllResult = false;
 
     [Parameter] public string? Title { get; set; }
+    [Parameter] public DamageCalcSV.Shared.Models.PokemonDataReal? atk { get; set; } = null;
+    [Parameter] public DamageCalcSV.Shared.Models.PokemonDataReal? def { get; set; } = null;
+    [Parameter] public Dictionary<string, Tuple<int, int>>? damage_min_max { get; set; } = null;
+    [Parameter] public List<KeyValuePair<string, List<int>>>? damage_list { get; set; } = null;
+    [Parameter] public Dictionary<string, string>? damage_range { get; set; } = null;
+    [Parameter] public Dictionary<string, string>? damage_exp { get; set; } = null;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-
-        damage_min[0] = 15;
-        damage_max[0] = 32;
     }
 }
