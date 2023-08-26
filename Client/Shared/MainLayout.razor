@@ -125,7 +125,7 @@
                         <PokemonStatus Title="ポケモン1" OnStatusChangeEventCallback="@((x) => CalcDamage( x, 1 ))"></PokemonStatus>
                     </MudItem>
                     <MudItem xs="4">
-                        <DamageResult Title="ダメージ計算一覧1" atk="pokemon1" def="pokemon2" damage_list="result1" damage_range="result2" damage_exp="result3" damage_min_max="result4"></DamageResult>
+                        <DamageResult Title="ダメージ計算一覧1" atk="pokemon1" def="pokemon2" damage_list_All="result1" damage_list_10="result1_10" damage_range="result2" damage_exp="result3" damage_min_max="result4"></DamageResult>
                     </MudItem>
                     <MudItem xs="4">
                         <PokemonStatus Title="ポケモン2" OnStatusChangeEventCallback="@((x) => CalcDamage( x, 2 ))"></PokemonStatus>
@@ -133,7 +133,7 @@
 
                     <MudItem xs="4" />
                     <MudItem xs="4">
-                        <DamageResult Title="ダメージ計算一覧2" atk="pokemon2" def="pokemon1" damage_list="result5" damage_range="result6" damage_exp="result7" damage_min_max="result8"></DamageResult>
+                        <DamageResult Title="ダメージ計算一覧2" atk="pokemon2" def="pokemon1" damage_list_All="result5" damage_list_10="result5_10" damage_range="result6" damage_exp="result7" damage_min_max="result8"></DamageResult>
                     </MudItem>
                     <MudItem xs="4" />
                 </MudGrid>
@@ -149,20 +149,24 @@
 
     private DamageCalcSV.Shared.Models.PokemonDataReal? pokemon1 = null, pokemon2 = null;
     private List<KeyValuePair<string, List<int>>>? result1 = null;
+    private List<KeyValuePair<string, List<int>>>? result1_10 = null;
     private Dictionary<string, string>? result2 = null;
     private Dictionary<string, string>? result3 = null;
     private Dictionary<string, Tuple<int, int>>? result4 = null;
     private List<KeyValuePair<string, List<int>>>? result5 = null;
+    private List<KeyValuePair<string, List<int>>>? result5_10 = null;
     private Dictionary<string, string>? result6 = null;
     private Dictionary<string, string>? result7 = null;
     private Dictionary<string, Tuple<int, int>>? result8 = null;
+    private Dictionary<string, Tuple<int, int>>? result8_10 = null;
     private DamageCalcSV.Shared.Models.DamageCalc Damage = new DamageCalcSV.Shared.Models.DamageCalc();
 
-    private Tuple<List<KeyValuePair<string, List<int>>>, Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, Tuple<int, int>>> CalcDamageMain(DamageCalcSV.Shared.Models.PokemonDataReal atk, DamageCalcSV.Shared.Models.PokemonDataReal def)
+    private Tuple<List<KeyValuePair<string, List<int>>>, List<KeyValuePair<string, List<int>>>, Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, Tuple<int, int>>> CalcDamageMain(DamageCalcSV.Shared.Models.PokemonDataReal atk, DamageCalcSV.Shared.Models.PokemonDataReal def)
     {
         var tmp_result = Damage.calc(atk, def);
         List<KeyValuePair<string, int>> tmp = new List<KeyValuePair<string, int>>();
         List<KeyValuePair<string, List<int>>> res1 = new List<KeyValuePair<string, List<int>>>();
+        List<KeyValuePair<string, List<int>>> res1_10 = new List<KeyValuePair<string, List<int>>>();
         Dictionary<string, string> res2 = new Dictionary<string, string>();
         Dictionary<string, string> res3 = new Dictionary<string, string>();
         Dictionary<string, Tuple<int, int>> res4 = new Dictionary<string, Tuple<int, int>>();
@@ -176,6 +180,8 @@
         foreach( var t in tmp )
         {
             res1.Add(KeyValuePair.Create(t.Key, tmp_result[t.Key]));
+            if (res1.Count() <= 10)
+                res1_10.Add(KeyValuePair.Create(t.Key, tmp_result[t.Key]));
         }
 
         foreach( var r in res1 )
@@ -187,7 +193,7 @@
             res4[r.Key] = (Tuple.Create( max, min ));
         }
 
-        return ( Tuple.Create( res1, res2, res3, res4 ) );
+        return ( Tuple.Create( res1, res1_10, res2, res3, res4 ) );
     }
 
     private void CalcDamage(DamageCalcSV.Shared.Models.PokemonDataReal p, int idx )
@@ -198,7 +204,7 @@
         if (pokemon1 == null) return;
         if (pokemon2 == null) return;
 
-        ( result1, result2, result3, result4 ) = CalcDamageMain(pokemon1, pokemon2);
-        ( result5, result6, result7, result8 ) = CalcDamageMain(pokemon2, pokemon1);
+        ( result1, result1_10, result2, result3, result4 ) = CalcDamageMain(pokemon1, pokemon2);
+        ( result5, result5_10, result6, result7, result8 ) = CalcDamageMain(pokemon2, pokemon1);
     }
 }

@@ -13,33 +13,25 @@
             }
         </MudItem>
         <MudItem xs="2" />
-        @if (damage_list != null)
+        @if (damage_list_All != null)
         {
             @if ( IsAllResult )
             {
                 // 全行表示する
-                @foreach (var d in damage_list)
-                {
-                    <MudItem xs="12"><MudText>@d.Key / <b>@damage_range[d.Key]</b> / 期待値: @damage_exp[d.Key]%</MudText></MudItem>
-                    <MudItem xs="12">
-                        <MudProgressLinear Buffer="true" Size="Size.Large" Color="Color.Tertiary" Min="0" Max="@def.HP"
-                                           Value="@damage_min_max[d.Key].Item1" BufferValue="@damage_min_max[d.Key].Item2">
-                        </MudProgressLinear>
-                    </MudItem>
-                }
+                damage_list = damage_list_All;
             }
             else
             {
-                // ダメージが大きい方から10個だけ表示する
-                @for ( var i = 0; i < 10; ++i )
-                {
-                    <MudItem xs="12"><MudText>@damage_list[i].Key / <b>@damage_range[damage_list[i].Key]</b> / 期待値: @damage_exp[damage_list[i].Key]</MudText></MudItem>
-                    <MudItem xs="12">
-                        <MudProgressLinear Buffer="true" Size="Size.Large" Color="Color.Tertiary" Min="0" Max="@def.HP"
-                                           Value="@damage_min_max[damage_list[i].Key].Item1" BufferValue="@damage_min_max[damage_list[i].Key].Item2">
+                damage_list = damage_list_10;
+            }
+            @foreach (var d in damage_list)
+            {
+                <MudItem xs="12"><MudText>@d.Key / <b>@damage_range[d.Key]</b> / 期待値: @damage_exp[d.Key]</MudText></MudItem>
+                <MudItem xs="12">
+                    <MudProgressLinear Buffer="true" Size="Size.Large" Color="Color.Tertiary" Min="0" Max="@def.HP"
+                                           Value="@damage_min_max[d.Key].Item1" BufferValue="@damage_min_max[d.Key].Item2">
                         </MudProgressLinear>
                     </MudItem>
-                }
             }
         }
     </MudGrid>
@@ -54,6 +46,8 @@
     [Parameter] public DamageCalcSV.Shared.Models.PokemonDataReal? def { get; set; } = null;
     [Parameter] public Dictionary<string, Tuple<int, int>>? damage_min_max { get; set; } = null;
     [Parameter] public List<KeyValuePair<string, List<int>>>? damage_list { get; set; } = null;
+    [Parameter] public List<KeyValuePair<string, List<int>>>? damage_list_10 { get; set; } = null;
+    [Parameter] public List<KeyValuePair<string, List<int>>>? damage_list_All { get; set; } = null;
     [Parameter] public Dictionary<string, string>? damage_range { get; set; } = null;
     [Parameter] public Dictionary<string, string>? damage_exp { get; set; } = null;
 
