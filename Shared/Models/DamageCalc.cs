@@ -387,8 +387,8 @@ namespace DamageCalcSV.Shared.Models
                 long damage_critical;
                 damage *= ((atk.Level * 2) / 5); damage = (damage / 4096) * 4096; damage += 8192;
                 damage_critical = damage;
-                damage_base(A, D, power, damage, move);
-                damage_base(A_critical, D_critical, power, damage_critical, move);
+                damage = damage_base(A, D, power, damage, move);
+                damage_critical = damage_base(A_critical, D_critical, power, damage_critical, move);
 
                 /* STEP6. 急所補正 */
                 damage_critical = damage_critical * (2048 + 4096) / 4096;
