@@ -30,7 +30,7 @@
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                     <MudForm>
-                                <MudRadioGroup @bind-SelectedOption="@DamageCalcSV.Shared.Models.DamageCalc.SelectedBattleStyle">
+                                <MudRadioGroup T="int" SelectedOptionChanged="OnBattleStyleChanged">
                                 <MudRadio Option="0">シングル</MudRadio>
                                 <MudRadio Option="1">ダブル</MudRadio>
                             </MudRadioGroup>
@@ -41,7 +41,7 @@
 
                     <MudItem xs="6">
                             <MudForm>
-                            <MudRadioGroup @bind-SelectedOption="@DamageCalcSV.Shared.Models.DamageCalc.SelectedWeatherSettings">
+                            <MudRadioGroup T="int" SelectedOptionChanged="OnWeatherChanged">
                                     <MudGrid Spacing="@spacing" Justify="Justify.Center">
                                     <MudItem xs="1" />
                                     <MudItem xs="2">
@@ -66,7 +66,7 @@
                     </MudItem>
                     <MudItem xs="6">
                             <MudForm>
-                            <MudRadioGroup @bind-SelectedOption="@DamageCalcSV.Shared.Models.DamageCalc.SelectedFieldSettings">
+                            <MudRadioGroup T="int" SelectedOptionChanged="OnFieldChanged">
                                     <MudGrid Spacing="@spacing" Justify="Justify.Center">
                                     <MudItem xs="1" />
                                     <MudItem xs="2">
@@ -162,6 +162,22 @@
     private Dictionary<string, Color>? result10 = null;
     private DamageCalcSV.Shared.Models.DamageCalc Damage = new DamageCalcSV.Shared.Models.DamageCalc();
 
+    private void OnBattleStyleChanged( int val )
+    {
+        DamageCalcSV.Shared.Models.DamageCalc.SelectedBattleStyle = val;
+        CalcDamage(null, 3);
+    }
+    private void OnWeatherChanged( int val )
+    {
+        DamageCalcSV.Shared.Models.DamageCalc.SelectedWeatherSettings = val;
+        CalcDamage(null, 3);
+    }
+    private void OnFieldChanged( int val )
+    {
+        DamageCalcSV.Shared.Models.DamageCalc.SelectedFieldSettings = val;
+        CalcDamage(null, 3);
+    }
+
     private Tuple<List<KeyValuePair<string, List<long>>>, List<KeyValuePair<string, List<long>>>, Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, Tuple<long, long>>, Dictionary<string, Color>> CalcDamageMain(DamageCalcSV.Shared.Models.PokemonDataReal atk, DamageCalcSV.Shared.Models.PokemonDataReal def)
     {
         var tmp_result = Damage.calc(atk, def);
@@ -173,7 +189,7 @@
         Dictionary<string, Tuple<long, long>> res4 = new Dictionary<string, Tuple<long, long>>();
         Dictionary<string, Color> res5 = new Dictionary<string, Color>();
 
-        // 与えるダメージの期待値でソートする
+        // 与えるダメージの期待値でソートする -> ダメージの最大値の方が良いかも。。
         foreach( var t in tmp_result )
         {
             tmp.Add(KeyValuePair.Create(t.Key, t.Value.Last()));
@@ -204,10 +220,11 @@
         return ( Tuple.Create( res1, res1_10, res2, res3, res4, res5 ) );
     }
 
-    private void CalcDamage(DamageCalcSV.Shared.Models.PokemonDataReal p, int idx )
+    private void CalcDamage(DamageCalcSV.Shared.Models.PokemonDataReal? p, int idx )
     {
         if (idx == 1) pokemon1 = p;
-        else if ( idx == 2 ) pokemon2 = p;
+        else if (idx == 2) pokemon2 = p;
+        else if (idx == 3) ; // すでにポケモンが入力されていればダメージの再計算だけ実行する
 
         if (pokemon1 == null) return;
         if (pokemon2 == null) return;
