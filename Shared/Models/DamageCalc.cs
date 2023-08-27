@@ -1,5 +1,6 @@
 ﻿using DamageCalcSV.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,17 @@ using System.Text;
 using System.Threading.Tasks;
 using static MudBlazor.CategoryTypes;
 using static System.Net.Mime.MediaTypeNames;
+
+/*
+ *  Options[x]のメモ
+ *   0: リフレクター     1: ひかりのかべ    2: てだすけ
+ *   3: きあいだめ       4: じゅうでん      5: そうでん
+ *   6: はがねのせいしん 7: フラワーギフト  8: ハロウィン
+ *   9: もりののろい    10: みずびたし     11: フレンドガード
+ *  12: ダメ半減特性    13: しんかのきせき 14: テラスタルON
+ *  15: 毒・猛毒        16: 火傷           17: 麻痺
+ *  18: 眠り            19: 小さくなる
+ */
 
 namespace DamageCalcSV.Shared.Models
 {
@@ -126,7 +138,7 @@ namespace DamageCalcSV.Shared.Models
                 ++rank;
             }
             if ((atk.ability == "ひとでなし") // 攻撃側の特性が人でなしで、
-            && (def.Options[20] == true)) // 防御側が毒/猛毒状態 -> あとで書き直す
+            && (def.Options[15] == true)) // 防御側が毒/猛毒状態 -> あとで書き直す
             {
                 rank += 3;
             }
@@ -272,6 +284,25 @@ namespace DamageCalcSV.Shared.Models
                 {
                     // この技のダメージは計算済みなのでスキップ
                     continue;
+                }
+
+                // テラバーストの設定を変える
+                if (move.Name == "テラバースト")
+                {
+                    if (atk.TeraType.IsNullOrEmpty() == false && atk.Options[14] )
+                    {
+                        // テラスタイプが入力されている＆テラスタルしている
+                        move.Type = atk.TeraType;
+
+                        // ランク補正を含めてA>Cなら物理技に切り替える
+                        // -> ランク補正済みステータスを計算するサブ関数を実装すること！！！！！
+                    }
+                    else
+                    {
+                        // テラスタルしてない場合はノーマル・特殊技として扱う(ノーマルがタイプ一致の場合もこれで安心)
+                        move.Type = "ノーマル";
+                        move.Category = 0x2;
+                    }
                 }
 
                 // ↓↓↓ダメージ計算式にフィールドの補正が入ってないけど、どこで補正されるんだ…？？？
@@ -467,7 +498,7 @@ namespace DamageCalcSV.Shared.Models
                 /* STEP10. 火傷補正 */
                 for (int i = 0; i < 16; ++i)
                 {
-                    if ( atk.Options[21] ) // -> 後で直す！！！！！！！！
+                    if ( atk.Options[16] ) // -> 後で直す！！！！！！！！
                     {
                         result[move.Name][i] *= 2048;
                         result[move.Name][i] += 2047;
@@ -479,7 +510,8 @@ namespace DamageCalcSV.Shared.Models
                                  // 今更だけど、型破りを考慮してない…
                                  // -> 型破りフラグがONなら、残りの特性系ビットを全部OFFにすれば良いような気もする
                 /* STEP11-1. 壁補正 */
-                if (move.Category == 1 && def.Options[0]) // -> 後で直す！！！！！！！！
+                if ( (move.Category == 1 && def.Options[0])
+                    || ( move.Category == 2 && def.Options[1]) )
                 {
                     // 分類と壁の有無が一致
                     // →テラバーストとかフォトンゲイザーが困るか…
@@ -672,7 +704,7 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 /* STEP11-8. フレンドガード補正 */
-                if (def.Options[3])
+                if (def.Options[11])
                 {
                     // フレンドガードが発動する時はダメージ0.75倍
                     // -> ツールとしてはチェックボックスのON/OFFで切り替える
@@ -754,7 +786,7 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 /* STEP11-13. Mtwice補正 */
-                if (atk.Options[25])
+                if (move.Minimize && def.Options[19])
                 {
                     // 特定条件下でダメージ2倍の技を使用した
                     for (int i = 0; i < 32; ++i)

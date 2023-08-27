@@ -127,7 +127,7 @@
                         </MudItem>
                         </MudGrid>
                     </MudItem>
-                </MudItem>
+            </MudItem>
 
                 <MudItem xs="2">
                     <MudText>ランク：</MudText>
@@ -180,6 +180,32 @@
                 }
                     </MudSelect>
                 </MudItem>
+
+            <MudItem xs="4">
+                @if (ability_value == "マルチスケイル" || ability_value == "ファントムガード")
+                {
+                    <MudForm>
+                        <MudCheckBox @bind-Checked="@options[12]" Size="Size.Small" Label="HPが満タンの時ダメージ半減" Margin="Margin.Dense"></MudCheckBox>
+                    </MudForm>
+                }
+            </MudItem>
+            <MudItem xs="5">
+                @if (item_value == "しんかのきせき")
+                {
+                    <MudForm>
+                        <MudCheckBox @bind-Checked="@options[13]" Size="Size.Small" Label="進化前ポケモンの時 防御/特防1.5倍" Margin="Margin.Dense"></MudCheckBox>
+                    </MudForm>
+                }
+            </MudItem>
+            <MudItem xs="3">
+                @if (teratype_value != "")
+                {
+                    <MudForm>
+                        <MudCheckBox @bind-Checked="@options[14]" Size="Size.Small" Label="テラスタル" Margin="Margin.Dense"></MudCheckBox>
+                    </MudForm>
+                }
+            </MudItem>
+
 
                 <MudItem xs="4">
                     <MudForm>
@@ -241,7 +267,20 @@
                         <MudCheckBox @bind-Checked="@options[11]" Size="Size.Small" Label="フレンドガード"></MudCheckBox>
                     </MudForm>
                 </MudItem>
+        <MudItem xs="4">
+            <MudForm>
+                <MudCheckBox @bind-Checked="@options[19]" Size="Size.Small" Label="ちいさくなる"></MudCheckBox>
+            </MudForm>
+        </MudItem>
 
+        <MudItem xs="8">
+            <MudSelect T="string" Label="状態異常" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnConditionChanged">
+                @foreach( var c in conditionAbnormaly )
+                {
+                    <MudSelectItem T="string" Value="@c" />
+                }
+            </MudSelect>
+        </MudItem>
     </MudGrid>
     </main>
 
@@ -319,6 +358,18 @@
     {
         teratype_value = s;
         CalcStatus();
+    }
+    private void OnConditionChanged( string s )
+    {
+        options[15] = options[16] = options[17] = options[18] = false;
+        switch ( s )
+        {
+            default: break;
+            case "毒・猛毒": options[15] = true; CalcStatus(); break;
+            case "火傷": options[16] = true; CalcStatus(); break;
+            case "麻痺": options[17] = true; CalcStatus(); break;
+            case "眠り": options[18] = true; CalcStatus(); break;
+        }
     }
 
     private void CalcStatus()
@@ -408,6 +459,10 @@
         "こおり", "かくとう", "どく", "じめん", "ひこう",
         "エスパー", "むし", "いわ", "ゴースト",
         "ドラゴン", "あく", "はがね", "フェアリー",
+    };
+
+    private string[] conditionAbnormaly = {
+        "正常", "毒・猛毒", "火傷", "麻痺", "眠り",
     };
 
     private DamageCalcSV.Shared.Models.PokemonDataManager PokemonManager = new DamageCalcSV.Shared.Models.PokemonDataManager();

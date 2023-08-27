@@ -33,6 +33,10 @@
                         </MudProgressLinear>
                     </MudItem>
             }
+            <MudButton OnClick="@(s => {IsAllResult = ( IsAllResult == false);
+                    if ( IsAllResult ) result_print_btn = "一部表示";
+                    else result_print_btn = "全て表示";
+                })" Variant="Variant.Filled" Size="Size.Large">@result_print_btn</MudButton>
         }
     </MudGrid>
 </main>
@@ -40,6 +44,7 @@
 @code {
     private static int spacing { get; set; } = 1;
     private bool IsAllResult = false;
+    private string result_print_btn = "全て表示";
 
     [Parameter] public string? Title { get; set; }
     [Parameter] public DamageCalcSV.Shared.Models.PokemonDataReal? atk { get; set; } = null;
