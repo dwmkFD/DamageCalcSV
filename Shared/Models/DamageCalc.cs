@@ -198,7 +198,7 @@ namespace DamageCalcSV.Shared.Models
             }
             return (Tuple.Create( A, D ));
         }
-        private long damage_base(long a, long d, int p, long dmg, PokemonMove move) {
+        private long damage_base(long a, long d, long p, long dmg, PokemonMove move) {
             dmg = dmg * (p * a) / d; dmg = (dmg / 4096) * 4096;
             dmg /= 50; dmg = (dmg / 4096) * 4096;
             dmg += 8192; dmg = (dmg / 4096) * 4096;
@@ -265,10 +265,10 @@ namespace DamageCalcSV.Shared.Models
             return (dmg);
         }
 
-        public Dictionary<string, List<int>> calc(PokemonDataReal atk, PokemonDataReal def)
+        public Dictionary<string, List<long>> calc(PokemonDataReal atk, PokemonDataReal def)
         {
-            Dictionary<string, List<int>> result = new Dictionary<string, List<int>>();
-            Dictionary<string, List<int>> result_critical = new Dictionary<string, List<int>>();
+            Dictionary<string, List<long>> result = new Dictionary<string, List<long>>();
+            Dictionary<string, List<long>> result_critical = new Dictionary<string, List<long>>();
 
             foreach ( var atkmove in atk.MoveList )
             {
@@ -357,7 +357,7 @@ namespace DamageCalcSV.Shared.Models
 
                 /* STEP2. 最初の()内を計算 */
                 /* STEP2-1. 威力を決定 */
-                int power = move.Power;
+                long power = move.Power;
                 /* 以下、サイコフィールドでワイドフォースとか、ジャイロボールとか、そういうやつも計算する */
                 // ↓これも関数に入れた方が良い？？
                 if (atk.Item == "タイプ強化" )
@@ -426,14 +426,14 @@ namespace DamageCalcSV.Shared.Models
                 damage_critical += 2047; damage_critical /= 4096; damage_critical *= 4096;
 
                 /* STEP7. 乱数補正 */
-                result[move.Name] = new List<int>();
-                result_critical[move.Name] = new List<int>();
+                result[move.Name] = new List<long>();
+                result_critical[move.Name] = new List<long>();
                 for (int i = 0; i < 16; ++i)
                 {
                     long tmp = damage * (85 + i); tmp /= 100; tmp /= 4096; tmp *= 4096;
                     long tmp_critical = damage_critical * (85 + i); tmp_critical /= 100; tmp_critical /= 4096; tmp_critical *= 4096;
-                    result[move.Name].Add( (int)tmp );
-                    result_critical[move.Name].Add( (int)tmp_critical );
+                    result[move.Name].Add( tmp );
+                    result_critical[move.Name].Add( tmp_critical );
                 }
 
                 /* STEP8. タイプ一致補正 */
@@ -486,11 +486,11 @@ namespace DamageCalcSV.Shared.Models
 
                 for (int i = 0; i < 16; ++i) // STEP毎にループ書くの微妙なんだけどね…
                 {
-                    result[move.Name][i] = (int)( result[move.Name][i] * typecomp_res );
+                    result[move.Name][i] = (long)( result[move.Name][i] * typecomp_res );
                     result[move.Name][i] /= 4096;
                     result[move.Name][i] *= 4096;
 
-                    result_critical[move.Name][i] = (int)(result_critical[move.Name][i] * typecomp_res);
+                    result_critical[move.Name][i] = (long)(result_critical[move.Name][i] * typecomp_res);
                     result_critical[move.Name][i] /= 4096;
                     result_critical[move.Name][i] *= 4096;
                 }
@@ -825,7 +825,7 @@ namespace DamageCalcSV.Shared.Models
                     tmp_exp += (result_critical[move.Name][i] / 16.0) * CalcCriticalProbability(atkmove, atk, def) * (move.Accuracy / 100.0);
                 }
                 result[move.Name].AddRange(result_critical[move.Name] );
-                result[move.Name].Add( (int)tmp_exp );
+                result[move.Name].Add( (long)tmp_exp );
 
                 /* LAST STEP. 計算結果を結果配列に突っ込む */
                 /* LAST STEP2. 後始末 */

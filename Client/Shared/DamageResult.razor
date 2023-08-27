@@ -49,10 +49,10 @@
     [Parameter] public string? Title { get; set; }
     [Parameter] public DamageCalcSV.Shared.Models.PokemonDataReal? atk { get; set; } = null;
     [Parameter] public DamageCalcSV.Shared.Models.PokemonDataReal? def { get; set; } = null;
-    [Parameter] public Dictionary<string, Tuple<int, int>>? damage_min_max { get; set; } = null;
-    [Parameter] public List<KeyValuePair<string, List<int>>>? damage_list { get; set; } = null;
-    [Parameter] public List<KeyValuePair<string, List<int>>>? damage_list_10 { get; set; } = null;
-    [Parameter] public List<KeyValuePair<string, List<int>>>? damage_list_All { get; set; } = null;
+    [Parameter] public Dictionary<string, Tuple<long, long>>? damage_min_max { get; set; } = null;
+    [Parameter] public List<KeyValuePair<string, List<long>>>? damage_list { get; set; } = null;
+    [Parameter] public List<KeyValuePair<string, List<long>>>? damage_list_10 { get; set; } = null;
+    [Parameter] public List<KeyValuePair<string, List<long>>>? damage_list_All { get; set; } = null;
     [Parameter] public Dictionary<string, string>? damage_range { get; set; } = null;
     [Parameter] public Dictionary<string, string>? damage_exp { get; set; } = null;
 

@@ -148,35 +148,35 @@
     public int spacing { get; set; } = 2;
 
     private DamageCalcSV.Shared.Models.PokemonDataReal? pokemon1 = null, pokemon2 = null;
-    private List<KeyValuePair<string, List<int>>>? result1 = null;
-    private List<KeyValuePair<string, List<int>>>? result1_10 = null;
+    private List<KeyValuePair<string, List<long>>>? result1 = null;
+    private List<KeyValuePair<string, List<long>>>? result1_10 = null;
     private Dictionary<string, string>? result2 = null;
     private Dictionary<string, string>? result3 = null;
-    private Dictionary<string, Tuple<int, int>>? result4 = null;
-    private List<KeyValuePair<string, List<int>>>? result5 = null;
-    private List<KeyValuePair<string, List<int>>>? result5_10 = null;
+    private Dictionary<string, Tuple<long, long>>? result4 = null;
+    private List<KeyValuePair<string, List<long>>>? result5 = null;
+    private List<KeyValuePair<string, List<long>>>? result5_10 = null;
     private Dictionary<string, string>? result6 = null;
     private Dictionary<string, string>? result7 = null;
-    private Dictionary<string, Tuple<int, int>>? result8 = null;
-    private Dictionary<string, Tuple<int, int>>? result8_10 = null;
+    private Dictionary<string, Tuple<long, long>>? result8 = null;
+    private Dictionary<string, Tuple<long, long>>? result8_10 = null;
     private DamageCalcSV.Shared.Models.DamageCalc Damage = new DamageCalcSV.Shared.Models.DamageCalc();
 
-    private Tuple<List<KeyValuePair<string, List<int>>>, List<KeyValuePair<string, List<int>>>, Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, Tuple<int, int>>> CalcDamageMain(DamageCalcSV.Shared.Models.PokemonDataReal atk, DamageCalcSV.Shared.Models.PokemonDataReal def)
+    private Tuple<List<KeyValuePair<string, List<long>>>, List<KeyValuePair<string, List<long>>>, Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, Tuple<long, long>>> CalcDamageMain(DamageCalcSV.Shared.Models.PokemonDataReal atk, DamageCalcSV.Shared.Models.PokemonDataReal def)
     {
         var tmp_result = Damage.calc(atk, def);
-        List<KeyValuePair<string, int>> tmp = new List<KeyValuePair<string, int>>();
-        List<KeyValuePair<string, List<int>>> res1 = new List<KeyValuePair<string, List<int>>>();
-        List<KeyValuePair<string, List<int>>> res1_10 = new List<KeyValuePair<string, List<int>>>();
+        List<KeyValuePair<string, long>> tmp = new List<KeyValuePair<string, long>>();
+        List<KeyValuePair<string, List<long>>> res1 = new List<KeyValuePair<string, List<long>>>();
+        List<KeyValuePair<string, List<long>>> res1_10 = new List<KeyValuePair<string, List<long>>>();
         Dictionary<string, string> res2 = new Dictionary<string, string>();
         Dictionary<string, string> res3 = new Dictionary<string, string>();
-        Dictionary<string, Tuple<int, int>> res4 = new Dictionary<string, Tuple<int, int>>();
+        Dictionary<string, Tuple<long, long>> res4 = new Dictionary<string, Tuple<long, long>>();
 
         // 与えるダメージの期待値でソートする
         foreach( var t in tmp_result )
         {
             tmp.Add(KeyValuePair.Create(t.Key, t.Value.Last()));
         }
-        tmp.Sort( ( a, b ) => b.Value - a.Value );
+        tmp.Sort( ( a, b ) => (int)b.Value - (int)a.Value );
         foreach( var t in tmp )
         {
             res1.Add(KeyValuePair.Create(t.Key, tmp_result[t.Key]));
@@ -186,8 +186,8 @@
 
         foreach( var r in res1 )
         {
-            int min = Math.Max(def.HP - r.Value[0], 0);
-            int max = Math.Max(def.HP - r.Value[15], 0);
+            long min = Math.Max(def.HP - r.Value[0], 0);
+            long max = Math.Max(def.HP - r.Value[15], 0);
             res2[r.Key] = (((double)r.Value[0] / def.HP) * 100.0).ToString("F1") + "% ～ " + (((double)r.Value[15] / def.HP) * 100.0).ToString("F1") + "%";
             res3[r.Key] = (((double)r.Value.Last() / def.HP ) * 100.0).ToString( "F1") + "%";
             res4[r.Key] = (Tuple.Create( max, min ));
