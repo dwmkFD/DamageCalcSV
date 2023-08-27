@@ -125,7 +125,7 @@
                         <PokemonStatus Title="ポケモン1" OnStatusChangeEventCallback="@((x) => CalcDamage( x, 1 ))"></PokemonStatus>
                     </MudItem>
                     <MudItem xs="4">
-                        <DamageResult Title="ダメージ計算一覧1" atk="pokemon1" def="pokemon2" damage_list_All="result1" damage_list_10="result1_10" damage_range="result2" damage_exp="result3" damage_min_max="result4"></DamageResult>
+                        <DamageResult Title="ダメージ計算一覧1" atk="pokemon1" def="pokemon2" damage_list_All="result1" damage_list_10="result1_10" damage_range="result2" damage_exp="result3" damage_min_max="result4" HP_Bar_Color="result5"></DamageResult>
                     </MudItem>
                     <MudItem xs="4">
                         <PokemonStatus Title="ポケモン2" OnStatusChangeEventCallback="@((x) => CalcDamage( x, 2 ))"></PokemonStatus>
@@ -133,7 +133,7 @@
 
                     <MudItem xs="4" />
                     <MudItem xs="4">
-                        <DamageResult Title="ダメージ計算一覧2" atk="pokemon2" def="pokemon1" damage_list_All="result5" damage_list_10="result5_10" damage_range="result6" damage_exp="result7" damage_min_max="result8"></DamageResult>
+                        <DamageResult Title="ダメージ計算一覧2" atk="pokemon2" def="pokemon1" damage_list_All="result6" damage_list_10="result6_10" damage_range="result7" damage_exp="result8" damage_min_max="result9" HP_Bar_Color="result10"></DamageResult>
                     </MudItem>
                     <MudItem xs="4" />
                 </MudGrid>
@@ -153,15 +153,16 @@
     private Dictionary<string, string>? result2 = null;
     private Dictionary<string, string>? result3 = null;
     private Dictionary<string, Tuple<long, long>>? result4 = null;
-    private List<KeyValuePair<string, List<long>>>? result5 = null;
-    private List<KeyValuePair<string, List<long>>>? result5_10 = null;
-    private Dictionary<string, string>? result6 = null;
+    private Dictionary<string, Color>? result5 = null;
+    private List<KeyValuePair<string, List<long>>>? result6 = null;
+    private List<KeyValuePair<string, List<long>>>? result6_10 = null;
     private Dictionary<string, string>? result7 = null;
-    private Dictionary<string, Tuple<long, long>>? result8 = null;
-    private Dictionary<string, Tuple<long, long>>? result8_10 = null;
+    private Dictionary<string, string>? result8 = null;
+    private Dictionary<string, Tuple<long, long>>? result9 = null;
+    private Dictionary<string, Color>? result10 = null;
     private DamageCalcSV.Shared.Models.DamageCalc Damage = new DamageCalcSV.Shared.Models.DamageCalc();
 
-    private Tuple<List<KeyValuePair<string, List<long>>>, List<KeyValuePair<string, List<long>>>, Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, Tuple<long, long>>> CalcDamageMain(DamageCalcSV.Shared.Models.PokemonDataReal atk, DamageCalcSV.Shared.Models.PokemonDataReal def)
+    private Tuple<List<KeyValuePair<string, List<long>>>, List<KeyValuePair<string, List<long>>>, Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, Tuple<long, long>>, Dictionary<string, Color>> CalcDamageMain(DamageCalcSV.Shared.Models.PokemonDataReal atk, DamageCalcSV.Shared.Models.PokemonDataReal def)
     {
         var tmp_result = Damage.calc(atk, def);
         List<KeyValuePair<string, long>> tmp = new List<KeyValuePair<string, long>>();
@@ -170,6 +171,7 @@
         Dictionary<string, string> res2 = new Dictionary<string, string>();
         Dictionary<string, string> res3 = new Dictionary<string, string>();
         Dictionary<string, Tuple<long, long>> res4 = new Dictionary<string, Tuple<long, long>>();
+        Dictionary<string, Color> res5 = new Dictionary<string, Color>();
 
         // 与えるダメージの期待値でソートする
         foreach( var t in tmp_result )
@@ -191,9 +193,15 @@
             res2[r.Key] = (((double)r.Value[0] / def.HP) * 100.0).ToString("F1") + "% ～ " + (((double)r.Value[15] / def.HP) * 100.0).ToString("F1") + "%";
             res3[r.Key] = (((double)r.Value.Last() / def.HP ) * 100.0).ToString( "F1") + "%";
             res4[r.Key] = (Tuple.Create( max, min ));
+            if (max / (double)def.HP >= 0.5)
+                res5[r.Key] = Color.Tertiary;
+            else if (max / (double)def.HP >= 0.25)
+                res5[r.Key] = Color.Warning;
+            else
+                res5[r.Key] = Color.Error;
         }
 
-        return ( Tuple.Create( res1, res1_10, res2, res3, res4 ) );
+        return ( Tuple.Create( res1, res1_10, res2, res3, res4, res5 ) );
     }
 
     private void CalcDamage(DamageCalcSV.Shared.Models.PokemonDataReal p, int idx )
@@ -204,7 +212,7 @@
         if (pokemon1 == null) return;
         if (pokemon2 == null) return;
 
-        ( result1, result1_10, result2, result3, result4 ) = CalcDamageMain(pokemon1, pokemon2);
-        ( result5, result5_10, result6, result7, result8 ) = CalcDamageMain(pokemon2, pokemon1);
+        ( result1, result1_10, result2, result3, result4, result5 ) = CalcDamageMain(pokemon1, pokemon2);
+        ( result6, result6_10, result7, result8, result9, result10 ) = CalcDamageMain(pokemon2, pokemon1);
     }
 }

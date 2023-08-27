@@ -28,7 +28,7 @@
             {
                 <MudItem xs="12"><MudText>@d.Key / <b>@damage_range[d.Key]</b> / 期待値: @damage_exp[d.Key]</MudText></MudItem>
                 <MudItem xs="12">
-                    <MudProgressLinear Buffer="true" Size="Size.Large" Color="Color.Tertiary" Min="0" Max="@def.HP"
+                    <MudProgressLinear Buffer="true" Size="Size.Large" Color="@HP_Bar_Color[d.Key]" Min="0" Max="@def.HP"
                                            Value="@damage_min_max[d.Key].Item1" BufferValue="@damage_min_max[d.Key].Item2">
                         </MudProgressLinear>
                     </MudItem>
@@ -55,6 +55,7 @@
     [Parameter] public List<KeyValuePair<string, List<long>>>? damage_list_All { get; set; } = null;
     [Parameter] public Dictionary<string, string>? damage_range { get; set; } = null;
     [Parameter] public Dictionary<string, string>? damage_exp { get; set; } = null;
+    [Parameter] public Dictionary<string, Color>? HP_Bar_Color { get; set; } = null;
 
     protected override void OnInitialized()
     {
