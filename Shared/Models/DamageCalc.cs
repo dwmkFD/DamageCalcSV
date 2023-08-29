@@ -19,7 +19,7 @@ using static System.Net.Mime.MediaTypeNames;
  *   9: もりののろい    10: みずびたし     11: フレンドガード
  *  12: ダメ半減特性    13: しんかのきせき 14: テラスタルON
  *  15: 毒・猛毒        16: 火傷           17: 麻痺
- *  18: 眠り            19: 小さくなる
+ *  18: 眠り            19: 小さくなる     20: かたやぶり
  */
 
 namespace DamageCalcSV.Shared.Models
@@ -41,12 +41,14 @@ namespace DamageCalcSV.Shared.Models
             // 技の威力が変わる場合に補正する処理
             long power = move.Power;
 
-            // サイコフィールドでワイドフォースを撃つ場合は威力2倍かつ全体技
+            // サイコフィールドでワイドフォースを撃つ場合は威力1.5倍かつ全体技
             if (move.Name == "ワイドフォース")
             {
                 if (SelectedFieldSettings == 3) // フィールドとか天気の数値はdefine的な感じで書きたいがC#での書き方がわからん。。
                 {
-                    power *= 2;
+                    power *= 6144;
+                    power += 2048;
+                    power /= 4096;
                     move.Range = true; // サイコフィールドなら範囲攻撃
                 }
                 else
@@ -55,16 +57,72 @@ namespace DamageCalcSV.Shared.Models
                 }
             }
 
+            // からげんきを状態異常で撃つと威力2倍かつ火傷無効
+            if ( move.Name == "からげんき" )
+            {
+                if (atk.Options[15] || atk.Options[16] || atk.Options[17] || atk.Options[18] )
+                {
+                    power *= 2;
+                }
+            }
+
             // エレキボール、ジャイロボールは素早さを比較して威力決定
             if (move.Name == "エレキボール")
             {
                 int atkS = atk.Speed;
                 int defS = def.Speed;
+
+                if (atkS <= defS)
+                    power = 40;
+                else if (atkS <= defS * 2)
+                    power = 60;
+                else if (atkS <= defS * 3)
+                    power = 80;
+                else if (atkS <= defS * 4)
+                    power = 120;
+                else
+                    power = 150;
             }
             else if (move.Name == "ジャイロボール")
             {
                 int atkS = atk.Speed;
                 int defS = def.Speed;
+                power = (25 * defS / atkS) + 1;
+                power = Math.Min(power, 150);
+            }
+
+            // ヒートスタンプ、ヘビーボンバーは体重差によって威力決定
+            if (move.Name == "ヒートスタンプ" || move.Name == "ヘビーボンバー")
+            {
+                if (def.Weight * 5 <= atk.Weight)
+                    power = 120;
+                else if (def.Weight * 4 <= atk.Weight)
+                    power = 100;
+                else if (def.Weight * 3 <= atk.Weight)
+                    power = 80;
+                else if (def.Weight * 2 <= atk.Weight)
+                    power = 60;
+                else
+                    power = 40;
+
+                if (def.Options[19]) // 相手がちいさくなっていた場合は威力2倍
+                    power *= 2;
+            }
+            // けたぐりは相手の体重によって威力決定
+            if (move.Name == "けたぐり")
+            {
+                if (def.Weight <= 9.9)
+                    power = 20;
+                else if (def.Weight <= 24.9)
+                    power = 40;
+                else if (def.Weight <= 49.9)
+                    power = 60;
+                else if (def.Weight <= 99.9)
+                    power = 80;
+                else if (def.Weight <= 199.9)
+                    power = 100;
+                else
+                    power = 120;
             }
 
             // サイコブレイドはエレキフィールドで威力1.5倍
@@ -72,6 +130,9 @@ namespace DamageCalcSV.Shared.Models
             {
                 if (move.Name == "サイコブレイド")
                 {
+                    power *= (2048 + 4096);
+                    power += 2048;
+                    power /= 4096;
                 }
             }
 
@@ -82,30 +143,22 @@ namespace DamageCalcSV.Shared.Models
             {
             }
 
+            // おはかまいりは仲間が倒された回数で威力変動
+            // 同、ふんどのこぶしは攻撃を受けた回数で威力変動
+            if (move.Name == "ふんどのこぶし" || move.Name == "おはかまいり")
+            {
+                power = 50 + atk.Special * 50;
+            }
+
             // 特性「テクニシャン」で威力60以下の技は威力1.5倍
             if (atk.ability == "テクニシャン")
             {
                 if (power <= 60)
                 {
                     power *= (2048 + 4096);
-                    power += 0; // 切り捨てだった気がする？
+                    power += 2048;
                     power /= 4096;
                 }
-            }
-
-            // ミストフィールドでドラゴン技を使うと威力半減（ダメージ半減？どっち？）
-            if (SelectedFieldSettings == 4)
-            {
-                if (move.Type == "ドラゴン")
-                {
-                    power *= 2048;
-                    power /= 4096;
-                }
-            }
-
-            // ヒートスタンプ、けたぐり、ヘビーボンバーは体重差によって威力決定
-            if (move.Name == "ヒートスタンプ" || move.Name == "けたぐり" || move.Name == "ヘビーボンバー")
-            {
             }
 
             // 無天候と晴れ以外の天候でのソーラービーム/ブレードは威力半減
@@ -118,29 +171,217 @@ namespace DamageCalcSV.Shared.Models
                 }
             }
 
+            // テラスタイプが有効で、テラスタイプ一致であり、威力が60以下の技は威力を60に上げる
+            if ( atk.type.Contains( atk.TeraType ) && atk.Options[14] && power <= 60 )
+            {
+                power = 60;
+            }
+
+            // ミストフィールドでドラゴン技を使うと威力半減（ダメージ半減？どっち？）
+            if (SelectedFieldSettings == 4)
+            {
+                if (move.Type == "ドラゴン")
+                {
+                    power *= 2048;
+                    power /= 4096;
+                }
+            }
+
+            // 特性「メガランチャー」で波動技は威力1.5倍
+            if ( atk.ability == "メガランチャー" && move.Pulse )
+            {
+                power *= (2048 + 4096);
+                power += 2048;
+                power /= 4096;
+            }
+
+            // 特性「がんじょうあご」で噛みつく技は威力1.5倍
+            if ( atk.ability == "がんじょうあご" && move.Bite )
+            {
+                power *= (2048 + 4096);
+                power += 2048;
+                power /= 4096;
+            }
+
+            // スキン系特性による威力強化(テラスタイプは考慮しない)
+            if ( atk.ability.Contains( "スキン" ) )
+            {
+                if ( atk.ability != "ミラクルスキン" && atk.ability != "ノーマルスキン" )
+                {
+                    // ノーマルタイプの技を使った場合に威力1.2倍
+                    if ( move.Type == "ノーマル" )
+                    {
+                        power *= 4915;
+                        power /= 4096;
+                    }
+                }
+            }
+
+            // はがねのせいしん
+            if (atk.ability == "はがねのせいしん" && move.Type == "はがね")
+            {
+                // はがねタイプの技威力1.5倍（重複する）-> 四捨五入のタイミングは逐次？最後？
+                for (int i = 0; i < atk.Special; ++i)
+                {
+                    power *= (4096 + 2048);
+                    power += 2048;
+                    power /= 4096;
+                }
+            }
+
+            // オーラ系(フェアリー、ダーク、ブレイク)
+            if ( FairyAura && move.Type == "フェアリー" )
+            {
+                if (AuraBreak)
+                {
+                    // ブレイクも有効なら威力を逆にする
+                    power *= 3072;
+                    power += 2048;
+                    power /= 4096;
+                }
+                else
+                {
+                    power *= 5448;
+                    power += 2048;
+                    power /= 4096;
+                }
+            }
+            if ( DarkAura && move.Type == "あく")
+            {
+                if (AuraBreak)
+                {
+                    power *= 3072;
+                    power += 2048;
+                    power /= 4096;
+                }
+                else
+                {
+                    power *= 5448;
+                    power += 2048;
+                    power /= 4096;
+                }
+            }
+
+            // ちからずく
+            if ( atk.ability == "ちからずく" &&
+                move.StrExp.Contains( "通常攻撃" ) == false ) // 判定これじゃダメなので見直し(追加効果フラグが必要？)
+            {
+                // 追加効果がある場合は威力1.3倍
+                power *= 5325;
+                power += 2048;
+                power /= 4096;
+            }
+
+            // パンクロックで音技を使うと威力1.3倍
+            if ( atk.ability == "パンクロック" && move.Sound )
+            {
+                power *= 5325;
+                power += 2048;
+                power /= 4096;
+            }
+
+            // てつのこぶしでパンチ技を使うと威力1.2倍
+            if (atk.ability == "てつのこぶし" && move.Punch )
+            {
+                // てつのこぶしでパンチ技を使った場合は4915/4096倍
+                power *= 4915;
+                power += 2048;
+                power /= 4096;
+            }
+
+            // そうだいしょうは仲間が倒された数×10％（最大50％）威力上昇
+            if (atk.ability == "そうだいしょう")
+            {
+                power *= (4096 + ( 4096 * (long)Math.Min( atk.Special, 5 ) / 10) );
+                power += 2048;
+                power /= 4096;
+            }
+
+            // たいねつ相手の炎技は威力半減
+            if ( def.ability == "たいねつ" && move.Type == "ほのお" )
+            {
+                power *= 2048;
+                power += 2048;
+                power /= 4096;
+            }
+
+            // かんそうはだ相手の炎技は威力1.25倍
+            if (def.ability == "かんそうはだ" && move.Type == "ほのお")
+            {
+                power *= 5120;
+                power += 2048;
+                power /= 4096;
+            }
+
             // アイテムによる威力強化
             if (atk.Item == "タイプ強化")
             {
                 // タイプ強化アイテムなら威力4915/4096倍
-                power *= 4915; power /= 4096;
+                power *= 4915;
+                power += 2048;
+                power /= 4096;
             }
             if ((move.Category == 1)
              && (atk.Item == "ちからのハチマキ"))
             {
                 // 物理技でちからのハチマキを持っている時は威力4505/4096倍
-                power *= 4505; power /= 4096;
+                power *= 4505;
+                power += 2048;
+                power /= 4096;
             }
             if ((move.Category == 2)
              && (atk.Item == "ものしりメガネ"))
             {
                 // 特殊技でものしりメガネを持っている時は威力4505/4096倍
-                power *= 4505; power /= 4096;
+                power *= 4505;
+                power += 2048;
+                power /= 4096;
             }
 
-            // おはかまいりは仲間が倒された回数で威力変動(専用の入力欄が必要 or おはかまいり(0-10くらいまで別々の技として計算しても良いけど))
-            // 同、ふんどのこぶしは攻撃を受けた回数で威力変動
+            // てだすけされた時は威力1.5倍
+            if (atk.Options[2])
+            {
+                power *= 6144;
+                power += 2048;
+                power /= 4096;
+            }
 
-            // テラスタイプが有効で、テラスタイプ一致であり、威力が60以下の技は威力を60に上げる
+            if ( SelectedFieldSettings == 1 )
+            {
+                if ( move.Type == "でんき" )
+                {
+                    power *= 5325;
+                    power += 2048;
+                    power /= 4096;
+                }
+            }
+
+            if ( SelectedFieldSettings == 2)
+            {
+                if (move.Type == "くさ")
+                {
+                    power *= 5325;
+                    power += 2048;
+                    power /= 4096;
+                }
+                if ( move.Name == "じしん" || move.Name == "じならし" )
+                {
+                    // グラスフィールド下ではいくつかの地面技は威力半減
+                    power *= 2048;
+                    power += 2048;
+                    power /= 4096;
+                }
+            }
+
+            if ( SelectedFieldSettings == 3)
+            {
+                if (move.Type == "エスパー")
+                {
+                    power *= 5325;
+                    power += 2048;
+                    power /= 4096;
+                }
+            }
 
             return (power);
         }
@@ -244,11 +485,22 @@ namespace DamageCalcSV.Shared.Models
 
             return (result);
         }
-        Tuple<long, long> calcAD( long A, long D, PokemonDataReal atk, PokemonDataReal def, int category ) {
+        Tuple<long, long> calcAD( long A, long D, PokemonDataReal atk, PokemonDataReal def, string name, int category ) {
             if (category == 1 )
             {
                 // 物理技の時は、攻撃側の「攻撃」と防御側の「防御」を使う
-                A *= atk.Attack; D *= def.Block;
+                D *= def.Block;
+
+                // ボディプレスは防御をAとして計算する
+                if ( name == "ボディプレス" )
+                {
+                    A *= atk.Block;
+                }
+                else
+                {
+                    A *= atk.Attack;
+                }
+
                 if ((atk.ability == "ちからもち")
                     || (atk.ability == "ヨガパワー")
                 //|| ( atk.m_option.m_ability & PokemonAbility::ABILITY_XXXXX ) // 張り込みを入れるべきか否か… でも張り込みは特攻も上がるらしいから別枠か
@@ -263,17 +515,53 @@ namespace DamageCalcSV.Shared.Models
                     A += 2048;
                     A /= 4096;
                 }
+
+                // 防御側が「こおり」タイプを持っていて雪の場合は防御を1.5倍する
+                if ( ( def.type.Contains( "こおり" ) || ( def.TeraType == "こおり" && def.Options[14]) ) && SelectedWeatherSettings == 4 )
+                {
+                    D *= 6144;
+                    D += 2048;
+                    D /= 4096;
+                }
             }
             if (category == 2 )
             {
                 // 特殊技の時は、攻撃側の「特攻」と防御側の「特防」を使う
-                A *= atk.Constant; D *= def.Deffence;
+                A *= atk.Constant;
+
+                // categoryを物理・特殊・変化だけじゃなくて、物理(特殊計算)、特殊(物理計算)みたいなものも入れたら良いかも…
+                if ((name == "サイコショック") || (name == "サイコブレイク"))
+                {
+                    // 相手の防御を使って計算する技の時は特殊処理
+                    D *= def.Block;
+
+                    // 防御側が「こおり」タイプを持っていて雪の場合は防御を1.5倍する
+                    if ( ( def.type.Contains("こおり") || (def.TeraType == "こおり" && def.Options[14]) ) && SelectedWeatherSettings == 4)
+                    {
+                        D *= 6144;
+                        D += 2048;
+                        D /= 4096;
+                    }
+                }
+                else
+                {
+                    D *= def.Deffence;
+                }
+
                 if (atk.Item == "こだわりメガネ")
                 {
                     // 持ち物がこだわりメガネなら特攻を1.5倍(四捨五入)する
                     A *= 6144;
                     A += 2048;
                     A /= 4096;
+                }
+
+                // 防御側が「いわ」タイプを持っていて砂嵐の場合は特防を1.5倍する
+                if ( ( def.type.Contains("いわ") || (def.TeraType == "いわ" && def.Options[14]) ) && SelectedWeatherSettings == 3)
+                {
+                    D *= 6144;
+                    D += 2048;
+                    D /= 4096;
                 }
             }
             return (Tuple.Create( A, D ));
@@ -291,9 +579,6 @@ namespace DamageCalcSV.Shared.Models
                 dmg /= 4096;
                 dmg += 2047;
                 dmg /= 4096; dmg *= 4096;
-            }
-            else if (false) // サイコフィールドでワイドフォースを使った場合は m_moveDB[atkmove].m_rangeはfalseだが、ダブルバトルならダブル補正する必要あり
-            {
             }
 
             /* STEP4. 親子愛補正は第九世代には存在しない */
@@ -358,6 +643,8 @@ namespace DamageCalcSV.Shared.Models
 
             foreach ( var atkmove in Atk.MoveList )
             {
+                atk.Options[20] = def.Options[20] = false; // かたやぶりをOFFにする(技にかたやぶり効果が付いているものへの対応)
+
                 var move = MoveManager.GetMoveInfo(atkmove);
                 if (move == null) // 万が一、指定された技がデータベース（？）に存在しなかった場合は無視する
                     continue;
@@ -370,6 +657,12 @@ namespace DamageCalcSV.Shared.Models
                 {
                     // この技のダメージは計算済みなのでスキップ
                     continue;
+                }
+
+                // 特性の影響を受けない技の場合はかたやぶりオプションを有効にする
+                if ( move.StrExp.Contains("特性の影響を受けず" ) )
+                {
+                    atk.Options[20] = true;
                 }
 
                 // テラバーストの設定を変える
@@ -427,15 +720,11 @@ namespace DamageCalcSV.Shared.Models
                 long Mhalf = 1, Mfilter = 1, MTwice = 1;
 
                 /* STEP1. A/Dを決定 */ // --> 要確認！！！　ランク補正ってここのA/Dを直接いじる？ -> もう一個、こだわり系はステータス1.5倍だよね？ここ？？
-                ( A, D ) = calcAD(A, D, atk, def, move.Category);
-                ( A_critical, D_critical ) = calcAD( A_critical, D_critical, atk_cri, def_cri, move.Category);
+                ( A, D ) = calcAD(A, D, atk, def, move.Name, move.Category);
+                ( A_critical, D_critical ) = calcAD( A_critical, D_critical, atk_cri, def_cri, move.Name, move.Category);
 
                 // STEP1-1. サイコショックとサイコブレイクは攻撃側の特攻、防御側の防御を使う
-                // categoryを物理・特殊・変化だけじゃなくて、物理(特殊計算)、特殊(物理計算)みたいなものも入れたら良いかも…
-                if ((atkmove == "サイコショック") || (atkmove == "サイコブレイク"))
-                {
-                    A = atk.Constant; D = def.Block;
-                }
+                // -> calcADの中に移動
 
                 // STEP1-2. フォトンゲイザーとシェルアームズはここで補正？
                 // 攻撃・特攻と防御・特防を比較して、一番ダメージが大きくなるようにA/Dを決めるんだっけ？
@@ -445,8 +734,8 @@ namespace DamageCalcSV.Shared.Models
                 {
                     long A_dummy = 1;
                     D = D_critical = 1; // Aは変わらないのでダミーで計算して結果は捨て、Dはここでの結果を採用する
-                    (A_dummy, D) = calcAD(A_dummy, D, atk, def, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
-                    (A_dummy, D_critical) = calcAD(A_dummy, D_critical, atk_cri, def_cri, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
+                    (A_dummy, D) = calcAD(A_dummy, D, atk, def, move.Name, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
+                    (A_dummy, D_critical) = calcAD(A_dummy, D_critical, atk_cri, def_cri, move.Name, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
                 }
 
                 /* STEP2. 最初の()内を計算 */
@@ -545,12 +834,16 @@ namespace DamageCalcSV.Shared.Models
                 /* STEP10. 火傷補正 */
                 for (int i = 0; i < 16; ++i)
                 {
-                    // 物理技で火傷状態ならダメージ半減
-                    if ( atk.Options[16] & move.Category == 1 )
+                    // 物理技で火傷状態ならダメージ半減(からげんきは除く)
+                    if ( atk.Options[16] && move.Category == 1 && move.Name != "からげんき" )
                     {
                         result[move.Name][i] *= 2048;
                         result[move.Name][i] += 2047;
                         result[move.Name][i] /= 4096;
+
+                        result_critical[move.Name][i] *= 2048;
+                        result_critical[move.Name][i] += 2047;
+                        result_critical[move.Name][i] /= 4096;
                     }
                 }
 
@@ -562,8 +855,7 @@ namespace DamageCalcSV.Shared.Models
                     || ( move.Category == 2 && def.Options[1]) )
                 {
                     // 分類と壁の有無が一致
-                    // →テラバーストとかフォトンゲイザーが困るか…
-                    //   bitには空きがあるし、専用bit入れるか。テラバースト物理、テラバースト特殊(壁)、みたいな
+                    // →テラバーストとかフォトンゲイザーが困るか… -> 修正したのでたぶん困らない
                     for (int i = 0; i < 16; ++i) // 急所に当たったら壁は無視されるので、前半16パターンだけ補正する
                     {
                         if ( SelectedBattleStyle == 1 )
@@ -634,7 +926,7 @@ namespace DamageCalcSV.Shared.Models
                 /* STEP11-6. Mhalf補正 */
                 /* STEP11-6-1. 氷の鱗粉補正 */
                 if ((def.ability == "こおりのりんぷん")
-                    && ( move.Category == 2 ))
+                    && ( move.Category == 2) && atk.Options[20] == false )
                 {
                     // 氷の鱗粉で特殊技を受ける時はダメージ半減
                     for (int i = 0; i < 16; ++i)
@@ -650,7 +942,7 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 /* STEP11-6-2. ファントムガード、マルチスケイル補正 */
-                if (def.ability == "ファントムガード")
+                if (def.ability == "ファントムガード" && def.Options[12] )
                 {
                     // ファントムガード、マルチスケイルが発動する時はダメージ半減
                     // -> ツールとしてはチェックボックスのON/OFFで切り替えるのでHP判定はしない
@@ -667,8 +959,9 @@ namespace DamageCalcSV.Shared.Models
                         result_critical[move.Name][i] /= 4096;
                     }
                 }
-                if (def.ability == "マルチスケイル" )
+                if (def.ability == "マルチスケイル" && def.Options[12] && atk.Options[20] == false )
                 {
+                    // 型破りは専用optionsをONにした方が良いかも。シャドーレイとかと一緒に処理できて楽だし。
                     for (int i = 0; i < 16; ++i)
                     {
                         result[move.Name][i] *= 2048;
@@ -683,7 +976,7 @@ namespace DamageCalcSV.Shared.Models
 
                 /* STEP11-6-3. パンクロック補正 */
                 if ( (def.ability == "パンクロック" )
-                    && ( move.Sound ) ) // 音の技の時
+                    && ( move.Sound) && atk.Options[20] == false ) // 音の技の時
                 {
                     // 音の技を受ける時はダメージ半減
                     // 逆に音技を使う時は[威力]上昇？ -> 威力計算の時にやる？
@@ -719,7 +1012,7 @@ namespace DamageCalcSV.Shared.Models
                 /* STEP11-7. Mfilter補正 */
                 /* STEP11-7-1. ハードロック/フィルター補正 */
                 if ( ( ( def.ability == "ハードロック" ) || ( def.ability == "フィルター" ) )
-                    && (typecomp_res > 1.0))
+                    && (typecomp_res > 1.0) && atk.Options[20] == false )
                 {
                     // ハードロック/フィルターが発動する時はダメージ0.75倍
                     // プリズムアーマーは、シャドーレイやメテオドライブの特性貫通を無視して軽減するので、別々に計算
@@ -752,7 +1045,7 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 /* STEP11-8. フレンドガード補正 */
-                if (def.Options[11])
+                if (def.Options[11] && atk.Options[20] == false )
                 {
                     // フレンドガードが発動する時はダメージ0.75倍
                     // -> ツールとしてはチェックボックスのON/OFFで切り替える

@@ -17,9 +17,10 @@ namespace DamageCalcSV.Shared.Models
         public bool[] Options = new bool[30];
         public string Item;
         public int[] Rank = { 0, 0, 0, 0, 0 };
+        public int Special;
 
         public PokemonDataReal(string name, string t1, string t2, string t3, int L, int h, int a, int b, int c, int d, int s,
-            int zukanNo, double height, double weight, string abl, string item, int[] r, bool[] opt, List<string> moveList)
+            int zukanNo, double height, double weight, string abl, string item, int[] r, bool[] opt, int spe, List<string> moveList)
         {
             Name = name; Level = L;
             HP = h; Attack = a; Block = b; Constant = c; Deffence = d; Speed = s;
@@ -29,6 +30,7 @@ namespace DamageCalcSV.Shared.Models
             Item = item;
             Rank = r;
             Options = opt;
+            Special = spe;
             MoveList = moveList;
         }
     }

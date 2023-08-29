@@ -185,7 +185,7 @@
                 @if (ability_value == "マルチスケイル" || ability_value == "ファントムガード")
                 {
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[12]" Size="Size.Small" Label="HPが満タンの時ダメージ半減" Margin="Margin.Dense"></MudCheckBox>
+                        <MudCheckBox T="bool" Checked="@options[12]" Size="Size.Small" Label="HPが満タンの時ダメージ半減" Margin="Margin.Dense" CheckedChanged="@(x => OnOptionsChanged(12,x))"/>
                     </MudForm>
                 }
             </MudItem>
@@ -193,7 +193,7 @@
                 @if (item_value == "しんかのきせき")
                 {
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[13]" Size="Size.Small" Label="進化前ポケモンの時 防御/特防1.5倍" Margin="Margin.Dense"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[13]" Size="Size.Small" Label="進化前ポケモンの時 防御/特防1.5倍" Margin="Margin.Dense" CheckedChanged="@(x => OnOptionsChanged(13,x))" />
                     </MudForm>
                 }
             </MudItem>
@@ -201,7 +201,7 @@
                 @if (teratype_value != "")
                 {
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[14]" Size="Size.Small" Label="テラスタル" Margin="Margin.Dense"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[14]" Size="Size.Small" Label="テラスタル" Margin="Margin.Dense" CheckedChanged="@(x => OnOptionsChanged(14,x))" />
                     </MudForm>
                 }
             </MudItem>
@@ -209,71 +209,71 @@
 
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[0]" Size="Size.Small" Label="リフレクター"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[0]" Size="Size.Small" Label="リフレクター" CheckedChanged="@(x => OnOptionsChanged(0,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[1]" Size="Size.Small" Label="ひかりのかべ"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[1]" Size="Size.Small" Label="ひかりのかべ" CheckedChanged="@(x => OnOptionsChanged(1,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[2]" Size="Size.Small" Label="てだすけ"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[2]" Size="Size.Small" Label="てだすけ" CheckedChanged="@(x => OnOptionsChanged(2,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[3]" Size="Size.Small" Label="きあいだめ"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[3]" Size="Size.Small" Label="きあいだめ" CheckedChanged="@(x => OnOptionsChanged(3,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[4]" Size="Size.Small" Label="じゅうでん"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[4]" Size="Size.Small" Label="じゅうでん" CheckedChanged="@(x => OnOptionsChanged(4,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[5]" Size="Size.Small" Label="そうでん"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[5]" Size="Size.Small" Label="そうでん" CheckedChanged="@(x => OnOptionsChanged(5,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[6]" Size="Size.Small" Label="はがねのせいしん"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[6]" Size="Size.Small" Label="はがねのせいしん" CheckedChanged="@(x => OnOptionsChanged(6,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[7]" Size="Size.Small" Label="フラワーギフト"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[7]" Size="Size.Small" Label="フラワーギフト" CheckedChanged="@(x => OnOptionsChanged(7,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[8]" Size="Size.Small" Label="ハロウィン"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[8]" Size="Size.Small" Label="ハロウィン" CheckedChanged="@(x => OnOptionsChanged(8,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[9]" Size="Size.Small" Label="もりののろい"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[9]" Size="Size.Small" Label="もりののろい" CheckedChanged="@(x => OnOptionsChanged(9,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[10]" Size="Size.Small" Label="みずびたし"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[10]" Size="Size.Small" Label="みずびたし" CheckedChanged="@(x => OnOptionsChanged(10,x))" />
                     </MudForm>
                 </MudItem>
                 <MudItem xs="4">
                     <MudForm>
-                        <MudCheckBox @bind-Checked="@options[11]" Size="Size.Small" Label="フレンドガード"></MudCheckBox>
+                        <MudCheckBox  T="bool" Checked="@options[11]" Size="Size.Small" Label="フレンドガード" CheckedChanged="@(x => OnOptionsChanged(11,x))" />
                     </MudForm>
                 </MudItem>
         <MudItem xs="4">
             <MudForm>
-                <MudCheckBox @bind-Checked="@options[19]" Size="Size.Small" Label="ちいさくなる"></MudCheckBox>
+                <MudCheckBox  T="bool" Checked="@options[19]" Size="Size.Small" Label="ちいさくなる" CheckedChanged="@(x => OnOptionsChanged(19,x))" />
             </MudForm>
         </MudItem>
 
-        <MudItem xs="8">
+        <MudItem xs="4">
             <MudSelect T="string" Label="状態異常" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnConditionChanged">
                 @foreach( var c in conditionAbnormaly )
                 {
@@ -281,6 +281,16 @@
                 }
             </MudSelect>
         </MudItem>
+
+        <MudItem xs="4">
+            <MudSelect T="int" Label="@special_string" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnSpecialValueChanged">
+                @foreach (var v in special_values)
+                {
+                    <MudSelectItem T="int" Value="@v" />
+                }
+            </MudSelect>
+        </MudItem> 
+
     </MudGrid>
     </main>
 
@@ -322,6 +332,14 @@
     private void OnPokemonNameSelected( string name ) // ポケモン名が入力された
     {
         PokemonName = name;
+        if ( name == "コノヨザル" || name == "オコリザル" )
+        {
+            special_string = "ふんどのこぶし";
+        }
+        else if ( name == "ハカドッグ" || name.Contains( "イダイトウ" ) )
+        {
+            special_string = "おはかまいり";
+        }
         CalcStatus();
     }
     private void OnNatureSelected( string v )
@@ -346,6 +364,10 @@
     }
     private void OnAbilitySelected( string s )
     {
+        if (s == "そうだいしょう" || s == "はがねのせいしん")
+        {
+            special_string = s;
+        }
         ability_value = s;
         CalcStatus();
     }
@@ -357,7 +379,8 @@
     private void OnTeraTypeSelected( string s )
     {
         teratype_value = s;
-        CalcStatus();
+        if ( options[14] )
+            CalcStatus(); // テラスタルしてる時だけダメージ再計算
     }
     private void OnConditionChanged( string s )
     {
@@ -365,11 +388,23 @@
         switch ( s )
         {
             default: break;
-            case "毒・猛毒": options[15] = true; CalcStatus(); break;
-            case "火傷": options[16] = true; CalcStatus(); break;
-            case "麻痺": options[17] = true; CalcStatus(); break;
-            case "眠り": options[18] = true; CalcStatus(); break;
+            case "毒・猛毒": options[15] = true; break;
+            case "火傷": options[16] = true; break;
+            case "麻痺": options[17] = true; break;
+            case "眠り": options[18] = true; break;
         }
+
+        CalcStatus();
+    }
+    private void OnOptionsChanged( int idx, bool val )
+    {
+        options[idx] = val;
+        CalcStatus();
+    }
+    private void OnSpecialValueChanged( int val )
+    {
+        special_value = val;
+        CalcStatus();
     }
 
     private void CalcStatus()
@@ -419,7 +454,7 @@
         // 実ステータスを入力して親コンポーネントに返す
         DamageCalcSV.Shared.Models.PokemonDataReal real_pokemon
         = new DamageCalcSV.Shared.Models.PokemonDataReal(p.Name, p.type[0], p.type[1], teratype_value, Level, status[0], status[1], status[2], status[3], status[4], status[5],
-                                                          p.ZukanNo, p.Height, p.Weight, ability_value, item_value, rank, options, p.MoveList);
+                                                          p.ZukanNo, p.Height, p.Weight, ability_value, item_value, rank, options, special_value, p.MoveList);
 
         OnStatusChangeEventCallback.InvokeAsync( real_pokemon );
     }
@@ -469,6 +504,12 @@
 
     private int[] status = new int[18];
     private int[] rank = { 0, 0, 0, 0, 0 };
+
+    private int[] special_values = {
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+    };
+    private string special_string;
+    private int special_value = 0;
 
     private int[] _efvalToggleValue = new int[6];
     void _efvalToggleText( int idx )

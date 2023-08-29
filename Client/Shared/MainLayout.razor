@@ -92,32 +92,32 @@
 
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.Gravity" Size="Size.Small" Label="じゅうりょく" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.Gravity" Size="Size.Small" Label="じゅうりょく" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(0,x))" />
                             </MudForm>
                     </MudItem>
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.WonderRoom" Size="Size.Small" Label="ワンダールーム" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.WonderRoom" Size="Size.Small" Label="ワンダールーム" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(1,x))" />
                             </MudForm>
                     </MudItem>
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.PlasmaShower" Size="Size.Small" Label="プラズマシャワー" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.PlasmaShower" Size="Size.Small" Label="プラズマシャワー" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(2,x))" />
                             </MudForm>
                     </MudItem>
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.FairyAura" Size="Size.Small" Label="フェアリーオーラ" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.FairyAura" Size="Size.Small" Label="フェアリーオーラ" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(3,x))" />
                             </MudForm>
                     </MudItem>
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.DarkAura" Size="Size.Small" Label="ダークオーラ" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.DarkAura" Size="Size.Small" Label="ダークオーラ" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(4,x))" />
                             </MudForm>
                     </MudItem>
                     <MudItem xs="2">
                             <MudForm>
-                            <MudCheckBox @bind-Checked="@DamageCalcSV.Shared.Models.DamageCalc.AuraBreak" Size="Size.Small" Label="オーラブレイク" Margin="Margin.Dense"></MudCheckBox>
+                            <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.AuraBreak" Size="Size.Small" Label="オーラブレイク" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(5,x))" />
                             </MudForm>
                     </MudItem>
 
@@ -175,6 +175,20 @@
     private void OnFieldChanged( int val )
     {
         DamageCalcSV.Shared.Models.DamageCalc.SelectedFieldSettings = val;
+        CalcDamage(null, 3);
+    }
+    private void OnBattleSettingsChanged( int idx, bool val )
+    {
+        switch ( idx )
+        {
+            case 0: DamageCalcSV.Shared.Models.DamageCalc.Gravity = val; break;
+            case 1: DamageCalcSV.Shared.Models.DamageCalc.WonderRoom = val; break;
+            case 2: DamageCalcSV.Shared.Models.DamageCalc.PlasmaShower = val; break;
+            case 3: DamageCalcSV.Shared.Models.DamageCalc.FairyAura = val; break;
+            case 4: DamageCalcSV.Shared.Models.DamageCalc.DarkAura = val; break;
+            case 5: DamageCalcSV.Shared.Models.DamageCalc.AuraBreak = val; break;
+            default: break;
+        }
         CalcDamage(null, 3);
     }
 
