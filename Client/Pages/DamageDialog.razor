@@ -1,0 +1,46 @@
+﻿
+<MudDialog DiableSidePadding="true">
+    <DialogContent>
+        <MudContainer Style="max-height: 300px; overflow-y: scroll">
+            <MudGrid>
+                <MudItem xs="4">
+                    <MudText>@damageDetail.Key</MudText>
+                </MudItem>
+                <MudItem xs="8" />
+                <MudItem xs="4">通常ダメージ</MudItem>
+                <MudItem xs="8" />
+                    @foreach (var dam in damage_normal)
+                    {
+                        <MudText>@dam,</MudText>
+                    }
+                <MudItem xs="4">急所ダメージ</MudItem>
+                <MudItem xs="8" />
+                    @foreach (var dam in damage_critical)
+                    {
+                        <MudText>@dam,</MudText>
+                    }
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@( () => MudDialog.Close())">閉じる</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public KeyValuePair<string, List<long>> damageDetail { get; set; }
+    private List<long> damage_normal = new List<long>();
+    private List<long> damage_critical = new List<long>();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        for ( int i = 0; i < 16; ++i )
+        {
+            damage_normal.Add( damageDetail.Value[i] );
+            damage_critical.Add(damageDetail.Value[i + 16]);
+        }
+    }
+}

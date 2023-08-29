@@ -1,4 +1,6 @@
-﻿<main>
+﻿@inject IDialogService DialogService
+
+<main>
     <MudGrid Spacing="@spacing" Justify="Justify.Center">
         <!-- for文的なやつで、技の種類分だけゲージを出したい -->
         <MudItem xs="2" />
@@ -26,7 +28,10 @@
             }
             @foreach (var d in damage_list)
             {
-                <MudItem xs="12"><MudText>@d.Key / <b>@damage_range[d.Key]</b> / 期待値: @damage_exp[d.Key]</MudText></MudItem>
+                <MudItem xs="10"><MudText>@d.Key / <b>@damage_range[d.Key]</b> / 期待値: @damage_exp[d.Key]</MudText></MudItem>
+                <MudItem xs="2">
+                    <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Add" OnClick="@((e) => OpenDamageDialog(d))"></MudIconButton>
+                </MudItem>
                 <MudItem xs="12">
                     <MudProgressLinear Buffer="true" Size="Size.Large" Color="@HP_Bar_Color[d.Key]" Min="0" Max="@def.HP"
                                            Value="@damage_min_max[d.Key].Item1" BufferValue="@damage_min_max[d.Key].Item2">
@@ -60,5 +65,13 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
+    }
+
+    DialogOptions closeButton = new DialogOptions() { CloseButton = true };
+
+    private void OpenDamageDialog( KeyValuePair<string, List<long>> d )
+    {
+        var parameters = new DialogParameters<DamageCalcSV.Client.Pages.DamageDialog> { { x => x.damageDetail, d } };
+        DialogService.Show<DamageCalcSV.Client.Pages.DamageDialog>("ダメージ詳細", parameters );
     }
 }

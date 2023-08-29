@@ -36,30 +36,32 @@ namespace DamageCalcSV.Shared.Models
             MoveManager = new PokemonMoveManager();
             TypeCompatible = new PokemonType();
         }
-        private int CorrectPower(string name, PokemonDataReal atk, PokemonDataReal def)
+        private long CorrectPower(ref PokemonMove move, PokemonDataReal atk, PokemonDataReal def)
         {
             // 技の威力が変わる場合に補正する処理
-            var MoveInfo = MoveManager.GetMoveInfo(name);
-            int power = MoveInfo.Power;
+            long power = move.Power;
 
             // サイコフィールドでワイドフォースを撃つ場合は威力2倍かつ全体技
-            // -> 技データベースの方を書き換えると面倒なのをどうするか…
-            //  -> ここでは威力だけ補正して、ダブル判定etcは本体の関数でやる(たぶん)
-            if (SelectedFieldSettings == 3) // フィールドとか天気の数値はdefine的な感じで書きたいがC#での書き方がわからん。。
+            if (move.Name == "ワイドフォース")
             {
-                if (name == "ワイドフォース")
+                if (SelectedFieldSettings == 3) // フィールドとか天気の数値はdefine的な感じで書きたいがC#での書き方がわからん。。
                 {
-                    return (power * 2);
+                    power *= 2;
+                    move.Range = true; // サイコフィールドなら範囲攻撃
+                }
+                else
+                {
+                    move.Range = false; // サイコフィールドでないなら単体攻撃
                 }
             }
 
             // エレキボール、ジャイロボールは素早さを比較して威力決定
-            if (name == "エレキボール")
+            if (move.Name == "エレキボール")
             {
                 int atkS = atk.Speed;
                 int defS = def.Speed;
             }
-            else if (name == "ジャイロボール")
+            else if (move.Name == "ジャイロボール")
             {
                 int atkS = atk.Speed;
                 int defS = def.Speed;
@@ -68,7 +70,7 @@ namespace DamageCalcSV.Shared.Models
             // サイコブレイドはエレキフィールドで威力1.5倍
             if (SelectedFieldSettings == 1)
             {
-                if (name == "サイコブレイド")
+                if (move.Name == "サイコブレイド")
                 {
                 }
             }
@@ -76,7 +78,7 @@ namespace DamageCalcSV.Shared.Models
             // イナズマドライブ/アクセルブレイクは弱点をつくと威力1.33倍
             // -> ここで弱点計算するのは面倒なので、「弱点をついた」フラグをONにするのが良いかも
             //  -> むしろ弱点処理する方でやるべきか…？
-            if (name == "アクセルブレイク" || name == "イナズマドライブ")
+            if (move.Name == "アクセルブレイク" || move.Name == "イナズマドライブ")
             {
             }
 
@@ -94,7 +96,7 @@ namespace DamageCalcSV.Shared.Models
             // ミストフィールドでドラゴン技を使うと威力半減（ダメージ半減？どっち？）
             if (SelectedFieldSettings == 4)
             {
-                if (MoveInfo.Type == "ドラゴン")
+                if (move.Type == "ドラゴン")
                 {
                     power *= 2048;
                     power /= 4096;
@@ -102,18 +104,37 @@ namespace DamageCalcSV.Shared.Models
             }
 
             // ヒートスタンプ、けたぐり、ヘビーボンバーは体重差によって威力決定
-            if (name == "ヒートスタンプ" || name == "けたぐり" || name == "ヘビーボンバー")
+            if (move.Name == "ヒートスタンプ" || move.Name == "けたぐり" || move.Name == "ヘビーボンバー")
             {
             }
 
             // 無天候と晴れ以外の天候でのソーラービーム/ブレードは威力半減
-            if (name == "ソーラービーム" || name == "ソーラーブレード")
+            if (move.Name == "ソーラービーム" || move.Name == "ソーラーブレード")
             {
                 if ((SelectedWeatherSettings != 0) && (SelectedWeatherSettings != 1))
                 {
                     power *= 2048;
                     power /= 4096;
                 }
+            }
+
+            // アイテムによる威力強化
+            if (atk.Item == "タイプ強化")
+            {
+                // タイプ強化アイテムなら威力4915/4096倍
+                power *= 4915; power /= 4096;
+            }
+            if ((move.Category == 1)
+             && (atk.Item == "ちからのハチマキ"))
+            {
+                // 物理技でちからのハチマキを持っている時は威力4505/4096倍
+                power *= 4505; power /= 4096;
+            }
+            if ((move.Category == 2)
+             && (atk.Item == "ものしりメガネ"))
+            {
+                // 特殊技でものしりメガネを持っている時は威力4505/4096倍
+                power *= 4505; power /= 4096;
             }
 
             // おはかまいりは仲間が倒された回数で威力変動(専用の入力欄が必要 or おはかまいり(0-10くらいまで別々の技として計算しても良いけど))
@@ -124,14 +145,73 @@ namespace DamageCalcSV.Shared.Models
             return (power);
         }
 
-        double CalcCriticalProbability(string name, PokemonDataReal atk, PokemonDataReal def)
+        PokemonDataReal CorrectRank(PokemonDataReal p )
+        {
+            int[] status = { p.Attack, p.Block, p.Constant, p.Deffence, p.Speed };
+            for ( int i = 0; i < p.Rank.Length; ++i )
+            {
+                int rank1 = 2, rank2 = 2;
+                if (p.Rank[i] > 0)
+                    rank1 += p.Rank[i];
+                else
+                    rank2 += p.Rank[i];
+
+                status[i] = status[i] * rank1;
+                status[i] = status[i] / rank2;
+            }
+
+            p.Attack = status[0]; p.Block = status[1];
+            p.Constant = status[2]; p.Deffence = status[3];
+            p.Speed = status[4];
+
+            return ( p );
+        }
+
+        PokemonDataReal CorrectRankCritical( PokemonDataReal p )
+        {
+            // 急所に当たる場合のランク補正
+            int[] status = { p.Attack, p.Block, p.Constant, p.Deffence };
+            for (int i = 0; i < p.Rank.Length - 1; ++i)
+            {
+                int rank1 = 2, rank2 = 2;
+                if (p.Rank[i] > 0)
+                    rank1 += p.Rank[i];
+                else
+                    rank2 += p.Rank[i];
+
+                if ( i % 2 == 0 ) // 攻撃系ステータス
+                {
+                    if ( (double)rank1 / (double)rank2 > 1.0 )
+                    {
+                        // 有利なステータスなら採用する
+                        status[i] = status[i] * rank1;
+                        status[i] = status[i] / rank2;
+                    }
+                }
+                else
+                {
+                    //防御系ステータス
+                    if ( (double)rank1 / (double)rank2 <= 1.0 )
+                    {
+                        status[i] = status[i] * rank1;
+                        status[i] = status[i] / rank2;
+                    }
+                }
+            }
+
+            p.Attack = status[0]; p.Block = status[1];
+            p.Constant = status[2]; p.Deffence = status[3];
+
+            return ( p );
+        }
+
+        double CalcCriticalProbability(PokemonMove move, PokemonDataReal atk, PokemonDataReal def)
         {
             // option条件下で急所に当たる確率を計算する
             // -> 急所に当たりやすい技、急所ランク(作ってない気がする…)、持ち物などを考慮 -> option はPokemonData.opt の方にしないとダメだと思うけど、暫定で
             double result = 1.0;
             int rank = 0;
-            var MoveInfo = MoveManager.GetMoveInfo(name);
-            rank += MoveInfo.Critical; // 急所に当たりやすい技なら、急所ランクを上げる(確定急所技は+3、それ以外は+1）
+            rank += move.Critical; // 急所に当たりやすい技なら、急所ランクを上げる(確定急所技は+3、それ以外は+1）
 
             if (atk.ability == "きょううん") // 攻撃側の特性が強運
             {
@@ -265,12 +345,18 @@ namespace DamageCalcSV.Shared.Models
             return (dmg);
         }
 
-        public Dictionary<string, List<long>> calc(PokemonDataReal atk, PokemonDataReal def)
+        public Dictionary<string, List<long>> calc(PokemonDataReal Atk, PokemonDataReal Def)
         {
             Dictionary<string, List<long>> result = new Dictionary<string, List<long>>();
             Dictionary<string, List<long>> result_critical = new Dictionary<string, List<long>>();
 
-            foreach ( var atkmove in atk.MoveList )
+            // ステータスをランク補正する
+            PokemonDataReal atk = CorrectRank(Atk);
+            PokemonDataReal def = CorrectRank(Def);
+            PokemonDataReal atk_cri = CorrectRank(Atk);
+            PokemonDataReal def_cri = CorrectRank(Def);
+
+            foreach ( var atkmove in Atk.MoveList )
             {
                 var move = MoveManager.GetMoveInfo(atkmove);
                 if (move == null) // 万が一、指定された技がデータベース（？）に存在しなかった場合は無視する
@@ -295,8 +381,14 @@ namespace DamageCalcSV.Shared.Models
                         move.Type = atk.TeraType;
 
                         // ランク補正を含めてA>Cなら物理技に切り替える
-                        // -> ランク補正済みステータスを計算するサブ関数を実装すること！！！！！
-                        //  -> そもそもステータスは技毎に変わるわけじゃないから、最初に一回だけ計算すべきだと思う
+                        if ( atk.Attack > atk.Constant )
+                        {
+                            move.Category = 1;
+                        }
+                        else
+                        {
+                            move.Category = 2;
+                        }
                     }
                     else
                     {
@@ -329,12 +421,14 @@ namespace DamageCalcSV.Shared.Models
                 // 4096は12bit固定小数点演算のため（整数で扱うと、1.0＝4096となる）
                 // 急所の有無それぞれについて、乱数による16パターンのダメージを算出する
                 long damage = 4096;
-                long A = 1, D = 1; // 今、AとDを技毎に毎回計算してるけど、A/B/C/Dそれぞれ出して計算するべきでは？ -> その方が計算が特殊な技を処理しやすそう
+                long A = 1, D = 1;
+                long A_critical = 1, D_critical = 1;
                 long M = 1;
                 long Mhalf = 1, Mfilter = 1, MTwice = 1;
 
                 /* STEP1. A/Dを決定 */ // --> 要確認！！！　ランク補正ってここのA/Dを直接いじる？ -> もう一個、こだわり系はステータス1.5倍だよね？ここ？？
                 ( A, D ) = calcAD(A, D, atk, def, move.Category);
+                ( A_critical, D_critical ) = calcAD( A_critical, D_critical, atk_cri, def_cri, move.Category);
 
                 // STEP1-1. サイコショックとサイコブレイクは攻撃側の特攻、防御側の防御を使う
                 // categoryを物理・特殊・変化だけじゃなくて、物理(特殊計算)、特殊(物理計算)みたいなものも入れたら良いかも…
@@ -350,66 +444,17 @@ namespace DamageCalcSV.Shared.Models
                 if ( WonderRoom == true )
                 {
                     long A_dummy = 1;
-                    D = 1; // Aは変わらないのでダミーで計算して結果は捨て、Dはここでの結果を採用する
-                    (A_dummy, D ) = calcAD(A_dummy, D, atk, def, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
+                    D = D_critical = 1; // Aは変わらないのでダミーで計算して結果は捨て、Dはここでの結果を採用する
+                    (A_dummy, D) = calcAD(A_dummy, D, atk, def, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
+                    (A_dummy, D_critical) = calcAD(A_dummy, D_critical, atk_cri, def_cri, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
                 }
-
-                // ソーラービームは威力が変わるから、範囲補正より先にそっちかも…？
-                // 威力変化系の技は、別途専用関数作って計算した方が良さそう
 
                 /* STEP2. 最初の()内を計算 */
                 /* STEP2-1. 威力を決定 */
-                long power = move.Power;
-                /* 以下、サイコフィールドでワイドフォースとか、ジャイロボールとか、そういうやつも計算する */
-                // ↓これも関数に入れた方が良い？？
-                if (atk.Item == "タイプ強化" )
-                {
-                    // タイプ強化アイテムなら威力4915/4096倍
-                    power *= 4915; power /= 4096;
-                }
-                if ((move.Category == 1 )
-                 && (atk.Item == "ちからのハチマキ" ))
-                {
-                    // 物理技でちからのハチマキを持っている時は威力4505/4096倍
-                    power *= 4505; power /= 4096;
-                }
-                if ((move.Category == 2 )
-                 && (atk.Item == "ものしりメガネ"))
-                {
-                    // 特殊技でものしりメガネを持っている時は威力4505/4096倍
-                    power *= 4505; power /= 4096;
-                }
+                long power = CorrectPower(ref move, atk, def);
 
-                /* STEP2-2. A/Dにランク補正を入れるのはここ？ */
-                int rank1 = 2, rank2 = 2;
-                long A_critical = A, D_critical = D;
-                if (atk.Rank[(move.Category == 1 ? 0 : 2)] > 0) // 物理/特殊のカテゴリだけで見れない技をどうするか…(テラバーストとか)
-                {
-                    rank1 += atk.Rank[(move.Category == 1 ? 0 : 2)];
-                }
-                else if (atk.Rank[(move.Category == 1 ? 0 : 2)] < 0)
-                {
-                    rank2 += atk.Rank[(move.Category == 1 ? 0 : 2)];
-                }
-                A = A * rank1; A = A / rank2;
-                if ((double)rank1 / rank2 > 1.0)
-                {
-                    A_critical = A; // 急所に当たる場合、有利な効果(攻撃側の攻撃ランク上昇)だけ残す
-                }
-
-                if (def.Rank[(move.Category == 1 ? 1 : 3)] > 0)
-                {
-                    rank1 += def.Rank[(move.Category == 1 ? 1 : 3)];
-                }
-                else if (def.Rank[(move.Category == 1 ? 1 : 3)] < 0)
-                {
-                    rank2 += def.Rank[(move.Category == 1 ? 1 : 3)];
-                }
-                D = D * rank1; D = D / rank2;
-                if ((double)rank1 / rank2 < 1.0)
-                {
-                    D_critical = D; // 急所に当たる場合、有利(防御側の防御ランク低下)な効果だけ残す
-                }
+                /* STEP2-2. ランク補正済みA/Dに対して急所判定する */
+                // -> すでに別途計算済みなので割愛
 
                 /* STEP2-3. ランク補正とは別のステータス上昇(総大将、クォークチャージ、古代活性、ハドロンエンジン、ヒヒイロの鼓動) */
                 // -> これはPokemonDataの数値でもらう仕様にしたんだっけ？
@@ -500,7 +545,8 @@ namespace DamageCalcSV.Shared.Models
                 /* STEP10. 火傷補正 */
                 for (int i = 0; i < 16; ++i)
                 {
-                    if ( atk.Options[16] ) // -> 後で直す！！！！！！！！
+                    // 物理技で火傷状態ならダメージ半減
+                    if ( atk.Options[16] & move.Category == 1 )
                     {
                         result[move.Name][i] *= 2048;
                         result[move.Name][i] += 2047;
@@ -819,12 +865,12 @@ namespace DamageCalcSV.Shared.Models
                 for (int i = 0; i < 16; ++i)
                 {
                     // 基本ダメージは、計算結果 × 急所に"当たらない"確率 × 技の命中率
-                    tmp_exp += (result[move.Name][i] / 16.0) * (1.0 - CalcCriticalProbability(atkmove, atk, def)) * (move.Accuracy / 100.0);
+                    tmp_exp += (result[move.Name][i] / 16.0) * (1.0 - CalcCriticalProbability(move, atk, def)) * (move.Accuracy / 100.0);
                 }
                 for (int i = 0; i < 16; ++i)
                 {
                     // 急所に当たった場合のダメージは、計算結果 × 急所に"当たる"確率 × 技の命中率
-                    tmp_exp += (result_critical[move.Name][i] / 16.0) * CalcCriticalProbability(atkmove, atk, def) * (move.Accuracy / 100.0);
+                    tmp_exp += (result_critical[move.Name][i] / 16.0) * CalcCriticalProbability(move, atk, def) * (move.Accuracy / 100.0);
                 }
                 result[move.Name].AddRange(result_critical[move.Name] );
                 result[move.Name].Add( (long)tmp_exp );
