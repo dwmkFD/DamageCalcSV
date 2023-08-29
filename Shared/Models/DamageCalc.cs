@@ -154,7 +154,7 @@ namespace DamageCalcSV.Shared.Models
                 if (p.Rank[i] > 0)
                     rank1 += p.Rank[i];
                 else
-                    rank2 += p.Rank[i];
+                    rank2 -= p.Rank[i];
 
                 status[i] = status[i] * rank1;
                 status[i] = status[i] / rank2;
@@ -177,7 +177,7 @@ namespace DamageCalcSV.Shared.Models
                 if (p.Rank[i] > 0)
                     rank1 += p.Rank[i];
                 else
-                    rank2 += p.Rank[i];
+                    rank2 -= p.Rank[i];
 
                 if ( i % 2 == 0 ) // 攻撃系ステータス
                 {
