@@ -7,7 +7,7 @@ namespace DamageCalcSV.Shared.Models
     public class PokemonDataReal
     {
         public string Name { get; set; }
-        public int HP, Attack, Block, Constant, Deffence, Speed, Level;
+        public int HP, Attack, Block, Contact, Defense, Speed, Level;
         public string[] type = { "", "" };
         public string TeraType;
         public string ability;
@@ -23,7 +23,7 @@ namespace DamageCalcSV.Shared.Models
             int zukanNo, double height, double weight, string abl, string item, int[] r, bool[] opt, int spe, List<string> moveList)
         {
             Name = name; Level = L;
-            HP = h; Attack = a; Block = b; Constant = c; Deffence = d; Speed = s;
+            HP = h; Attack = a; Block = b; Contact = c; Defense = d; Speed = s;
             type[0] = t1; type[1] = t2; TeraType = t3;
             ability = abl;
             ZukanNo = zukanNo; Height = height; Weight = weight;
@@ -37,7 +37,7 @@ namespace DamageCalcSV.Shared.Models
     public class PokemonData
     {
         public string Name { get; set; }
-        public int HP, Attack, Block, Constant, Deffence, Speed;
+        public int HP, Attack, Block, Contact, Defense, Speed;
         public string[] type = { "", "" };
         public string[] ability = { "", "", "" };
         public int ZukanNo;
@@ -49,7 +49,7 @@ namespace DamageCalcSV.Shared.Models
             params string[] moveList )
         {
             Name = name;
-            HP = h; Attack = a; Block = b; Constant = c; Deffence = d; Speed = s;
+            HP = h; Attack = a; Block = b; Contact = c; Defense = d; Speed = s;
             type[0] = t1; type[1] = t2;
             ability[0] = ability1; ability[1] = ability2; ability[2] = ability3;
             ZukanNo = zukanNo; Height = height; Weight = weight;
@@ -82,12 +82,12 @@ namespace DamageCalcSV.Shared.Models
 
         // データベースを使うのはしんどそうなので、全部ここに書いてしまう
         private void AddPokemonData(string name, string type1, string type2,
-            int HP, int Attack, int Block, int Constant, int Deffence, int Speed,
+            int HP, int Attack, int Block, int Contact, int Defense, int Speed,
             int zukanNo, double height, double weight, string ability1, string ability2, string ability3,
             params string[] movelist)
         {
             PokemonList.Add( new PokemonData(name, type1, type2,
-                HP, Attack, Block, Constant, Deffence, Speed,
+                HP, Attack, Block, Contact, Defense, Speed,
                 zukanNo, height, weight, ability1, ability2, ability3,
                 movelist
                 ) );

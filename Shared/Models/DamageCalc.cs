@@ -393,7 +393,7 @@ namespace DamageCalcSV.Shared.Models
 
         PokemonDataReal CorrectRank(in PokemonDataReal p )
         {
-            int[] status = { p.Attack, p.Block, p.Constant, p.Deffence, p.Speed };
+            int[] status = { p.Attack, p.Block, p.Contact, p.Defense, p.Speed };
             for ( int i = 0; i < p.Rank.Length; ++i )
             {
                 int rank1 = 2, rank2 = 2;
@@ -407,7 +407,7 @@ namespace DamageCalcSV.Shared.Models
             }
 
             p.Attack = status[0]; p.Block = status[1];
-            p.Constant = status[2]; p.Deffence = status[3];
+            p.Contact = status[2]; p.Defense = status[3];
             p.Speed = status[4];
 
             return ( p );
@@ -416,7 +416,7 @@ namespace DamageCalcSV.Shared.Models
         PokemonDataReal CorrectRankCritical( in PokemonDataReal p )
         {
             // 急所に当たる場合のランク補正
-            int[] status = { p.Attack, p.Block, p.Constant, p.Deffence };
+            int[] status = { p.Attack, p.Block, p.Contact, p.Defense };
             for (int i = 0; i < p.Rank.Length - 1; ++i)
             {
                 int rank1 = 2, rank2 = 2;
@@ -446,7 +446,7 @@ namespace DamageCalcSV.Shared.Models
             }
 
             p.Attack = status[0]; p.Block = status[1];
-            p.Constant = status[2]; p.Deffence = status[3];
+            p.Contact = status[2]; p.Defense = status[3];
 
             return ( p );
         }
@@ -456,8 +456,8 @@ namespace DamageCalcSV.Shared.Models
             List<Tuple<int, int>> tmp = new List<Tuple<int, int>> {
                 Tuple.Create( 1, p.Attack ),
                 Tuple.Create( 2, p.Block ),
-                Tuple.Create( 3, p.Constant ),
-                Tuple.Create( 4, p.Deffence ),
+                Tuple.Create( 3, p.Contact ),
+                Tuple.Create( 4, p.Defense ),
                 Tuple.Create( 5, p.Speed ),
             };
 
@@ -479,11 +479,11 @@ namespace DamageCalcSV.Shared.Models
                         p.Block *= 5325; p.Block += 2048; p.Block /= 4096;
                         p_cri.Block *= 5325; p_cri.Block += 2048; p_cri.Block /= 4096; break;
                     case 3:
-                        p.Constant *= 5325; p.Constant += 2048; p.Constant /= 4096;
-                        p_cri.Constant *= 5325; p_cri.Constant += 2048; p_cri.Constant /= 4096; break;
+                        p.Contact *= 5325; p.Contact += 2048; p.Contact /= 4096;
+                        p_cri.Contact *= 5325; p_cri.Contact += 2048; p_cri.Contact /= 4096; break;
                     case 4:
-                        p.Deffence *= 5325; p.Deffence += 2048; p.Deffence /= 4096;
-                        p_cri.Deffence *= 5325; p_cri.Deffence += 2048; p_cri.Deffence /= 4096; break;
+                        p.Defense *= 5325; p.Defense += 2048; p.Defense /= 4096;
+                        p_cri.Defense *= 5325; p_cri.Defense += 2048; p_cri.Defense /= 4096; break;
                     case 5:
                         p.Speed *= 6144; p.Speed += 2048; p.Speed /= 4096;
                         p_cri.Speed *= 6144; p_cri.Speed += 2048; p_cri.Speed /= 4096; break;
@@ -658,7 +658,7 @@ namespace DamageCalcSV.Shared.Models
             if (category == 2 )
             {
                 // 特殊技の時は、攻撃側の「特攻」と防御側の「特防」を使う
-                A *= atk.Constant;
+                A *= atk.Contact;
 
                 // categoryを物理・特殊・変化だけじゃなくて、物理(特殊計算)、特殊(物理計算)みたいなものも入れたら良いかも…
                 if ((move.Name == "サイコショック") || (move.Name == "サイコブレイク"))
@@ -676,7 +676,7 @@ namespace DamageCalcSV.Shared.Models
                 }
                 else
                 {
-                    D *= def.Deffence;
+                    D *= def.Defense;
                 }
 
                 if ((atk.ability == "ハドロンエンジン") && SelectedFieldSettings == 1 )
@@ -928,19 +928,18 @@ namespace DamageCalcSV.Shared.Models
 
             // ステータスをランク補正する
             PokemonDataReal atk_tmp = new PokemonDataReal(Atk.Name, Atk.type[0], Atk.type[1], Atk.TeraType, Atk.Level,
-                Atk.HP, Atk.Attack, Atk.Block, Atk.Constant, Atk.Deffence, Atk.Speed, Atk.ZukanNo, Atk.Height, Atk.Weight,
+                Atk.HP, Atk.Attack, Atk.Block, Atk.Contact, Atk.Defense, Atk.Speed, Atk.ZukanNo, Atk.Height, Atk.Weight,
                 Atk.ability, Atk.Item, Atk.Rank, Atk.Options, Atk.Special, Atk.MoveList);
             CorrectRank(atk_tmp);
             PokemonDataReal def_tmp = new PokemonDataReal(Def.Name, Def.type[0], Def.type[1], Def.TeraType, Def.Level,
-                Def.HP, Def.Attack, Def.Block, Def.Constant, Def.Deffence, Def.Speed, Def.ZukanNo, Def.Height, Def.Weight,
+                Def.HP, Def.Attack, Def.Block, Def.Contact, Def.Defense, Def.Speed, Def.ZukanNo, Def.Height, Def.Weight,
                 Def.ability, Def.Item, Def.Rank, Def.Options, Def.Special, Def.MoveList);
             CorrectRank(def_tmp);
             PokemonDataReal atk_cri_tmp = new PokemonDataReal(Atk.Name, Atk.type[0], Atk.type[1], Atk.TeraType, Atk.Level,
-                Atk.HP, Atk.Attack, Atk.Block, Atk.Constant, Atk.Deffence, Atk.Speed, Atk.ZukanNo, Atk.Height, Atk.Weight,
+                Atk.HP, Atk.Attack, Atk.Block, Atk.Contact, Atk.Defense, Atk.Speed, Atk.ZukanNo, Atk.Height, Atk.Weight,
                 Atk.ability, Atk.Item, Atk.Rank, Atk.Options, Atk.Special, Atk.MoveList);
-            CorrectRank(atk_tmp);
             PokemonDataReal def_cri_tmp = new PokemonDataReal(Def.Name, Def.type[0], Def.type[1], Def.TeraType, Def.Level,
-                Def.HP, Def.Attack, Def.Block, Def.Constant, Def.Deffence, Def.Speed, Def.ZukanNo, Def.Height, Def.Weight,
+                Def.HP, Def.Attack, Def.Block, Def.Contact, Def.Defense, Def.Speed, Def.ZukanNo, Def.Height, Def.Weight,
                 Def.ability, Def.Item, Def.Rank, Def.Options, Def.Special, Def.MoveList);
             CorrectRankCritical(atk_cri_tmp);
             CorrectRankCritical(def_cri_tmp);
@@ -983,7 +982,7 @@ namespace DamageCalcSV.Shared.Models
                         move.Type = atk.TeraType;
 
                         // ランク補正を含めてA>Cなら物理技に切り替える
-                        if ( atk.Attack > atk.Constant )
+                        if ( atk.Attack > atk.Contact )
                         {
                             move.Category = 1;
                         }
