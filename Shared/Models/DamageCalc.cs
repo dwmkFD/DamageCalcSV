@@ -138,13 +138,6 @@ namespace DamageCalcSV.Shared.Models
                 }
             }
 
-            // イナズマドライブ/アクセルブレイクは弱点をつくと威力1.33倍
-            // -> ここで弱点計算するのは面倒なので、「弱点をついた」フラグをONにするのが良いかも
-            //  -> むしろ弱点処理する方でやるべきか…？
-            if (move.Name == "アクセルブレイク" || move.Name == "イナズマドライブ")
-            {
-            }
-
             // おはかまいりは仲間が倒された回数で威力変動
             // 同、ふんどのこぶしは攻撃を受けた回数で威力変動
             if (move.Name == "ふんどのこぶし" || move.Name == "おはかまいり")
@@ -283,12 +276,22 @@ namespace DamageCalcSV.Shared.Models
             }
 
             // てつのこぶしでパンチ技を使うと威力1.2倍
-            if (atk.ability == "てつのこぶし" && move.Punch )
+            if ( move.Punch )
             {
-                // てつのこぶしでパンチ技を使った場合は4915/4096倍
-                power *= 4915;
-                power += 2048;
-                power /= 4096;
+                if (atk.ability == "てつのこぶし")
+                {
+                    // てつのこぶしでパンチ技を使った場合は4915/4096倍
+                    power *= 4915;
+                    power += 2048;
+                    power /= 4096;
+                }
+                else if ( atk.Item == "パンチグローブ" )
+                {
+                    // パンチグローブでパンチ技を使う時は4506/4096倍
+                    power *= 4516;
+                    power += 2048;
+                    power /= 4096;
+                }
             }
 
             // そうだいしょうは仲間が倒された数×10％（最大50％）威力上昇
@@ -604,6 +607,13 @@ namespace DamageCalcSV.Shared.Models
                     A /= 4096;
                 }
 
+                if ( ( atk.Item == "ふといホネ" )
+                    && ( atk.Name == "カラカラ" || atk.Name.Contains( "ガラガラ" ) ) )
+                {
+                    // カラカラ・ガラガラなら攻撃2倍
+                    A *= 2;
+                }
+
                 if (atk.Item == "こだわりハチマキ")
                 {
                     // 持ち物がこだわりハチマキなら攻撃を1.5倍(四捨五入)する
@@ -612,15 +622,29 @@ namespace DamageCalcSV.Shared.Models
                     A /= 4096;
                 }
 
-                if (atk.ability == "ふしぎなうろこ")
+                if (def.ability == "ふしぎなうろこ")
                 {
-                    if (atk.Options[15] || atk.Options[16] || atk.Options[17] || atk.Options[18])
+                    if (def.Options[15] || def.Options[16] || def.Options[17] || def.Options[18])
                     {
                         // ふしぎなうろこかつ状態異常なら防御1.5倍
                         D *= 6144;
                         D += 2048;
                         D /= 4096;
                     }
+                }
+
+                if ( def.ability == "くさのけがわ" && SelectedFieldSettings == 2 )
+                {
+                    // くさのけがわでグラスフィールドなら防御1.5倍
+                    D *= 6144;
+                    D += 2048;
+                    D /= 4096;
+                }
+
+                if ( def.ability == "ファーコート" )
+                {
+                    // ファーコートで物理技を受ける時は防御2倍
+                    D *= 2;
                 }
 
                 // 防御側が「こおり」タイプを持っていて雪の場合は防御を1.5倍する
@@ -719,6 +743,13 @@ namespace DamageCalcSV.Shared.Models
                 }
             }
 
+            if ((atk.Item == "でんきだま")
+                && (atk.Name == "ピカチュウ"))
+            {
+                // ピカチュウなら攻撃・特攻2倍
+                A *= 2;
+            }
+
             if ( atk.ability == "すいほう" && move.Type == "みず" )
             {
                 A *= 2;
@@ -736,6 +767,14 @@ namespace DamageCalcSV.Shared.Models
                 A *= 2048;
                 A += 2048;
                 A /= 4096;
+            }
+
+            // しんかのきせき持ちの進化前ポケモンは防御・特防1.5倍
+            if ( def.Item == "しんかのきせき" )
+            {
+                D *= 6144;
+                D += 2048;
+                D /= 4096;
             }
 
             // 特性有効なら、それぞれ対応するタイプの技は威力1.5倍(実際には攻撃系ステータスを1.5倍っぽい？)
@@ -1144,7 +1183,25 @@ namespace DamageCalcSV.Shared.Models
 
                 /* STEP11-2. ブレインフォース補正は第九世代には存在しない */
 
-               /* STEP11-3. スナイパー補正 */
+                // STEP11-2.(第九世代) イナズマドライブ/アクセルブレイクは弱点をつくと威力1.33倍
+                if (move.Name == "アクセルブレイク" || move.Name == "イナズマドライブ")
+                {
+                    if (typecomp_res > 1.0 )
+                    {
+                        for ( int i = 0; i < 16; ++i )
+                        {
+                            result[move.Name][i] *= 5461;
+                            result[move.Name][i] += 2048;
+                            result[move.Name][i] /= 4096;
+
+                            result_critical[move.Name][i] *= 5461;
+                            result_critical[move.Name][i] += 2048;
+                            result_critical[move.Name][i] /= 4096;
+                        }
+                    }
+                }
+
+                /* STEP11-3. スナイパー補正 */
                 if (atk.ability == "スナイパー" )
                 {
                     for (int i = 0; i < 16; ++i) // 急所に当たった時、更に威力が1.5倍
@@ -1246,7 +1303,6 @@ namespace DamageCalcSV.Shared.Models
                     && ( move.Sound) && atk.Options[20] == false ) // 音の技の時
                 {
                     // 音の技を受ける時はダメージ半減
-                    // 逆に音技を使う時は[威力]上昇？ -> 威力計算の時にやる？
                     for (int i = 0; i < 16; ++i)
                     {
                         result[move.Name][i] *= 2048;
@@ -1261,18 +1317,23 @@ namespace DamageCalcSV.Shared.Models
 
                 /* STEP11-6-4. もふもふ(接触技)補正 */
                 if ((def.ability == "もふもふ" )
-                    && (move.Direct))
+                    && (move.Direct) && atk.Options[20] == false )
                 {
-                    // 接触技を受ける時はダメージ半減
-                    for (int i = 0; i < 16; ++i)
+                    if (move.Punch && atk.Item == "パンチグローブ")
+                        ; // パンチグローブでパンチ技を使う時は非接触判定になる
+                    else
                     {
-                        result[move.Name][i] *= 2048;
-                        result[move.Name][i] += 2048;
-                        result[move.Name][i] /= 4096;
+                        // 接触技を受ける時はダメージ半減
+                        for (int i = 0; i < 16; ++i)
+                        {
+                            result[move.Name][i] *= 2048;
+                            result[move.Name][i] += 2048;
+                            result[move.Name][i] /= 4096;
 
-                        result_critical[move.Name][i] *= 2048;
-                        result_critical[move.Name][i] += 2048;
-                        result_critical[move.Name][i] /= 4096;
+                            result_critical[move.Name][i] *= 2048;
+                            result_critical[move.Name][i] += 2048;
+                            result_critical[move.Name][i] /= 4096;
+                        }
                     }
                 }
 
@@ -1339,7 +1400,7 @@ namespace DamageCalcSV.Shared.Models
                 if (atk.Item.Contains("メトロノーム") )
                 {
                     // メトロノームで同じ技をN回使ったらダメージ上昇
-                    int[] gain = { 4096, 4096, 4096, 4096, 4096, 8192 };
+                    int[] gain = { 4096, 4915, 5734, 6553, 7372, 8192 };
                     for (int i = 0; i < 6; ++i)
                     {
                         string s = (i + 1).ToString();
