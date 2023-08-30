@@ -299,19 +299,79 @@
 
     private string PokemonName;
     private List<string> PokemonNameList = new List<string>();
+    private Dictionary<string, string> TranslateList = new Dictionary<string, string>();
 
     private List<string> trans_katakana( string str )
     {
         List<string> result = new List<string>();
-        if ( str == "f" )
+        bool finish = true;
+
+        // まず1～3文字のアルファベットの組を先頭から順番にカタカナに変換する
+        string res = "";
+        for (int i = 0; i < str.Length; i++)
         {
-            result.Add("ファ");
-            result.Add("フィ");
-            result.Add("フ");
-            result.Add("フェ");
-            result.Add("フォ");
+            string tmp = "";
+            if ( str.Length - i >= 3 )
+            {
+                // 3文字のパターンから先に調べた方が良さそう
+                if (TranslateList.ContainsKey(str.Substring(i, 3)))
+                {
+                    tmp = TranslateList[str.Substring(i, 3)];
+                    res += tmp;
+                    i += 2;
+                    continue;
+                }
+            }
+            if ( str.Length - i >= 2 )
+            {
+                if ( TranslateList.ContainsKey(str.Substring(i, 2)) )
+                {
+                    tmp = TranslateList[str.Substring(i, 2)];
+                    res += tmp;
+                    ++i; // 2文字変換してるので次へ
+                    continue;
+                }
+                else if ((i < str.Length) && (str[i] == str[i + 1]))
+                {
+                    res += "ッ";
+                    continue; // 子音を一つ残すので i をインクリメントせずに次へ
+                }
+            }
+            else
+            {
+                if (TranslateList.ContainsKey(str.Substring(i, 1)))
+                {
+                    // 1文字(母音とンとー)の変換ができるか？
+                    // -> ンをnだけから変換するには次が子音かどうかの判定が必要で面倒なので後回し
+                    tmp = TranslateList[str.Substring(i, 1)];
+                    res += tmp;
+                    continue;
+                }
+                else
+                {
+                    finish = false;
+                    break; // 1文字しかなく、さらに変換にも失敗してるなら、そのまま最終フェーズへ進む
+                }
+            }
         }
-        result.Add(str);
+
+        // 変換から漏れた最後の1文字からあり得る文字の候補を生成する
+        if ( finish == false && char.IsLetter( str.Last() ) )
+        {
+            // 最後の1文字がアルファベット(つまり変換漏れがある)
+            var tmpL = TranslateList.Where(x => x.Key.StartsWith(str.Last())).ToList();
+            foreach( var v in tmpL )
+            {
+                // 変換候補分だけ、それまでの変換結果に付け加えてリストを作る
+                // 例：マリルr -> マリルラ, マリルリ, マリルル, マリルレ, マリルロ
+                result.Add(res + v.Value);
+            }
+        }
+        else
+        {
+            result.Add( res ); // 全部変換できた(もしくは空っぽ)なら、それだけリストに詰めて返す
+        }
+
         return (result);
     }
 
@@ -321,13 +381,13 @@
             return (PokemonNameList);
 
         var s = trans_katakana(str);
-        var ll = PokemonNameList.Where(x => s.Contains(x)).ToList();
-        Title = "";
-        foreach ( var l in ll )
+        List<string> ls = new List<string>();
+        foreach ( var ss in s )
         {
-            Title += l;
+            ls.AddRange( PokemonNameList.Where(x => x.StartsWith(ss)).ToList() );
         }
-        return (PokemonNameList.Where(x => s.Contains(x)));
+
+        return ( ls );
     }
     private void OnPokemonNameSelected( string name ) // ポケモン名が入力された
     {
@@ -552,5 +612,126 @@
 
         status[6] = status[7] = status[8] = status[9] = status[10] = status[11] = 31;
         _efvalToggleValue[0] = _efvalToggleValue[1] = _efvalToggleValue[2] = _efvalToggleValue[3] = _efvalToggleValue[4] = _efvalToggleValue[5] = 252;
+
+        // ローマ字→カタカナ変換辞書
+        TranslateList["a"] = "ア"; TranslateList["ba"] = "バ";
+        TranslateList["be"] = "ベ"; TranslateList["bi"] = "ビ";
+        TranslateList["bo"] = "ボ"; TranslateList["bu"] = "ブ";
+        TranslateList["bya"] = "ビャ"; TranslateList["bye"] = "ビェ";
+        TranslateList["byi"] = "ビィ"; TranslateList["byo"] = "ビョ";
+        TranslateList["byu"] = "ビュ"; TranslateList["ca"] = "カ";
+        TranslateList["ce"] = "セ"; TranslateList["cha"] = "チャ";
+        TranslateList["che"] = "チェ"; TranslateList["chi"] = "チ";
+        TranslateList["cho"] = "チョ"; TranslateList["chu"] = "チュ";
+        TranslateList["ci"] = "シ"; TranslateList["co"] = "コ";
+        TranslateList["cu"] = "ク"; TranslateList["cya"] = "チャ";
+        TranslateList["cye"] = "チェ"; TranslateList["cyi"] = "チィ";
+        TranslateList["cyo"] = "チョ"; TranslateList["cyu"] = "チュ";
+        TranslateList["da"] = "ダ"; TranslateList["de"] = "デ";
+        TranslateList["dha"] = "デャ"; TranslateList["dhe"] = "デェ";
+        TranslateList["dhi"] = "ディ"; TranslateList["dho"] = "デョ";
+        TranslateList["dhu"] = "デュ"; TranslateList["di"] = "ヂ";
+        TranslateList["do"] = "ド"; TranslateList["du"] = "ヅ";
+        TranslateList["dya"] = "ヂャ"; TranslateList["dye"] = "ヂェ";
+        TranslateList["dyi"] = "ヂィ"; TranslateList["dyo"] = "ヂョ";
+        TranslateList["dyu"] = "デュ"; TranslateList["e"] = "エ";
+        TranslateList["fa"] = "ファ"; TranslateList["fe"] = "フェ";
+        TranslateList["fi"] = "フィ"; TranslateList["fo"] = "フォ";
+        TranslateList["fu"] = "フ"; TranslateList["ga"] = "ガ";
+        TranslateList["ge"] = "ゲ"; TranslateList["gi"] = "ギ";
+        TranslateList["go"] = "ゴ"; TranslateList["gu"] = "グ";
+        TranslateList["gwa"] = "グァ"; TranslateList["gwe"] = "グェ";
+        TranslateList["gwi"] = "グィ"; TranslateList["gwo"] = "グォ";
+        TranslateList["gwu"] = "グ"; TranslateList["gya"] = "ギャ";
+        TranslateList["gye"] = "ギェ"; TranslateList["gyi"] = "ギィ";
+        TranslateList["gyo"] = "ギョ"; TranslateList["gyu"] = "ギュ";
+        TranslateList["ha"] = "ハ"; TranslateList["he"] = "ヘ";
+        TranslateList["hi"] = "ヒ"; TranslateList["ho"] = "ホ";
+        TranslateList["hu"] = "フ"; TranslateList["hya"] = "ヒャ";
+        TranslateList["hye"] = "ヒェ"; TranslateList["hyi"] = "ヒィ";
+        TranslateList["hyo"] = "ヒョ"; TranslateList["hyu"] = "ヒュ";
+        TranslateList["i"] = "イ"; TranslateList["ja"] = "ジャ";
+        TranslateList["je"] = "ジェ"; TranslateList["ji"] = "ジ";
+        TranslateList["jo"] = "ジョ"; TranslateList["ju"] = "ジュ";
+        TranslateList["jya"] = "ジャ"; TranslateList["jye"] = "ジェ";
+        TranslateList["jyi"] = "ジィ"; TranslateList["jyo"] = "ジョ";
+        TranslateList["jyu"] = "ジュ"; TranslateList["ka"] = "カ";
+        TranslateList["ke"] = "ケ"; TranslateList["ki"] = "キ";
+        TranslateList["ko"] = "コ"; TranslateList["ku"] = "ク";
+        TranslateList["kwa"] = "クヮ"; TranslateList["kwe"] = "クェ";
+        TranslateList["kwi"] = "クィ"; TranslateList["kwo"] = "クォ";
+        TranslateList["kwu"] = "ク"; TranslateList["kya"] = "キャ";
+        TranslateList["kye"] = "キェ"; TranslateList["kyi"] = "キィ";
+        TranslateList["kyo"] = "キョ"; TranslateList["kyu"] = "キュ";
+        TranslateList["la"] = "ァ"; TranslateList["le"] = "ェ";
+        TranslateList["li"] = "ィ"; TranslateList["lo"] = "ォ";
+        TranslateList["lu"] = "ゥ"; TranslateList["lwa"] = "ヮ";
+        TranslateList["lya"] = "ャ"; TranslateList["lye"] = "ェ";
+        TranslateList["lyi"] = "ィ"; TranslateList["lyo"] = "ョ";
+        TranslateList["lyu"] = "ュ"; TranslateList["ma"] = "マ";
+        TranslateList["me"] = "メ"; TranslateList["mi"] = "ミ";
+        TranslateList["mo"] = "モ"; TranslateList["mu"] = "ム";
+        TranslateList["mya"] = "ミャ"; TranslateList["mye"] = "ミェ";
+        TranslateList["myi"] = "ミィ"; TranslateList["myo"] = "ミョ";
+        TranslateList["myu"] = "ミュ"; TranslateList["na"] = "ナ";
+        TranslateList["ne"] = "ネ"; TranslateList["ni"] = "ニ";
+        TranslateList["nn"] = "ン"; TranslateList["no"] = "ノ";
+        TranslateList["nu"] = "ヌ"; TranslateList["nya"] = "ニャ";
+        TranslateList["nye"] = "ニェ"; TranslateList["nyi"] = "ニィ";
+        TranslateList["nyo"] = "ニョ"; TranslateList["nyu"] = "ニュ";
+        TranslateList["o"] = "オ"; TranslateList["pa"] = "パ";
+        TranslateList["pe"] = "ペ"; TranslateList["pi"] = "ピ";
+        TranslateList["po"] = "ポ"; TranslateList["pu"] = "プ";
+        TranslateList["pya"] = "ピャ"; TranslateList["pye"] = "ピェ";
+        TranslateList["pyi"] = "ピィ"; TranslateList["pyo"] = "ピョ";
+        TranslateList["pyu"] = "ピュ"; TranslateList["qa"] = "クァ";
+        TranslateList["qe"] = "クェ"; TranslateList["qi"] = "クィ";
+        TranslateList["qo"] = "クォ"; TranslateList["qu"] = "ク";
+        TranslateList["qya"] = "クャ"; TranslateList["qye"] = "クェ";
+        TranslateList["qyi"] = "クィ"; TranslateList["qyo"] = "クョ";
+        TranslateList["qyu"] = "クュ"; TranslateList["ra"] = "ラ";
+        TranslateList["re"] = "レ"; TranslateList["ri"] = "リ";
+        TranslateList["ro"] = "ロ"; TranslateList["ru"] = "ル";
+        TranslateList["rya"] = "リャ"; TranslateList["rye"] = "リェ";
+        TranslateList["ryi"] = "リィ"; TranslateList["ryo"] = "リョ";
+        TranslateList["ryu"] = "リュ"; TranslateList["sa"] = "サ";
+        TranslateList["se"] = "セ"; TranslateList["sha"] = "シャ";
+        TranslateList["she"] = "シェ"; TranslateList["shi"] = "シ";
+        TranslateList["sho"] = "ショ"; TranslateList["shu"] = "シュ";
+        TranslateList["si"] = "シ"; TranslateList["so"] = "ソ";
+        TranslateList["su"] = "ス"; TranslateList["sya"] = "シャ";
+        TranslateList["sye"] = "シェ"; TranslateList["syi"] = "シィ";
+        TranslateList["syo"] = "ショ"; TranslateList["syu"] = "シュ";
+        TranslateList["ta"] = "タ"; TranslateList["te"] = "テ";
+        TranslateList["tha"] = "テャ"; TranslateList["the"] = "テェ";
+        TranslateList["thi"] = "ティ"; TranslateList["tho"] = "テョ";
+        TranslateList["thu"] = "テュ"; TranslateList["ti"] = "チ";
+        TranslateList["to"] = "ト"; TranslateList["tsa"] = "ツァ";
+        TranslateList["tse"] = "ツェ"; TranslateList["tsi"] = "ツィ";
+        TranslateList["tsu"] = "ツ"; TranslateList["tu"] = "ツ";
+        TranslateList["tso"] = "ツォ"; TranslateList["tya"] = "チャ";
+        TranslateList["tye"] = "チェ"; TranslateList["tyi"] = "チィ";
+        TranslateList["tyo"] = "チョ"; TranslateList["tyu"] = "チュ";
+        TranslateList["u"] = "ウ"; TranslateList["va"] = "ヴァ";
+        TranslateList["ve"] = "ヴェ"; TranslateList["vi"] = "ヴィ";
+        TranslateList["vo"] = "ヴォ"; TranslateList["vu"] = "ヴ";
+        TranslateList["wa"] = "ワ"; TranslateList["we"] = "ウェ";
+        TranslateList["wi"] = "ウィ"; TranslateList["wo"] = "ヲ";
+        TranslateList["wu"] = "ウ"; TranslateList["xa"] = "ァ";
+        TranslateList["xe"] = "ェ"; TranslateList["xi"] = "ィ";
+        TranslateList["xo"] = "ォ"; TranslateList["xn"] = "ン";
+        TranslateList["xtu"] = "ッ"; TranslateList["xtsu"] = "ッ";
+        TranslateList["xu"] = "ゥ"; TranslateList["xwa"] = "ヮ";
+        TranslateList["xya"] = "ャ"; TranslateList["xye"] = "ェ";
+        TranslateList["xyi"] = "ィ"; TranslateList["xyo"] = "ョ";
+        TranslateList["xyu"] = "ュ"; TranslateList["ya"] = "ヤ";
+        TranslateList["ye"] = "イェ"; TranslateList["yi"] = "イ";
+        TranslateList["yo"] = "ヨ"; TranslateList["yu"] = "ユ";
+        TranslateList["za"] = "ザ"; TranslateList["ze"] = "ゼ";
+        TranslateList["zi"] = "ジ"; TranslateList["zo"] = "ゾ";
+        TranslateList["zu"] = "ズ"; TranslateList["zya"] = "ジャ";
+        TranslateList["zye"] = "ジェ"; TranslateList["zyi"] = "ジィ";
+        TranslateList["zyo"] = "ジョ"; TranslateList["zyu"] = "ジュ";
+        TranslateList["-"] = "ー";
     }
 }
