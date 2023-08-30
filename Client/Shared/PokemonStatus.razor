@@ -188,6 +188,12 @@
                         <MudCheckBox T="bool" Checked="@options[12]" Size="Size.Small" Label="HPが満タンの時ダメージ半減" Margin="Margin.Dense" CheckedChanged="@(x => OnOptionsChanged(12,x))"/>
                     </MudForm>
                 }
+                else if ( ability_value == "しんりょく" || ability_value == "もうか" || ability_value == "げきりゅう" || ability_value == "むしのしらせ" || ability_value == "もらいび" )
+                {
+                    <MudForm>
+                        <MudCheckBox T="bool" Checked="@options[12]" Size="Size.Small" Label="対象タイプの威力1.5倍" Margin="Margin.Dense" CheckedChanged="@(x => OnOptionsChanged(12,x))" />
+                    </MudForm>
+                }
             </MudItem>
             <MudItem xs="5">
                 @if (item_value == "しんかのきせき")
@@ -267,12 +273,33 @@
                         <MudCheckBox  T="bool" Checked="@options[11]" Size="Size.Small" Label="フレンドガード" CheckedChanged="@(x => OnOptionsChanged(11,x))" />
                     </MudForm>
                 </MudItem>
+
         <MudItem xs="4">
             <MudForm>
                 <MudCheckBox  T="bool" Checked="@options[19]" Size="Size.Small" Label="ちいさくなる" CheckedChanged="@(x => OnOptionsChanged(19,x))" />
             </MudForm>
         </MudItem>
+        <MudItem xs="4">
+            <MudForm>
+                <MudCheckBox T="bool" Checked="@options[21]" Size="Size.Small" Label="わざわいのうつわ" CheckedChanged="@(x => OnOptionsChanged(21,x))" />
+            </MudForm>
+        </MudItem>
+        <MudItem xs="4">
+            <MudForm>
+                <MudCheckBox  T="bool" Checked="@options[22]" Size="Size.Small" Label="わざわいのおふだ" CheckedChanged="@(x => OnOptionsChanged(22,x))" />
+            </MudForm>
+        </MudItem>
 
+        <MudItem xs="4">
+            <MudForm>
+                <MudCheckBox T="bool" Checked="@options[21]" Size="Size.Small" Label="わざわいのたま" CheckedChanged="@(x => OnOptionsChanged(23,x))" />
+            </MudForm>
+        </MudItem>
+        <MudItem xs="4">
+            <MudForm>
+                <MudCheckBox T="bool" Checked="@options[22]" Size="Size.Small" Label="わざわいのつるぎ" CheckedChanged="@(x => OnOptionsChanged(24,x))" />
+            </MudForm>
+        </MudItem>
         <MudItem xs="4">
             <MudSelect T="string" Label="状態異常" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnConditionChanged">
                 @foreach( var c in conditionAbnormaly )
@@ -391,6 +418,8 @@
     }
     private void OnPokemonNameSelected( string name ) // ポケモン名が入力された
     {
+        // 本当はポケモンの技リストをWhereで探すべきだと思う
+        //  -> 言うてそんな重くないかな…？変えてみて考える？
         PokemonName = name;
         if ( name == "コノヨザル" || name == "オコリザル" )
         {
@@ -539,7 +568,7 @@
     private string nature_value = "がんばりや";
 
     private string[] PokemonItem = {
-        "もちものなし", "(攻撃系)", "タイプ強化", "ノーマルジュエル",
+        "もちものなし", "ブーストエナジー", "(攻撃系)", "タイプ強化", "ノーマルジュエル",
         "いのちのたま", "こころのしずく", "こだわりハチマキ", "こだわりメガネ",
         "こんごうだま", "しらたま", "しんかいのキバ", "するどいツメ", "たつじんのおび",
         "ちからのハチマキ", "でんきだま", "ながねぎ", "はっきんだま", "ピントレンズ",

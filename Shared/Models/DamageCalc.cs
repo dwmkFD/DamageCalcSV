@@ -13,13 +13,15 @@ using static System.Net.Mime.MediaTypeNames;
 
 /*
  *  Options[x]のメモ
- *   0: リフレクター     1: ひかりのかべ    2: てだすけ
- *   3: きあいだめ       4: じゅうでん      5: そうでん
- *   6: はがねのせいしん 7: フラワーギフト  8: ハロウィン
- *   9: もりののろい    10: みずびたし     11: フレンドガード
- *  12: ダメ半減特性    13: しんかのきせき 14: テラスタルON
- *  15: 毒・猛毒        16: 火傷           17: 麻痺
- *  18: 眠り            19: 小さくなる     20: かたやぶり
+ *   0: リフレクター      1: ひかりのかべ      2: てだすけ
+ *   3: きあいだめ        4: じゅうでん        5: そうでん
+ *   6: はがねのせいしん  7: フラワーギフト    8: ハロウィン
+ *   9: もりののろい     10: みずびたし       11: フレンドガード
+ *  12: ダメ半減特性     13: しんかのきせき   14: テラスタルON
+ *  15: 毒・猛毒         16: 火傷             17: 麻痺
+ *  18: 眠り             19: 小さくなる       20: かたやぶり
+ *  21: わざわいのうつわ 22: わざわいのおふだ 23: わざわいのたま
+ *  24: わざわいのつるぎ
  */
 
 namespace DamageCalcSV.Shared.Models
@@ -108,8 +110,8 @@ namespace DamageCalcSV.Shared.Models
                 if (def.Options[19]) // 相手がちいさくなっていた場合は威力2倍
                     power *= 2;
             }
-            // けたぐりは相手の体重によって威力決定
-            if (move.Name == "けたぐり")
+            // けたぐり、くさむすびは相手の体重によって威力決定
+            if (move.Name == "けたぐり" || move.Name == "くさむすび" )
             {
                 if (def.Weight <= 9.9)
                     power = 20;
@@ -386,7 +388,7 @@ namespace DamageCalcSV.Shared.Models
             return (power);
         }
 
-        PokemonDataReal CorrectRank(PokemonDataReal p )
+        PokemonDataReal CorrectRank(in PokemonDataReal p )
         {
             int[] status = { p.Attack, p.Block, p.Constant, p.Deffence, p.Speed };
             for ( int i = 0; i < p.Rank.Length; ++i )
@@ -408,7 +410,7 @@ namespace DamageCalcSV.Shared.Models
             return ( p );
         }
 
-        PokemonDataReal CorrectRankCritical( PokemonDataReal p )
+        PokemonDataReal CorrectRankCritical( in PokemonDataReal p )
         {
             // 急所に当たる場合のランク補正
             int[] status = { p.Attack, p.Block, p.Constant, p.Deffence };
@@ -444,6 +446,49 @@ namespace DamageCalcSV.Shared.Models
             p.Constant = status[2]; p.Deffence = status[3];
 
             return ( p );
+        }
+
+        int CorrectParadoxRankPos( in PokemonDataReal p )
+        {
+            List<Tuple<int, int>> tmp = new List<Tuple<int, int>> {
+                Tuple.Create( 1, p.Attack ),
+                Tuple.Create( 2, p.Block ),
+                Tuple.Create( 3, p.Constant ),
+                Tuple.Create( 4, p.Deffence ),
+                Tuple.Create( 5, p.Speed ),
+            };
+
+            tmp.Sort( ( x, y ) => y.Item2 - x.Item2 );
+            return ( tmp[0].Item1 );
+        }
+        Tuple<PokemonDataReal, PokemonDataReal> CorrectParadoxRank( in PokemonDataReal p, in PokemonDataReal p_cri)
+        {
+            if ((p.ability == "こだいかっせい" && (SelectedWeatherSettings == 1 || p.Item == "ブーストエナジー"))
+                || (p.ability == "クォークチャージ" && (SelectedFieldSettings == 1 || p.Item == "ブーストエナジー")))
+            {
+                int pos = CorrectParadoxRankPos(p); // ランク補正済みのステータスに対して補正する
+                switch (pos)
+                {
+                    case 1:
+                        p.Attack *= 5325; p.Attack += 2048; p.Attack /= 4096;
+                        p_cri.Attack *= 5325; p_cri.Attack += 2048; p_cri.Attack /= 4096; break;
+                    case 2:
+                        p.Block *= 5325; p.Block += 2048; p.Block /= 4096;
+                        p_cri.Block *= 5325; p_cri.Block += 2048; p_cri.Block /= 4096; break;
+                    case 3:
+                        p.Constant *= 5325; p.Constant += 2048; p.Constant /= 4096;
+                        p_cri.Constant *= 5325; p_cri.Constant += 2048; p_cri.Constant /= 4096; break;
+                    case 4:
+                        p.Deffence *= 5325; p.Deffence += 2048; p.Deffence /= 4096;
+                        p_cri.Deffence *= 5325; p_cri.Deffence += 2048; p_cri.Deffence /= 4096; break;
+                    case 5:
+                        p.Speed *= 6144; p.Speed += 2048; p.Speed /= 4096;
+                        p_cri.Speed *= 6144; p_cri.Speed += 2048; p_cri.Speed /= 4096; break;
+                    default: break;
+                }
+            }
+
+            return (Tuple.Create(p, p_cri));
         }
 
         double CalcCriticalProbability(PokemonMove move, PokemonDataReal atk, PokemonDataReal def)
@@ -485,14 +530,14 @@ namespace DamageCalcSV.Shared.Models
 
             return (result);
         }
-        Tuple<long, long> calcAD( long A, long D, PokemonDataReal atk, PokemonDataReal def, string name, int category ) {
+        Tuple<long, long> calcAD( long A, long D, PokemonDataReal atk, PokemonDataReal def, PokemonMove move, int category ) {
             if (category == 1 )
             {
                 // 物理技の時は、攻撃側の「攻撃」と防御側の「防御」を使う
                 D *= def.Block;
 
                 // ボディプレスは防御をAとして計算する
-                if ( name == "ボディプレス" )
+                if ( move.Name == "ボディプレス" )
                 {
                     A *= atk.Block;
                 }
@@ -508,12 +553,74 @@ namespace DamageCalcSV.Shared.Models
                 {
                     A *= 2; // 力持ち or ヨガパワーなら攻撃を2倍にする
                 }
-                if (atk.Item == "こだわりハチマキ" )
+
+                if ( ( atk.ability == "ひひいろのこどう") && SelectedWeatherSettings == 1 )
+                {
+                    // 天候が晴れなら攻撃を1.33倍する
+                    A *= 5461;
+                    A += 2048;
+                    A /= 4096;
+                }
+
+                if (atk.Options[7] && SelectedWeatherSettings == 1 )
+                {
+                    // 晴れならフラワーギフトで攻撃1.5倍
+                    A *= 6144;
+                    A += 2048;
+                    A /= 4096;
+                }
+
+                if ( (atk.Options[21] || def.ability == "わざわいのおふだ" ))
+                {
+                    // チェックボックスがON(隣にいる味方を想定)または相手の特性がわざわい
+                    A *= 3072;
+                    A += 2048;
+                    A /= 4096;
+                }
+
+                if (def.Options[24] || atk.ability == "わざわいのつるぎ")
+                {
+                    // 攻撃系のわざわい特性は自分の特性を考慮する必要がある
+                    D *= 3072;
+                    D += 2048;
+                    D /= 4096;
+                }
+
+                if ( atk.ability == "こんじょう" )
+                {
+                    if (atk.Options[15] || atk.Options[16] || atk.Options[17] || atk.Options[18] )
+                    {
+                        // こんじょうかつ状態異常なら攻撃1.5倍かつ火傷無効 -> 火傷の処理は本体でやる
+                        A *= 6144;
+                        A += 2048;
+                        A /= 4096;
+                    }
+                }
+
+                if (atk.ability == "ごりむちゅう" )
+                {
+                    A *= 6144;
+                    A += 2048;
+                    A /= 4096;
+                }
+
+                if (atk.Item == "こだわりハチマキ")
                 {
                     // 持ち物がこだわりハチマキなら攻撃を1.5倍(四捨五入)する
                     A *= 6144;
                     A += 2048;
                     A /= 4096;
+                }
+
+                if (atk.ability == "ふしぎなうろこ")
+                {
+                    if (atk.Options[15] || atk.Options[16] || atk.Options[17] || atk.Options[18])
+                    {
+                        // ふしぎなうろこかつ状態異常なら防御1.5倍
+                        D *= 6144;
+                        D += 2048;
+                        D /= 4096;
+                    }
                 }
 
                 // 防御側が「こおり」タイプを持っていて雪の場合は防御を1.5倍する
@@ -530,7 +637,7 @@ namespace DamageCalcSV.Shared.Models
                 A *= atk.Constant;
 
                 // categoryを物理・特殊・変化だけじゃなくて、物理(特殊計算)、特殊(物理計算)みたいなものも入れたら良いかも…
-                if ((name == "サイコショック") || (name == "サイコブレイク"))
+                if ((move.Name == "サイコショック") || (move.Name == "サイコブレイク"))
                 {
                     // 相手の防御を使って計算する技の時は特殊処理
                     D *= def.Block;
@@ -548,6 +655,46 @@ namespace DamageCalcSV.Shared.Models
                     D *= def.Deffence;
                 }
 
+                if ((atk.ability == "ハドロンエンジン") && SelectedFieldSettings == 1 )
+                {
+                    // エレキフィールドなら特攻を1.33倍する
+                    A *= 5461;
+                    A += 2048;
+                    A /= 4096;
+                }
+
+                if ((atk.Options[22] || def.ability == "わざわいのうつわ"))
+                {
+                    // チェックボックスがON(隣にいる味方を想定)または相手の特性がわざわい
+                    A *= 3072;
+                    A += 2048;
+                    A /= 4096;
+                }
+
+                if (def.Options[23] || atk.ability == "わざわいのたま")
+                {
+                    // 攻撃系のわざわい特性は自分の特性を考慮する必要がある
+                    D *= 3072;
+                    D += 2048;
+                    D /= 4096;
+                }
+
+                if (def.Options[7] && SelectedWeatherSettings == 1)
+                {
+                    // 晴れならフラワーギフトで特防1.5倍
+                    D *= 6144;
+                    D += 2048;
+                    D /= 4096;
+                }
+
+                if ( atk.ability == "サンパワー" && SelectedWeatherSettings == 1 )
+                {
+                    // 晴れなら特攻1.5倍
+                    A *= 6144;
+                    A += 2048;
+                    A /= 4096;
+                }
+
                 if (atk.Item == "こだわりメガネ")
                 {
                     // 持ち物がこだわりメガネなら特攻を1.5倍(四捨五入)する
@@ -563,7 +710,112 @@ namespace DamageCalcSV.Shared.Models
                     D += 2048;
                     D /= 4096;
                 }
+
+                if ( def.Item == "とつげきチョッキ" )
+                {
+                    D *= 6144;
+                    D += 2048;
+                    D /= 4096;
+                }
             }
+
+            if ( atk.ability == "すいほう" && move.Type == "みず" )
+            {
+                A *= 2;
+            }
+
+            if ( def.ability == "あついしぼう" && ( move.Type == "ほのお" || move.Type == "こおり") )
+            {
+                A *= 2048;
+                A += 2048;
+                A /= 4096;
+            }
+
+            if (def.ability == "きよめのしお" && move.Type == "ゴースト" )
+            {
+                A *= 2048;
+                A += 2048;
+                A /= 4096;
+            }
+
+            // 特性有効なら、それぞれ対応するタイプの技は威力1.5倍(実際には攻撃系ステータスを1.5倍っぽい？)
+            if (atk.ability == "しんりょく" && atk.Options[12] )
+            {
+                if ( move.Type == "くさ" )
+                {
+                    A *= 6144;
+                    A += 2048;
+                    A /= 4096;
+                }
+            }
+            if (( atk.ability == "もうか" || atk.ability == "もらいび" ) && atk.Options[12])
+            {
+                if (move.Type == "ほのお")
+                {
+                    A *= 6144;
+                    A += 2048;
+                    A /= 4096;
+                }
+            }
+            if (atk.ability == "げきりゅう" && atk.Options[12])
+            {
+                if (move.Type == "みず")
+                {
+                    A *= 6144;
+                    A += 2048;
+                    A /= 4096;
+                }
+            }
+            if ( atk.ability == "むしのしらせ" && atk.Options[12])
+            {
+                if (move.Type == "むし")
+                {
+                    A *= 6144;
+                    A += 2048;
+                    A /= 4096;
+                }
+            }
+
+            if (atk.ability == "トランジスタ" )
+            {
+                if (move.Type == "でんき")
+                {
+                    A *= 5325;
+                    A += 2048;
+                    A /= 4096;
+                }
+            }
+
+            if (atk.ability == "いわはこび")
+            {
+                if (move.Type == "いわ")
+                {
+                    A *= 6144;
+                    A += 2048;
+                    A /= 4096;
+                }
+            }
+
+            if (atk.ability == "はがねつかい")
+            {
+                if (move.Type == "はがね")
+                {
+                    A *= 6144;
+                    A += 2048;
+                    A /= 4096;
+                }
+            }
+
+            if (atk.ability == "りゅうのあぎと")
+            {
+                if (move.Type == "ドラゴン")
+                {
+                    A *= 6144;
+                    A += 2048;
+                    A /= 4096;
+                }
+            }
+
             return (Tuple.Create( A, D ));
         }
         private long damage_base(long a, long d, long p, long dmg, PokemonMove move) {
@@ -636,10 +888,28 @@ namespace DamageCalcSV.Shared.Models
             Dictionary<string, List<long>> result_critical = new Dictionary<string, List<long>>();
 
             // ステータスをランク補正する
-            PokemonDataReal atk = CorrectRank(Atk);
-            PokemonDataReal def = CorrectRank(Def);
-            PokemonDataReal atk_cri = CorrectRank(Atk);
-            PokemonDataReal def_cri = CorrectRank(Def);
+            PokemonDataReal atk_tmp = new PokemonDataReal(Atk.Name, Atk.type[0], Atk.type[1], Atk.TeraType, Atk.Level,
+                Atk.HP, Atk.Attack, Atk.Block, Atk.Constant, Atk.Deffence, Atk.Speed, Atk.ZukanNo, Atk.Height, Atk.Weight,
+                Atk.ability, Atk.Item, Atk.Rank, Atk.Options, Atk.Special, Atk.MoveList);
+            CorrectRank(atk_tmp);
+            PokemonDataReal def_tmp = new PokemonDataReal(Def.Name, Def.type[0], Def.type[1], Def.TeraType, Def.Level,
+                Def.HP, Def.Attack, Def.Block, Def.Constant, Def.Deffence, Def.Speed, Def.ZukanNo, Def.Height, Def.Weight,
+                Def.ability, Def.Item, Def.Rank, Def.Options, Def.Special, Def.MoveList);
+            CorrectRank(def_tmp);
+            PokemonDataReal atk_cri_tmp = new PokemonDataReal(Atk.Name, Atk.type[0], Atk.type[1], Atk.TeraType, Atk.Level,
+                Atk.HP, Atk.Attack, Atk.Block, Atk.Constant, Atk.Deffence, Atk.Speed, Atk.ZukanNo, Atk.Height, Atk.Weight,
+                Atk.ability, Atk.Item, Atk.Rank, Atk.Options, Atk.Special, Atk.MoveList);
+            CorrectRank(atk_tmp);
+            PokemonDataReal def_cri_tmp = new PokemonDataReal(Def.Name, Def.type[0], Def.type[1], Def.TeraType, Def.Level,
+                Def.HP, Def.Attack, Def.Block, Def.Constant, Def.Deffence, Def.Speed, Def.ZukanNo, Def.Height, Def.Weight,
+                Def.ability, Def.Item, Def.Rank, Def.Options, Def.Special, Def.MoveList);
+            CorrectRankCritical(atk_cri_tmp);
+            CorrectRankCritical(def_cri_tmp);
+
+            // こだいかっせい/クォークチャージが発動する場合のステータス補正
+            PokemonDataReal atk, def, atk_cri, def_cri;
+            ( atk, atk_cri ) = CorrectParadoxRank(atk_tmp, atk_cri_tmp);
+            ( def, def_cri ) = CorrectParadoxRank(def_tmp, def_cri_tmp);
 
             foreach ( var atkmove in Atk.MoveList )
             {
@@ -691,8 +961,6 @@ namespace DamageCalcSV.Shared.Models
                     }
                 }
 
-                // ↓↓↓ダメージ計算式にフィールドの補正が入ってないけど、どこで補正されるんだ…？？？
-
                 // ダメージ計算式↓
                 //  (((レベル×2/5+2)×威力×A/D)/50+2)×範囲補正×おやこあい補正×天気補正×急所補正×乱数補正×タイプ一致補正×相性補正×やけど補正×M×Mprotect
                 // A = 攻撃側の攻撃(物理) or 特攻(特殊)
@@ -710,7 +978,6 @@ namespace DamageCalcSV.Shared.Models
                 // 壁補正は、防御側の場に1匹なら0.5倍、2匹以上出していれば2732/4096倍
                 // 特定タイプの火力を上げるアイテム(神秘のしずく等)は、威力を4915/4096倍する
 
-                // サイコショック等の計算が特殊な技は、A/D/M等を独自計算する必要があるので、あとで実装する
                 // 4096は12bit固定小数点演算のため（整数で扱うと、1.0＝4096となる）
                 // 急所の有無それぞれについて、乱数による16パターンのダメージを算出する
                 long damage = 4096;
@@ -720,8 +987,8 @@ namespace DamageCalcSV.Shared.Models
                 long Mhalf = 1, Mfilter = 1, MTwice = 1;
 
                 /* STEP1. A/Dを決定 */ // --> 要確認！！！　ランク補正ってここのA/Dを直接いじる？ -> もう一個、こだわり系はステータス1.5倍だよね？ここ？？
-                ( A, D ) = calcAD(A, D, atk, def, move.Name, move.Category);
-                ( A_critical, D_critical ) = calcAD( A_critical, D_critical, atk_cri, def_cri, move.Name, move.Category);
+                ( A, D ) = calcAD(A, D, atk, def, move, move.Category);
+                ( A_critical, D_critical ) = calcAD( A_critical, D_critical, atk_cri, def_cri, move, move.Category);
 
                 // STEP1-1. サイコショックとサイコブレイクは攻撃側の特攻、防御側の防御を使う
                 // -> calcADの中に移動
@@ -734,8 +1001,8 @@ namespace DamageCalcSV.Shared.Models
                 {
                     long A_dummy = 1;
                     D = D_critical = 1; // Aは変わらないのでダミーで計算して結果は捨て、Dはここでの結果を採用する
-                    (A_dummy, D) = calcAD(A_dummy, D, atk, def, move.Name, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
-                    (A_dummy, D_critical) = calcAD(A_dummy, D_critical, atk_cri, def_cri, move.Name, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
+                    (A_dummy, D) = calcAD(A_dummy, D, atk, def, move, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
+                    (A_dummy, D_critical) = calcAD(A_dummy, D_critical, atk_cri, def_cri, move, move.Category ^ 0x3); // 物理/特殊の判定を入れ替えてDだけ再計算する
                 }
 
                 /* STEP2. 最初の()内を計算 */
@@ -834,8 +1101,8 @@ namespace DamageCalcSV.Shared.Models
                 /* STEP10. 火傷補正 */
                 for (int i = 0; i < 16; ++i)
                 {
-                    // 物理技で火傷状態ならダメージ半減(からげんきは除く)
-                    if ( atk.Options[16] && move.Category == 1 && move.Name != "からげんき" )
+                    // 物理技で火傷状態ならダメージ半減(こんじょう、からげんきは除く)
+                    if ( atk.Options[16] && move.Category == 1 && move.Name != "からげんき" && atk.ability != "こんじょう" )
                     {
                         result[move.Name][i] *= 2048;
                         result[move.Name][i] += 2047;
@@ -942,7 +1209,7 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 /* STEP11-6-2. ファントムガード、マルチスケイル補正 */
-                if (def.ability == "ファントムガード" && def.Options[12] )
+                if (def.ability == "ファントムガード" && def.Options[12] ) // Options[12]を特性有効bitみたいに使った方が良かったかも。。
                 {
                     // ファントムガード、マルチスケイルが発動する時はダメージ半減
                     // -> ツールとしてはチェックボックスのON/OFFで切り替えるのでHP判定はしない
