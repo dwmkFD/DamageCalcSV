@@ -292,12 +292,12 @@
 
         <MudItem xs="4">
             <MudForm>
-                <MudCheckBox T="bool" Checked="@options[21]" Size="Size.Small" Label="わざわいのたま" CheckedChanged="@(x => OnOptionsChanged(23,x))" />
+                <MudCheckBox T="bool" Checked="@options[23]" Size="Size.Small" Label="わざわいのたま" CheckedChanged="@(x => OnOptionsChanged(23,x))" />
             </MudForm>
         </MudItem>
         <MudItem xs="4">
             <MudForm>
-                <MudCheckBox T="bool" Checked="@options[22]" Size="Size.Small" Label="わざわいのつるぎ" CheckedChanged="@(x => OnOptionsChanged(24,x))" />
+                <MudCheckBox T="bool" Checked="@options[24]" Size="Size.Small" Label="わざわいのつるぎ" CheckedChanged="@(x => OnOptionsChanged(24,x))" />
             </MudForm>
         </MudItem>
         <MudItem xs="4">
@@ -309,14 +309,17 @@
             </MudSelect>
         </MudItem>
 
-        <MudItem xs="4">
-            <MudSelect T="int" Label="@special_string" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnSpecialValueChanged">
-                @foreach (var v in special_values)
-                {
-                    <MudSelectItem T="int" Value="@v" />
-                }
-            </MudSelect>
-        </MudItem> 
+        @if (special_string != "")
+        {
+            <MudItem xs="4">
+                <MudSelect T="int" Label="@special_string" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnSpecialValueChanged">
+                    @foreach (var v in special_values)
+                    {
+                        <MudSelectItem T="int" Value="@v" />
+                    }
+                </MudSelect>
+            </MudItem> 
+        }
 
     </MudGrid>
     </main>
@@ -408,6 +411,7 @@
             return (PokemonNameList);
 
         var s = trans_katakana(str);
+        s = s.Distinct().ToList();
         List<string> ls = new List<string>();
         foreach ( var ss in s )
         {
@@ -600,7 +604,7 @@
     private int[] special_values = {
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
     };
-    private string special_string;
+    private string special_string = "";
     private int special_value = 0;
 
     private int[] _efvalToggleValue = new int[6];

@@ -573,7 +573,7 @@ namespace DamageCalcSV.Shared.Models
                     A /= 4096;
                 }
 
-                if ( (atk.Options[21] || def.ability == "わざわいのおふだ" ))
+                if ( (atk.Options[22] || def.ability == "わざわいのおふだ" ))
                 {
                     // チェックボックスがON(隣にいる味方を想定)または相手の特性がわざわい
                     A *= 3072;
@@ -687,7 +687,7 @@ namespace DamageCalcSV.Shared.Models
                     A /= 4096;
                 }
 
-                if ((atk.Options[22] || def.ability == "わざわいのうつわ"))
+                if ((atk.Options[21] || def.ability == "わざわいのうつわ"))
                 {
                     // チェックボックスがON(隣にいる味方を想定)または相手の特性がわざわい
                     A *= 3072;
