@@ -321,7 +321,7 @@
             </MudItem> 
         }
 
-        @if (typechange_ability_title != "")
+        @if (typechange_ability_title != "" && options[14] == true )
         {
             <MudItem xs="4">
                 <MudSelect T="string" Label="@typechange_ability_title" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnTypeChangeAbilitySelected">
@@ -429,6 +429,7 @@
         {
             ls.AddRange( PokemonNameList.Where(x => x.StartsWith(ss)).ToList() );
         }
+        ls = ls.Distinct().ToList();
 
         return ( ls );
     }
