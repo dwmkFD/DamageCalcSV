@@ -1082,17 +1082,78 @@ namespace DamageCalcSV.Shared.Models
                 // テラバーストはテラスタルしている場合は必ずタイプ一致(未実装)、テラスタルしていなければノーマルでタイプ一致、ノーマルタイプがノーマルにテラスタルした時は…？
                 // そういえば、フライングプレスは「格闘」でタイプ一致判定するんだっけ？(ルチャブル専用技だった気がするから、いずれにせよタイプ一致だが、飛行にテラスタルすると事情が変わる…）
                 List<string> TypeCheck = new List<string>();
-                foreach( var t in atk.type )
+                if (atk.Options[10] == false || atk.Options[14] )
                 {
-                    TypeCheck.Add(t);
+                    // みずびたしを受けていない
+                    // or 
+                    // テラスタルしている場合はタイプ変更技無効
+                    foreach (var t in atk.type)
+                    {
+                        TypeCheck.Add(t);
+                    }
                 }
-                TypeCheck.Add(atk.TeraType);
-                long type_match_attack = 0;
-                foreach ( var t in TypeCheck )
+                else
                 {
-                    if ( t == move.Type )
+                    TypeCheck.Add("みず"); // みずびたし中は強制的にみず単タイプに変更
+                }
+
+                if (atk.Options[8])
+                {
+                    // ハロウィンを受けた場合はゴーストタイプを追加する
+                    // -> 複雑な処理は面倒なので、みずびたしと同時にONにされた場合は、
+                    //    みずびたしの後に受けたことにする。もりののろいも同様。
+                    if ( TypeCheck.Contains("ゴースト") == false )
+                        TypeCheck.Add("ゴースト");
+                }
+
+                if (atk.Options[9])
+                {
+                    // もりののろいを受けた場合はくさタイプを追加する
+                    if (TypeCheck.Contains("くさ") == false)
+                        TypeCheck.Add("くさ");
+                }
+
+                if (atk.Options[14])
+                {
+                    // テラスタルしてるならテラスタイプを判定条件に追加する
+                    // -> これたぶんタイプ変更技の後にテラスタルすると、テラスタイプ一致の補正がかかるはず？
+                    //    例：もりののろいを受けたリザードンが使うソーラービームはタイプ一致補正が1.5倍から2倍になるはず？(交代するまでは)
+                    //      -> 変幻自在とかリベロの仕様と一緒なら
+                    TypeCheck.Add(atk.TeraType);
+                }
+
+                long type_match_attack = 0;
+                if (atk.ability != "へんげんじざい" && atk.ability != "リベロ")
+                {
+                    foreach (var t in TypeCheck)
+                    {
+                        if (t == move.Type)
+                        {
+                            type_match_attack += 2048;
+                        }
+                    }
+                }
+                else
+                {
+                    // へんげんじざいとリベロの場合は全ての攻撃が必ずタイプ一致
+                    if (atk.Options[14] == false)
                     {
                         type_match_attack += 2048;
+                    }
+                    else
+                    {
+                        // テラスタル中はテラスタイプと元タイプで判定する
+                        // -> 元タイプはすでに変更済みなので、判定式自体は他特性と同じもので良い(もっとキレイなコードを書きたい。。)
+                        if ( atk.TeraType.IsNullOrEmpty() == false )
+                        {
+                            foreach (var t in TypeCheck)
+                            {
+                                if (t == move.Type)
+                                {
+                                    type_match_attack += 2048;
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -1111,7 +1172,7 @@ namespace DamageCalcSV.Shared.Models
 
                 /* STEP9. 相性補正 */
                 double typecomp_res = 1.0;
-                if ( def.TeraType.IsNullOrEmpty() == false )
+                if ( def.TeraType.IsNullOrEmpty() == false && def.Options[14] )
                 {
                     // 防御側にテラスタイプが設定されている場合は、相性はテラスタイプを使って計算する
                     typecomp_res *= TypeCompatible.CompatibilityCheck( move.Type, def.TeraType );
@@ -1119,9 +1180,35 @@ namespace DamageCalcSV.Shared.Models
                 else
                 {
                     // テラスタイプ未設定の場合は、本来持つタイプで計算する
-                    foreach ( var type in def.type )
+                    List<string> TypeCheck_def = new List<string>();
+                    if (def.Options[10])
                     {
-                        typecomp_res *= TypeCompatible.CompatibilityCheck( move.Type, type );
+                        // みずびたし中はみず単タイプとして扱う
+                        TypeCheck_def.Add("みず");
+                    }
+                    else
+                    {
+                        foreach (var type in def.type)
+                        {
+                            TypeCheck_def.Add(type);
+                        }
+                    }
+
+                    if (def.Options[8])
+                    {
+                        // ハロウィンを受けた場合はゴーストタイプを追加する
+                        TypeCheck_def.Add( "ゴースト" );
+                    }
+
+                    if (def.Options[9])
+                    {
+                        // もりののろいを受けた場合はくさタイプを追加する
+                        TypeCheck_def.Add("くさ");
+                    }
+
+                    foreach (var type in TypeCheck_def)
+                    {
+                        typecomp_res *= TypeCompatible.CompatibilityCheck(move.Type, type);
                     }
                 }
 

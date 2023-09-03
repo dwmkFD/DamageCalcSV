@@ -321,6 +321,18 @@
             </MudItem> 
         }
 
+        @if (typechange_ability_title != "")
+        {
+            <MudItem xs="4">
+                <MudSelect T="string" Label="@typechange_ability_title" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnTypeChangeAbilitySelected">
+                    @foreach (var v in typechange_ability_type)
+                    {
+                        <MudSelectItem T="string" Value="@v" />
+                    }
+                </MudSelect>
+            </MudItem>
+        }
+
     </MudGrid>
     </main>
 
@@ -461,6 +473,14 @@
         {
             special_string = s;
         }
+        else if ( s == "へんげんじざい" || s == "リベロ" )
+        {
+            typechange_ability_title = s;
+        }
+        else
+        {
+            special_string = typechange_ability_title = "";
+        }
         ability_value = s;
         CalcStatus();
     }
@@ -497,6 +517,11 @@
     private void OnSpecialValueChanged( int val )
     {
         special_value = val;
+        CalcStatus();
+    }
+    private void OnTypeChangeAbilitySelected( string s )
+    {
+        typechange_ability_string = s;
         CalcStatus();
     }
 
@@ -548,6 +573,16 @@
         DamageCalcSV.Shared.Models.PokemonDataReal real_pokemon
         = new DamageCalcSV.Shared.Models.PokemonDataReal(p.Name, p.type[0], p.type[1], teratype_value, Level, status[0], status[1], status[2], status[3], status[4], status[5],
                                                           p.ZukanNo, p.Height, p.Weight, ability_value, item_value, rank, options, special_value, p.MoveList);
+
+        // へんげんじざいとリベロのテラスタイプ前のタイプを修正
+        if ( typechange_ability_string != "" )
+        {
+            if ( typechange_ability_string != "元タイプ" )
+            {
+                real_pokemon.type[0] = typechange_ability_string;
+                real_pokemon.type[1] = ""; // 第二タイプは消す
+            }
+        }
 
         OnStatusChangeEventCallback.InvokeAsync( real_pokemon );
     }
@@ -607,6 +642,10 @@
     private string special_string = "";
     private int special_value = 0;
 
+    private string typechange_ability_title = "";
+    private string typechange_ability_string = "";
+    private List<string> typechange_ability_type = new List<string>();
+
     private int[] _efvalToggleValue = new int[6];
     void _efvalToggleText( int idx )
     {
@@ -645,6 +684,12 @@
         PokemonManager.InitializePokemonData8();
         PokemonManager.InitializePokemonData9();
         PokemonNameList = PokemonManager.AllPokemonName();
+
+        typechange_ability_type.Add("元タイプ");
+        foreach( var t in teratype )
+        {
+            typechange_ability_type.Add(t);
+        }
 
         status[6] = status[7] = status[8] = status[9] = status[10] = status[11] = 31;
         _efvalToggleValue[0] = _efvalToggleValue[1] = _efvalToggleValue[2] = _efvalToggleValue[3] = _efvalToggleValue[4] = _efvalToggleValue[5] = 252;
