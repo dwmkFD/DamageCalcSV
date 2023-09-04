@@ -167,6 +167,7 @@ namespace DamageCalcSV.Shared.Models
             }
 
             // テラスタイプが有効で、テラスタイプ一致であり、威力が60以下の技は威力を60に上げる
+            // -> 先制技等は除外なので、本当はこの条件じゃダメ！！！
             if ( atk.type.Contains( atk.TeraType ) && atk.Options[14] && power <= 60 )
             {
                 power = 60;
@@ -410,6 +411,13 @@ namespace DamageCalcSV.Shared.Models
             p.Contact = status[2]; p.Defense = status[3];
             p.Speed = status[4];
 
+            if ( p.ability == "はりきり" )
+            {
+                // 特性がはりきりなら攻撃1.5倍(切り捨て)
+                p.Attack *= 6144;
+                p.Attack /= 4096;
+            }
+
             return ( p );
         }
 
@@ -447,6 +455,13 @@ namespace DamageCalcSV.Shared.Models
 
             p.Attack = status[0]; p.Block = status[1];
             p.Contact = status[2]; p.Defense = status[3];
+
+            if (p.ability == "はりきり")
+            {
+                // 特性がはりきりなら攻撃1.5倍(切り捨て)
+                p.Attack *= 6144;
+                p.Attack /= 4096;
+            }
 
             return ( p );
         }
@@ -1479,7 +1494,17 @@ namespace DamageCalcSV.Shared.Models
                 if ((atk.Item == "たつじんのおび" )
                     && (typecomp_res > 1.0))
                 {
-                    // 達人の帯が発動する時はダメージ1.2倍 -> 正確にはいくつ？4915？4916？
+                    // 達人の帯が発動する時はダメージ1.2倍
+                    for (int i = 0; i < 16; ++i)
+                    {
+                        result[move.Name][i] *= 4915;
+                        result[move.Name][i] += 2048;
+                        result[move.Name][i] /= 4096;
+
+                        result_critical[move.Name][i] *= 4915;
+                        result_critical[move.Name][i] += 2048;
+                        result_critical[move.Name][i] /= 4096;
+                    }
                 }
 
                 /* STEP11-10. メトロノーム補正 */
@@ -1543,7 +1568,7 @@ namespace DamageCalcSV.Shared.Models
                 /* STEP11-13. Mtwice補正 */
                 if (move.Minimize && def.Options[19])
                 {
-                    // 特定条件下でダメージ2倍の技を使用した
+                    // 特定条件下でダメージ2倍の技を使用した(ここの条件はちいさくなるに対する2倍の技だけ。他も要対応)
                     for (int i = 0; i < 32; ++i)
                     {
                         result[move.Name][i] *= 8192;
@@ -1568,16 +1593,23 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 /* STEP14. 期待値を計算する */
+                // -> トレ天の計算結果と違うんだけど何で…？
                 double tmp_exp = 0.0;
+                double hustle_acc = 1.0;
+                if ( atk.ability == "はりきり" )
+                {
+                    // 特性はりきりなら命中率0.8倍
+                    hustle_acc = 0.8;
+                }
                 for (int i = 0; i < 16; ++i)
                 {
                     // 基本ダメージは、計算結果 × 急所に"当たらない"確率 × 技の命中率
-                    tmp_exp += (result[move.Name][i] / 16.0) * (1.0 - CalcCriticalProbability(move, atk, def)) * (move.Accuracy / 100.0);
+                    tmp_exp += (result[move.Name][i] / 16.0) * (1.0 - CalcCriticalProbability(move, atk, def)) * ( (move.Accuracy / 100.0) * hustle_acc );
                 }
                 for (int i = 0; i < 16; ++i)
                 {
                     // 急所に当たった場合のダメージは、計算結果 × 急所に"当たる"確率 × 技の命中率
-                    tmp_exp += (result_critical[move.Name][i] / 16.0) * CalcCriticalProbability(move, atk, def) * (move.Accuracy / 100.0);
+                    tmp_exp += (result_critical[move.Name][i] / 16.0) * CalcCriticalProbability(move, atk, def) * ( (move.Accuracy / 100.0) * hustle_acc );
                 }
                 result[move.Name].AddRange(result_critical[move.Name] );
                 result[move.Name].Add( (long)tmp_exp );
