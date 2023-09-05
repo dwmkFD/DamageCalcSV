@@ -343,10 +343,11 @@
     private List<string> PokemonNameList = new List<string>();
     private Dictionary<string, string> TranslateList = new Dictionary<string, string>();
 
-    private List<string> trans_katakana( string str )
+    private List<string> trans_katakana( string in_str )
     {
         List<string> result = new List<string>();
         bool finish = true;
+        string str = in_str.ToLower();
 
         // まず1～3文字のアルファベットの組を先頭から順番にカタカナに変換する
         string res = "";
@@ -395,8 +396,17 @@
                 }
                 else
                 {
-                    finish = false;
-                    break; // 1文字しかなく、さらに変換にも失敗してるなら、そのまま最終フェーズへ進む
+                    if ( str[i] >= 'a' && str[i] <= 'z' )
+                    {
+                        finish = false;
+                        break; // 1文字しかなく、さらに変換にも失敗してるなら、そのまま最終フェーズへ進む
+                    }
+                    else
+                    {
+                        // アルファベットじゃない場合はそのままresにくっつける
+                        // -> フシギb みたいな入力から フシギバ/フシギビ/...を検索したい
+                        res += str[i];
+                    }
                 }
             }
         }
