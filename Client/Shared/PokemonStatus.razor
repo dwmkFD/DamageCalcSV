@@ -375,11 +375,15 @@
                 }
                 else if ((i < str.Length) && (str[i] == str[i + 1]))
                 {
-                    res += "ッ";
-                    continue; // 子音を一つ残すので i をインクリメントせずに次へ
+                    if (str[i] != 'a' && str[i] != 'i' && str[i] != 'u' && str[i] != 'e' && str[i] != 'o' )
+                    {
+                        // 母音が2つ続いた場合は"ッ"への変換はしない
+                        res += "ッ";
+                        continue; // 子音を一つ残すので i をインクリメントせずに次へ
+                    }
                 }
             }
-            else
+            if ( str.Length - i >= 1 )
             {
                 if (TranslateList.ContainsKey(str.Substring(i, 1)))
                 {
@@ -437,15 +441,8 @@
     {
         // 本当はポケモンの技リストをWhereで探すべきだと思う
         //  -> 言うてそんな重くないかな…？変えてみて考える？
+        //   -> こういう特殊な処理はCalcStatusの中でやった方がキレイな気がする…？
         PokemonName = name;
-        if ( name == "コノヨザル" || name == "オコリザル" )
-        {
-            special_string = "ふんどのこぶし";
-        }
-        else if ( name == "ハカドッグ" || name.Contains( "イダイトウ" ) )
-        {
-            special_string = "おはかまいり";
-        }
         CalcStatus();
     }
     private void OnNatureSelected( string v )
@@ -470,18 +467,6 @@
     }
     private void OnAbilitySelected( string s )
     {
-        if (s == "そうだいしょう" || s == "はがねのせいしん")
-        {
-            special_string = s;
-        }
-        else if ( s == "へんげんじざい" || s == "リベロ" )
-        {
-            typechange_ability_title = s;
-        }
-        else
-        {
-            special_string = typechange_ability_title = "";
-        }
         ability_value = s;
         CalcStatus();
     }
@@ -568,6 +553,36 @@
                 down_status += 1;
             status[1 + up_status] = (int)( status[1 + up_status] * 1.1 );
             status[1 + down_status] = (int)(status[1 + down_status] * 0.9);
+        }
+
+        // 計算が特殊な特性や技のためのウィンドウを表示させる
+        if ( p.MoveList.Contains( "ふんどのこぶし" ) )
+        {
+            // ふんどのこぶしを覚えるポケモン？
+            special_string = "ふんどのこぶし";
+        }
+        else if (p.MoveList.Contains("おはかまいり"))
+        {
+            // おはかまいりを覚えるポケモン？
+            special_string = "おはかまいり";
+        }
+        else
+        {
+            // 特に無いならウィンドウを消す
+            special_string = "";
+        }
+
+        if (ability_value == "そうだいしょう" || ability_value == "はがねのせいしん")
+        {
+            special_string = ability_value;
+        }
+        else if (ability_value == "へんげんじざい" || ability_value == "リベロ")
+        {
+            typechange_ability_title = ability_value;
+        }
+        else
+        {
+            typechange_ability_title = "";
         }
 
         // 実ステータスを入力して親コンポーネントに返す
