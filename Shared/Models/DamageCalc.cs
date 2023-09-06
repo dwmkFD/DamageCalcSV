@@ -1092,6 +1092,25 @@ namespace DamageCalcSV.Shared.Models
                     result_critical[move.Name].Add( tmp_critical );
                 }
 
+                // STEP8-0. スキン系特性の場合、ノーマルタイプの技をスキンのタイプに変更する
+                bool isSkinAbility = true;
+                if (move.Type == "ノーマル")
+                {
+                    switch (atk.ability)
+                    {
+                        case "フェアリースキン": move.Type = "フェアリー"; break;
+                        case "エレキスキン": move.Type = "でんき"; break;
+                        case "フリーズスキン": move.Type = "こおり"; break;
+                        case "スカイスキン": move.Type = "ひこう"; break;
+                        case "うるおいボイス": move.Type = "みず"; break; // これも一緒にやっちゃう
+                        default: isSkinAbility = false; break;
+                    }
+                }
+                else
+                {
+                    isSkinAbility = false;
+                }
+
                 /* STEP8. タイプ一致補正 */
                 // -> テラスタイプ一致の計算もここでやる？
                 // テラバーストはテラスタルしている場合は必ずタイプ一致(未実装)、テラスタルしていなければノーマルでタイプ一致、ノーマルタイプがノーマルにテラスタルした時は…？
@@ -1236,6 +1255,12 @@ namespace DamageCalcSV.Shared.Models
                     result_critical[move.Name][i] = (long)(result_critical[move.Name][i] * typecomp_res);
                     result_critical[move.Name][i] /= 4096;
                     result_critical[move.Name][i] *= 4096;
+                }
+
+                // STEP9-LAST. スキン系補正を適用した技のタイプをノーマルに戻す
+                if ( isSkinAbility )
+                {
+                    move.Type = "ノーマル";
                 }
 
                 /* STEP10. 火傷補正 */

@@ -449,9 +449,6 @@
     }
     private void OnPokemonNameSelected( string name ) // ポケモン名が入力された
     {
-        // 本当はポケモンの技リストをWhereで探すべきだと思う
-        //  -> 言うてそんな重くないかな…？変えてみて考える？
-        //   -> こういう特殊な処理はCalcStatusの中でやった方がキレイな気がする…？
         PokemonName = name;
         CalcStatus();
     }
