@@ -1102,7 +1102,7 @@ namespace DamageCalcSV.Shared.Models
                         case "エレキスキン": move.Type = "でんき"; break;
                         case "フリーズスキン": move.Type = "こおり"; break;
                         case "スカイスキン": move.Type = "ひこう"; break;
-                        case "うるおいボイス": move.Type = "みず"; break; // これも一緒にやっちゃう
+                        case "うるおいボイス": if (move.Sound) move.Type = "みず"; else isSkinAbility = false; break; // これも一緒にやっちゃう
                         default: isSkinAbility = false; break;
                     }
                 }
@@ -1170,6 +1170,7 @@ namespace DamageCalcSV.Shared.Models
                 else
                 {
                     // へんげんじざいとリベロの場合は全ての攻撃が必ずタイプ一致
+                    // -> ノーマルスキンも事実上全ての技がタイプ一致だけど、実践でエネコロロとか使ってる人は皆無なので、とりあえず放置
                     if (atk.Options[14] == false)
                     {
                         type_match_attack += 2048;
