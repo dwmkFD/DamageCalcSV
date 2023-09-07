@@ -121,21 +121,21 @@
                             </MudForm>
                     </MudItem>
 
-                    <MudItem xs="4">
+                    <MudItem lg="4">
                         <PokemonStatus Title="ポケモン1" OnStatusChangeEventCallback="@((x) => CalcDamage( x, 1 ))"></PokemonStatus>
                     </MudItem>
-                    <MudItem xs="4">
+                    <MudItem lg="4">
                         <DamageResult Title="ダメージ計算一覧1" atk="pokemon1" def="pokemon2" damage_list_All="result1" damage_list_10="result1_10" damage_range="result2" damage_exp="result3" damage_min_max="result4" HP_Bar_Color="result5"></DamageResult>
                     </MudItem>
-                    <MudItem xs="4">
+                    <MudItem lg="4">
                         <PokemonStatus Title="ポケモン2" OnStatusChangeEventCallback="@((x) => CalcDamage( x, 2 ))"></PokemonStatus>
                     </MudItem>
 
-                    <MudItem xs="4" />
-                    <MudItem xs="4">
+                    <MudItem lg="4" />
+                    <MudItem lg="4">
                         <DamageResult Title="ダメージ計算一覧2" atk="pokemon2" def="pokemon1" damage_list_All="result6" damage_list_10="result6_10" damage_range="result7" damage_exp="result8" damage_min_max="result9" HP_Bar_Color="result10"></DamageResult>
                     </MudItem>
-                    <MudItem xs="4" />
+                    <MudItem lg="4" />
                 </MudGrid>
                 @Body
             </MudMainContent>
