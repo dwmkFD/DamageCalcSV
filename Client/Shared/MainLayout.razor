@@ -26,8 +26,8 @@
         <MudLayout>
             <MudMainContent>
                 <MudGrid Spacing="@spacing" Justify="Justify.Center">
-                    <MudItem xs="4" />
-                    <MudItem xs="4">
+                    <MudItem lg="4" />
+                    <MudItem lg="4">
                         <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                     <MudForm>
                                 <MudRadioGroup T="int" SelectedOptionChanged="OnBattleStyleChanged">
@@ -37,85 +37,85 @@
                         </MudForm>
                         </MudPaper>
                     </MudItem>
-                    <MudItem xs="4" />
+                    <MudItem lg="4" />
 
-                    <MudItem xs="6">
+                    <MudItem lg="6">
                             <MudForm>
                             <MudRadioGroup T="int" SelectedOptionChanged="OnWeatherChanged">
                                     <MudGrid Spacing="@spacing" Justify="Justify.Center">
-                                    <MudItem xs="1" />
-                                    <MudItem xs="2">
+                                    <MudItem lg="1" />
+                                    <MudItem lg="2">
                                         <MudRadio Option="0" Size="Size.Small">‐</MudRadio>
                                     </MudItem>
-                                    <MudItem xs="2">
+                                    <MudItem lg="2">
                                     <MudRadio Option="1" Size="Size.Small">晴れ</MudRadio>
                                     </MudItem>
-                                    <MudItem xs="2">
+                                    <MudItem lg="2">
                                     <MudRadio Option="2" Size="Size.Small">雨</MudRadio>
                                     </MudItem>
-                                    <MudItem xs="2">
+                                    <MudItem lg="2">
                                     <MudRadio Option="3" Size="Size.Small">砂嵐</MudRadio>
                                     </MudItem>
-                                    <MudItem xs="2">
+                                    <MudItem lg="2">
                                     <MudRadio Option="4" Size="Size.Small">雪</MudRadio>
                                     </MudItem>
-                                    <MudItem xs="1" />
+                                    <MudItem lg="1" />
                                     </MudGrid>
                                 </MudRadioGroup>
                             </MudForm>
                     </MudItem>
-                    <MudItem xs="6">
+                    <MudItem lg="6">
                             <MudForm>
                             <MudRadioGroup T="int" SelectedOptionChanged="OnFieldChanged">
                                     <MudGrid Spacing="@spacing" Justify="Justify.Center">
-                                    <MudItem xs="1" />
-                                    <MudItem xs="2">
+                                    <MudItem lg="1" />
+                                    <MudItem lg="2">
                                     <MudRadio Option="0" Size="Size.Small">‐</MudRadio>
                                     </MudItem>
-                                    <MudItem xs="2">
+                                    <MudItem lg="2">
                                         <MudRadio Option="1" Size="Size.Small">エレキ</MudRadio>
                                     </MudItem>
-                                    <MudItem xs="2">
+                                    <MudItem lg="2">
                                         <MudRadio Option="2" Size="Size.Small">グラス</MudRadio>
                                     </MudItem>
-                                    <MudItem xs="2">
+                                    <MudItem lg="2">
                                         <MudRadio Option="3" Size="Size.Small">サイコ</MudRadio>
                                     </MudItem>
-                                    <MudItem xs="2">
+                                    <MudItem lg="2">
                                         <MudRadio Option="4" Size="Size.Small">ミスト</MudRadio>
                                     </MudItem>
-                                    <MudItem xs="1" />
+                                    <MudItem lg="1" />
                                 </MudGrid>
                             </MudRadioGroup>
                             </MudForm>
                     </MudItem>
 
-                    <MudItem xs="2">
+                    <MudItem lg="2">
                             <MudForm>
                             <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.Gravity" Size="Size.Small" Label="じゅうりょく" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(0,x))" />
                             </MudForm>
                     </MudItem>
-                    <MudItem xs="2">
+                    <MudItem lg="2">
                             <MudForm>
                             <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.WonderRoom" Size="Size.Small" Label="ワンダールーム" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(1,x))" />
                             </MudForm>
                     </MudItem>
-                    <MudItem xs="2">
+                    <MudItem lg="2">
                             <MudForm>
                             <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.PlasmaShower" Size="Size.Small" Label="プラズマシャワー" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(2,x))" />
                             </MudForm>
                     </MudItem>
-                    <MudItem xs="2">
+                    <MudItem lg="2">
                             <MudForm>
                             <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.FairyAura" Size="Size.Small" Label="フェアリーオーラ" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(3,x))" />
                             </MudForm>
                     </MudItem>
-                    <MudItem xs="2">
+                    <MudItem lg="2">
                             <MudForm>
                             <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.DarkAura" Size="Size.Small" Label="ダークオーラ" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(4,x))" />
                             </MudForm>
                     </MudItem>
-                    <MudItem xs="2">
+                    <MudItem lg="2">
                             <MudForm>
                             <MudCheckBox T="bool" Checked="@DamageCalcSV.Shared.Models.DamageCalc.AuraBreak" Size="Size.Small" Label="オーラブレイク" Margin="Margin.Dense" CheckedChanged="@(x =>OnBattleSettingsChanged(5,x))" />
                             </MudForm>

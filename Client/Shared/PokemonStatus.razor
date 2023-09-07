@@ -1,11 +1,11 @@
 
     <main>
             <MudGrid Spacing="@spacing" Justify="Justify.Center">
-                <MudItem xs="12"><MudText>@Title</MudText></MudItem>
-                    <MudItem xs="6">
+                <MudItem lg="12"><MudText>@Title</MudText></MudItem>
+                    <MudItem lg="6">
                         <MudAutocomplete T="string" Label="ポケモン" SearchFunc="@search_pokemon" CoerceText="false" Variant="Variant.Outlined" Margin="Margin.Dense" ValueChanged="OnPokemonNameSelected" />
                     </MudItem>
-                    <MudItem xs="4">
+                    <MudItem lg="4">
                     <MudSelect T="string" Label="性格" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnNatureSelected">
                         @foreach( var n in nature )
                         {
@@ -14,60 +14,60 @@
                         </MudSelect>
                     </MudItem>
 
-                    <MudItem xs="2">
+                    <MudItem lg="2">
                         <MudNumericField T="int" Label="レベル" Variant="Variant.Outlined" Min="1" Max="100" Margin="Margin.Dense" Value="@Level" ValueChanged="OnLevelChanged" />
                     </MudItem>
 
-                    <MudItem xs="2">
+                    <MudItem lg="2">
                         <MudText>実数値：</MudText>
                     </MudItem>
-                    <MudItem xs="10">
-                    <MudItem xs="12">
+                    <MudItem lg="10">
+                    <MudItem lg="12">
                         <MudGrid Spacing="0">
-                            <MudItem xs="2">
+                            <MudItem lg="2">
                                 <MudNumericField @bind-Value="status[0]" Label="ＨＰ" Variant="Variant.Outlined" Margin="Margin.Dense" />
                             </MudItem>
                             <MudItem sm="2">
                                 <MudNumericField @bind-Value="status[1]" Label="攻撃" Variant="Variant.Outlined" Margin="Margin.Dense" />
                             </MudItem>
-                            <MudItem xs="2">
+                            <MudItem lg="2">
                                 <MudNumericField @bind-Value="status[2]" Label="防御" Variant="Variant.Outlined" Margin="Margin.Dense" />
                             </MudItem>
-                            <MudItem xs="2">
+                            <MudItem lg="2">
                                 <MudNumericField @bind-Value="status[3]" Label="特攻" Variant="Variant.Outlined" Margin="Margin.Dense" />
                             </MudItem>
-                            <MudItem xs="2">
+                            <MudItem lg="2">
                                 <MudNumericField @bind-Value="status[4]" Label="特防" Variant="Variant.Outlined" Margin="Margin.Dense" />
                             </MudItem>
-                            <MudItem xs="2">
+                            <MudItem lg="2">
                                 <MudNumericField @bind-Value="status[5]" Label="素早さ" Variant="Variant.Outlined" Margin="Margin.Dense" />
                             </MudItem>
                         </MudGrid>
                     </MudItem>
                 </MudItem>
 
-                <MudItem xs="2">
+                <MudItem lg="2">
                     <MudText>個体値：</MudText>
                 </MudItem>
-                <MudItem xs="10">
-                    <MudItem xs="12">
+                <MudItem lg="10">
+                    <MudItem lg="12">
                         <MudGrid Spacing="0">
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@status[6]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(6, s))" />
                         </MudItem>
                         <MudItem sm="2">
                         <MudNumericField T="int" Value="@status[7]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(7, s))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@status[8]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(8, s))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@status[9]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(9, s))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@status[10]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(10, s))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@status[11]" Variant="Variant.Outlined" Min="0" Max="31" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(11, s))" />
                         </MudItem>
                     </MudGrid>
@@ -75,87 +75,87 @@
                 </MudItem>
 
 
-                <MudItem xs="2">
+                <MudItem lg="2">
                     <MudText>努力値：</MudText>
                 </MudItem>
-                <MudItem xs="10">
-                    <MudItem xs="12">
+                <MudItem lg="10">
+                    <MudItem lg="12">
                         <MudGrid Spacing="0">
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@status[12]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(12, s))" />
                         </MudItem>
                         <MudItem sm="2">
                         <MudNumericField T="int" Value="@status[13]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(13, s))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@status[14]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(14, s))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@status[15]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(15, s))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@status[16]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(16, s))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@status[17]" Variant="Variant.Outlined" Min="0" Max="252" Step="4" Margin="Margin.Dense" ValueChanged="@(s => OnStatusChanged(17, s))" />
                         </MudItem>
                     </MudGrid>
                 </MudItem>
                 </MudItem>
-                <MudItem xs="2">
+                <MudItem lg="2">
                 </MudItem>
-                <MudItem xs="10">
-                    <MudItem xs="12">
+                <MudItem lg="10">
+                    <MudItem lg="12">
                         <MudGrid Spacing="0">
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                             <MudButton OnClick="@(s => _efvalToggleText(0))" Variant="Variant.Filled" FullWidth="true">@_efvalToggleValue[0]</MudButton>
                         </MudItem>
                         <MudItem sm="2">
                                 <MudButton OnClick="@(s => _efvalToggleText(1))" Variant="Variant.Filled" FullWidth="true">@_efvalToggleValue[1]</MudButton>
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                                 <MudButton OnClick="@(s => _efvalToggleText(2))" Variant="Variant.Filled" FullWidth="true">@_efvalToggleValue[2]</MudButton>
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                                 <MudButton OnClick="@(s => _efvalToggleText(3))" Variant="Variant.Filled" FullWidth="true">@_efvalToggleValue[3]</MudButton>
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                                 <MudButton OnClick="@(s => _efvalToggleText(4))" Variant="Variant.Filled" FullWidth="true">@_efvalToggleValue[4]</MudButton>
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                                 <MudButton OnClick="@(s => _efvalToggleText(5))" Variant="Variant.Filled" FullWidth="true">@_efvalToggleValue[5]</MudButton>
                         </MudItem>
                         </MudGrid>
                     </MudItem>
             </MudItem>
 
-                <MudItem xs="2">
+                <MudItem lg="2">
                     <MudText>ランク：</MudText>
                 </MudItem>
-                <MudItem xs="10">
-                    <MudItem xs="12">
+                <MudItem lg="10">
+                    <MudItem lg="12">
                         <MudGrid Spacing="0">
-                        <MudItem xs="2" />
-                        <MudItem xs="2">
+                        <MudItem lg="2" />
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@rank[0]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" ValueChanged="@(s => OnRankChanged( 0, s ))" />
                         </MudItem>
                         <MudItem sm="2">
                         <MudNumericField T="int" Value="@rank[1]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" ValueChanged="@(s => OnRankChanged( 1, s ))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@rank[2]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" ValueChanged="@(s => OnRankChanged( 2, s ))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@rank[3]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" ValueChanged="@(s => OnRankChanged( 3, s ))" />
                         </MudItem>
-                        <MudItem xs="2">
+                        <MudItem lg="2">
                         <MudNumericField T="int" Value="@rank[4]" Variant="Variant.Outlined" Min="-6" Max="6" Margin="Margin.Dense" ValueChanged="@(s => OnRankChanged( 4, s ))" />
                             </MudItem>
                         </MudGrid>
                 </MudItem>
                 </MudItem>
 
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudSelect T="string" Label="特性" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnAbilitySelected">
                         <MudSelectItem Value="@("未発動")" />
                         @foreach( var a in PokemonAbility )
@@ -164,7 +164,7 @@
                         }
                     </MudSelect>
                 </MudItem>
-                <MudItem xs="5">
+                <MudItem lg="5">
             <MudSelect T="string" Label="道具" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnItemSelected">
                 @foreach( var i in PokemonItem )
                 {
@@ -172,7 +172,7 @@
                 }
                     </MudSelect>
                 </MudItem>
-                <MudItem xs="3">
+                <MudItem lg="3">
             <MudSelect T="string" Label="テラスタイプ" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnTeraTypeSelected">
                 @foreach( var t in teratype )
                 {
@@ -181,7 +181,7 @@
                     </MudSelect>
                 </MudItem>
 
-            <MudItem xs="4">
+            <MudItem lg="4">
                 @if (ability_value == "マルチスケイル" || ability_value == "ファントムガード")
                 {
                     <MudForm>
@@ -195,7 +195,7 @@
                     </MudForm>
                 }
             </MudItem>
-            <MudItem xs="5">
+            <MudItem lg="5">
                 @if (item_value == "しんかのきせき")
                 {
                     <MudForm>
@@ -203,7 +203,7 @@
                     </MudForm>
                 }
             </MudItem>
-            <MudItem xs="3">
+            <MudItem lg="3">
                 @if (teratype_value != "")
                 {
                     <MudForm>
@@ -213,94 +213,94 @@
             </MudItem>
 
 
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[0]" Size="Size.Small" Label="リフレクター" CheckedChanged="@(x => OnOptionsChanged(0,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[1]" Size="Size.Small" Label="ひかりのかべ" CheckedChanged="@(x => OnOptionsChanged(1,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[2]" Size="Size.Small" Label="てだすけ" CheckedChanged="@(x => OnOptionsChanged(2,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[3]" Size="Size.Small" Label="きあいだめ" CheckedChanged="@(x => OnOptionsChanged(3,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[4]" Size="Size.Small" Label="じゅうでん" CheckedChanged="@(x => OnOptionsChanged(4,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[5]" Size="Size.Small" Label="そうでん" CheckedChanged="@(x => OnOptionsChanged(5,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[6]" Size="Size.Small" Label="はがねのせいしん" CheckedChanged="@(x => OnOptionsChanged(6,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[7]" Size="Size.Small" Label="フラワーギフト" CheckedChanged="@(x => OnOptionsChanged(7,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[8]" Size="Size.Small" Label="ハロウィン" CheckedChanged="@(x => OnOptionsChanged(8,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[9]" Size="Size.Small" Label="もりののろい" CheckedChanged="@(x => OnOptionsChanged(9,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[10]" Size="Size.Small" Label="みずびたし" CheckedChanged="@(x => OnOptionsChanged(10,x))" />
                     </MudForm>
                 </MudItem>
-                <MudItem xs="4">
+                <MudItem lg="4">
                     <MudForm>
                         <MudCheckBox  T="bool" Checked="@options[11]" Size="Size.Small" Label="フレンドガード" CheckedChanged="@(x => OnOptionsChanged(11,x))" />
                     </MudForm>
                 </MudItem>
 
-        <MudItem xs="4">
+        <MudItem lg="4">
             <MudForm>
                 <MudCheckBox  T="bool" Checked="@options[19]" Size="Size.Small" Label="ちいさくなる" CheckedChanged="@(x => OnOptionsChanged(19,x))" />
             </MudForm>
         </MudItem>
-        <MudItem xs="4">
+        <MudItem lg="4">
             <MudForm>
                 <MudCheckBox T="bool" Checked="@options[21]" Size="Size.Small" Label="わざわいのうつわ" CheckedChanged="@(x => OnOptionsChanged(21,x))" />
             </MudForm>
         </MudItem>
-        <MudItem xs="4">
+        <MudItem lg="4">
             <MudForm>
                 <MudCheckBox  T="bool" Checked="@options[22]" Size="Size.Small" Label="わざわいのおふだ" CheckedChanged="@(x => OnOptionsChanged(22,x))" />
             </MudForm>
         </MudItem>
 
-        <MudItem xs="4">
+        <MudItem lg="4">
             <MudForm>
                 <MudCheckBox T="bool" Checked="@options[23]" Size="Size.Small" Label="わざわいのたま" CheckedChanged="@(x => OnOptionsChanged(23,x))" />
             </MudForm>
         </MudItem>
-        <MudItem xs="4">
+        <MudItem lg="4">
             <MudForm>
                 <MudCheckBox T="bool" Checked="@options[24]" Size="Size.Small" Label="わざわいのつるぎ" CheckedChanged="@(x => OnOptionsChanged(24,x))" />
             </MudForm>
         </MudItem>
-        <MudItem xs="4">
+        <MudItem lg="4">
             <MudSelect T="string" Label="状態異常" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnConditionChanged">
                 @foreach( var c in conditionAbnormaly )
                 {
@@ -311,7 +311,7 @@
 
         @if (special_string != "")
         {
-            <MudItem xs="4">
+            <MudItem lg="4">
                 <MudSelect T="int" Label="@special_string" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnSpecialValueChanged">
                     @foreach (var v in special_values)
                     {
@@ -323,7 +323,7 @@
 
         @if (typechange_ability_title != "" && options[14] == true )
         {
-            <MudItem xs="4">
+            <MudItem lg="4">
                 <MudSelect T="string" Label="@typechange_ability_title" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" ValueChanged="OnTypeChangeAbilitySelected">
                     @foreach (var v in typechange_ability_type)
                     {
