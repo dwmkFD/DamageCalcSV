@@ -389,6 +389,14 @@ namespace DamageCalcSV.Shared.Models
                 }
             }
 
+            // オーガポンで、みどりのめん以外の場合は威力1.2倍
+            if ( atk.Name.Contains( "オーガポン" ) && atk.Name.Contains( "みどり" ) == false )
+            {
+                power *= 4915;
+                power += 2048;
+                power /= 4096;
+            }
+
             return (power);
         }
 
@@ -1014,6 +1022,24 @@ namespace DamageCalcSV.Shared.Models
                     }
                 }
 
+                // ツタこんぼうのタイプを変える
+                if ( move.Name == "ツタこんぼう" && atk.Name.Contains( "オーガポン" ) )
+                {
+                    // オーガポンの時のみ、持ち物によってタイプを変える
+                    if ( atk.Name.Contains( "いど" ) )
+                    {
+                        move.Type = "みず";
+                    }
+                    else if ( atk.Name.Contains( "かまど") )
+                    {
+                        move.Type = "ほのお";
+                    }
+                    else if ( atk.Name.Contains( "いしずえ" ) )
+                    {
+                        move.Type = "いわ";
+                    }
+                }
+
                 // ダメージ計算式↓
                 //  (((レベル×2/5+2)×威力×A/D)/50+2)×範囲補正×おやこあい補正×天気補正×急所補正×乱数補正×タイプ一致補正×相性補正×やけど補正×M×Mprotect
                 // A = 攻撃側の攻撃(物理) or 特攻(特殊)
@@ -1170,7 +1196,7 @@ namespace DamageCalcSV.Shared.Models
                 else
                 {
                     // へんげんじざいとリベロの場合は全ての攻撃が必ずタイプ一致
-                    // -> ノーマルスキンも事実上全ての技がタイプ一致だけど、実践でエネコロロとか使ってる人は皆無なので、とりあえず放置
+                    // -> ノーマルスキンも事実上全ての技がタイプ一致だけど、実戦でエネコロロとか使ってる人は皆無なので、とりあえず放置
                     if (atk.Options[14] == false)
                     {
                         type_match_attack += 2048;
@@ -1197,12 +1223,14 @@ namespace DamageCalcSV.Shared.Models
                     result[move.Name][i] *= (4096 + (int)type_match_attack); // タイプ不一致なら1.0倍、タイプ一致なら1.5倍、テラスタイプ一致なら2.0倍になる
                     result[move.Name][i] /= 4096;
                     result[move.Name][i] += 2047;
-                    result[move.Name][i] /= 4096; result[move.Name][i] *= 4096;
+                    result[move.Name][i] /= 4096;
+                    result[move.Name][i] *= 4096;
 
                     result_critical[move.Name][i] *= (4096 + (int)type_match_attack);
                     result_critical[move.Name][i] /= 4096;
                     result_critical[move.Name][i] += 2047;
-                    result_critical[move.Name][i] /= 4096; result_critical[move.Name][i] *= 4096;
+                    result_critical[move.Name][i] /= 4096;
+                    result_critical[move.Name][i] *= 4096;
                 }
 
                 /* STEP9. 相性補正 */

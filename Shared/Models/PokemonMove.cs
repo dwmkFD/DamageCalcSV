@@ -436,6 +436,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("つきのひかり", "フェアリー", 0, 0, 0, 5, false, false, false, 0, false, false, false, false, "HPが、天気が通常の時は最大HPの1/2、『にほんばれ』の時は最大HPの2/3、『あめ』『ゆき』『すなあらし』の時は最大HPの1/4回復する。");
             AddPokemonMove("つけあがる", "あく", 1, 20, 100, 10, true, false, false, 0, false, false, false, false, "自分のいずれかの能力ランクが1つ上がる度に威力が20上がる。");
             AddPokemonMove("つじぎり", "あく", 1, 70, 100, 15, true, false, false, 1, false, false, false, false, "急所に当たりやすい(急所ランク:+1)。");
+            AddPokemonMove("ツタこんぼう", "くさ", 1, 100, 100, 10, false, false, false, 1, false, false, false, false, "『オーガポン』が使う場合、持たせた「おめん」によるフォルムに合わせて、技が『くさ』『ほのお』『みず』『いわ』タイプのいずれかに変化する。また、急所に当たりやすい(急所ランク:+1)。");
             AddPokemonMove("つつく", "ひこう", 1, 35, 100, 35, true, false, false, 0, false, false, false, false, "通常攻撃。");
             AddPokemonMove("つっぱり", "かくとう", 1, 15, 100, 20, true, false, false, 0, false, false, false, false, "1ターンに2～5回連続で攻撃する。");
             AddPokemonMove("つのでつく", "ノーマル", 1, 65, 100, 25, true, false, false, 0, false, false, false, false, "通常攻撃。");
@@ -638,6 +639,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("プラズマシャワー", "でんき", 0, 0, 0, 25, false, false, false, 0, false, false, false, false, "必ず先制でき(優先度:+1)、そのターンの間、すべての『ノーマル』タイプの技を『でんき』タイプにする。");
             AddPokemonMove("プラズマフィスト", "でんき", 1, 100, 100, 15, true, false, true, 0, false, false, false, false, "そのターンの間、すべての『ノーマル』タイプの技を『でんき』タイプにする。特性『てつのこぶし』の時、威力が1.2倍になる。");
             AddPokemonMove("フラッシュ", "ノーマル", 0, 0, 100, 20, false, false, false, 0, false, false, false, false, "相手の命中率を1段階下げる。");
+            AddPokemonMove("ブラッドムーン", "ノーマル", 2, 140, 100, 5, false, false, false, 0, false, false, false, false, "この技は2回連続で出すことができない。");
             AddPokemonMove("フラフラダンス", "ノーマル", 0, 0, 100, 20, false, false, false, 0, false, false, false, false, "自分以外全員が対象。相手を1～4ターンの間『こんらん』状態にする。");
             AddPokemonMove("フラワーガード", "フェアリー", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, "すべての『くさ』タイプのポケモンの『ぼうぎょ』ランクが1段階上がる。");
             AddPokemonMove("フラワーヒール", "フェアリー", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, "相手は最大HPの1/2回復する。ただし、『グラスフィールド』の時は最大HPの2/3回復する。(ダブルバトルで味方に使うと良い)");

@@ -540,6 +540,26 @@
         if (p == null) // そんな名前のポケモンは存在しない！
             return;
 
+        if ( PokemonName.Contains( "オーガポン" ) )
+        {
+            // オーガポンで、みどりのめん以外の場合は持ち物を(内部的に)固定する
+            // -> 同じような処理を、ギラティナとかオリジンシンオウ伝説とかでもやらないとダメ
+            //  -> あと、アルセウスのプレート、シルヴァディのメモリとかも？ -> これも技と自身のタイプなのでダメージ計算本体でやれば良いと思う
+            //  -> ゲノセクトのカセットも同じ
+            if (PokemonName.Contains("いど"))
+            {
+                item_value = "いどのめん";
+            }
+            else if (PokemonName.Contains("かまど"))
+            {
+                item_value = "かまどのめん";
+            }
+            else if (PokemonName.Contains("いしずえ"))
+            {
+                item_value = "いしずえのめん";
+            }
+        }
+
         // 特性を設定する
         PokemonAbility.Clear();
         foreach( var a in p.ability )
