@@ -60,9 +60,9 @@ namespace DamageCalcSV.Shared.Models
             }
 
             // からげんきを状態異常で撃つと威力2倍かつ火傷無効
-            if ( move.Name == "からげんき" )
+            if (move.Name == "からげんき")
             {
-                if (atk.Options[15] || atk.Options[16] || atk.Options[17] || atk.Options[18] )
+                if (atk.Options[15] || atk.Options[16] || atk.Options[17] || atk.Options[18])
                 {
                     power *= 2;
                 }
@@ -93,16 +93,28 @@ namespace DamageCalcSV.Shared.Models
                 power = Math.Min(power, 150);
             }
 
+            // 体重依存技のために体重を計算しておく
+            double aw = atk.Weight;
+            double dw = def.Weight;
+            if (atk.ability == "ライトメタル")
+                aw /= 2;
+            if (atk.ability == "ヘビーメタル")
+                aw *= 2;
+            if (def.ability == "ライトメタル")
+                dw /= 2;
+            if (def.ability == "ヘビーメタル")
+                dw *= 2;
+
             // ヒートスタンプ、ヘビーボンバーは体重差によって威力決定
             if (move.Name == "ヒートスタンプ" || move.Name == "ヘビーボンバー")
             {
-                if (def.Weight * 5 <= atk.Weight)
+                if (dw * 5 <= aw)
                     power = 120;
-                else if (def.Weight * 4 <= atk.Weight)
+                else if (dw * 4 <= aw)
                     power = 100;
-                else if (def.Weight * 3 <= atk.Weight)
+                else if (dw * 3 <= aw)
                     power = 80;
-                else if (def.Weight * 2 <= atk.Weight)
+                else if (dw * 2 <= aw)
                     power = 60;
                 else
                     power = 40;
@@ -113,15 +125,15 @@ namespace DamageCalcSV.Shared.Models
             // けたぐり、くさむすびは相手の体重によって威力決定
             if (move.Name == "けたぐり" || move.Name == "くさむすび" )
             {
-                if (def.Weight <= 9.9)
+                if (dw <= 9.9)
                     power = 20;
-                else if (def.Weight <= 24.9)
+                else if (dw <= 24.9)
                     power = 40;
-                else if (def.Weight <= 49.9)
+                else if (dw <= 49.9)
                     power = 60;
-                else if (def.Weight <= 99.9)
+                else if (dw <= 99.9)
                     power = 80;
-                else if (def.Weight <= 199.9)
+                else if (dw <= 199.9)
                     power = 100;
                 else
                     power = 120;
@@ -145,17 +157,6 @@ namespace DamageCalcSV.Shared.Models
                 power = 50 + atk.Special * 50;
             }
 
-            // 特性「テクニシャン」で威力60以下の技は威力1.5倍
-            if (atk.ability == "テクニシャン")
-            {
-                if (power <= 60)
-                {
-                    power *= (2048 + 4096);
-                    power += 2048;
-                    power /= 4096;
-                }
-            }
-
             // 無天候と晴れ以外の天候でのソーラービーム/ブレードは威力半減
             if (move.Name == "ソーラービーム" || move.Name == "ソーラーブレード")
             {
@@ -171,6 +172,17 @@ namespace DamageCalcSV.Shared.Models
             if ( atk.type.Contains( atk.TeraType ) && atk.Options[14] && power <= 60 )
             {
                 power = 60;
+            }
+
+            // 特性「テクニシャン」で威力60以下の技は威力1.5倍
+            if (atk.ability == "テクニシャン")
+            {
+                if (power <= 60)
+                {
+                    power *= (2048 + 4096);
+                    power += 2048;
+                    power /= 4096;
+                }
             }
 
             // ミストフィールドでドラゴン技を使うと威力半減（ダメージ半減？どっち？）
@@ -286,7 +298,7 @@ namespace DamageCalcSV.Shared.Models
                     power += 2048;
                     power /= 4096;
                 }
-                else if ( atk.Item == "パンチグローブ" )
+                if ( atk.Item == "パンチグローブ" )
                 {
                     // パンチグローブでパンチ技を使う時は4506/4096倍
                     power *= 4516;
@@ -389,7 +401,7 @@ namespace DamageCalcSV.Shared.Models
                 }
             }
 
-            // オーガポンで、みどりのめん以外の場合は威力1.2倍
+            // オーガポンで、みどりのめん以外の場合は全ての技の威力が1.2倍
             if ( atk.Name.Contains( "オーガポン" ) && atk.Name.Contains( "みどり" ) == false )
             {
                 power *= 4915;
@@ -562,10 +574,15 @@ namespace DamageCalcSV.Shared.Models
                 // 物理技の時は、攻撃側の「攻撃」と防御側の「防御」を使う
                 D *= def.Block;
 
-                // ボディプレスは防御をAとして計算する
-                if ( move.Name == "ボディプレス" )
+                if (move.Name == "ボディプレス")
                 {
+                    // ボディプレスは防御をAとして計算する
                     A *= atk.Block;
+                }
+                else if (move.Name == "イカサマ")
+                {
+                    // イカサマの時は相手の攻撃をAとして計算する
+                    A *= def.Attack;
                 }
                 else
                 {

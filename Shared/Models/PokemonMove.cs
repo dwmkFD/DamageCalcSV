@@ -8,6 +8,7 @@ namespace DamageCalcSV.Shared.Models
         public int Category, Power, Accuracy, PP, Critical;
         public bool Direct, Bite, Punch, Pulse, Minimize, Sound, Range;
 
+        // ↓少なくとも「弾の技」も必要か？（防弾判定しないなら別に要らないけど、たぶん。どうせ貰い火とかも判定してないし）
         //技名, タイプ, 分類, 威力, 命中, PP, 接触判定, 噛みつき技, パンチ技, 急所技, 波動技, 小さくなる, 音の技, 範囲技, 説明
         public PokemonMove(string n, string t, int c, int p, int a, int pp,
             bool d, bool b, bool pu, int crt, bool pls, bool mini, bool snd, bool rng, string str )
@@ -333,7 +334,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("しぼりとる", "ノーマル", 2, 0, 100, 5, true, false, false, 0, false, false, false, false, "相手の残りHPが多いほど威力が高くなる。(120No相手の残りHP÷相手の最大HP)が威力になる。");
             AddPokemonMove("しめつける", "ノーマル", 1, 15, 85, 20, true, false, false, 0, false, false, false, false, "4～5ターンの間、毎ターン終了後最大HPの1/8のダメージを与え、その間『ゴースト』タイプではない相手は逃げたり交代できない。");
             AddPokemonMove("ジャイロボール", "はがね", 1, 0, 100, 5, true, false, false, 0, false, false, false, false, "相手より『すばやさ』が低いほど威力が高くなる。(25No相手のすばやさ÷自分のすばやさ)+1が威力になる。ただし最大威力は150。小数点以下は切り捨て。");
-            AddPokemonMove("シャカシャカほう", "くさ", 2, 80, 90, 15, false, false, false, 0, false, false, false, false, "相手全体が対象。相手に与えたダメージの半分だけ自分のHPが回復する。また、20%の確率で相手を『やけど』状態にする。自分が『こおり』状態の時でも使う事ができ、使うと『こおり』状態が治る。また、相手の『こおり』状態を治す。");
+            AddPokemonMove("シャカシャカほう", "くさ", 2, 80, 90, 15, false, false, false, 0, false, false, false, true, "相手全体が対象。相手に与えたダメージの半分だけ自分のHPが回復する。また、20%の確率で相手を『やけど』状態にする。自分が『こおり』状態の時でも使う事ができ、使うと『こおり』状態が治る。また、相手の『こおり』状態を治す。");
             AddPokemonMove("シャドークロー", "ゴースト", 1, 70, 100, 15, true, false, false, 1, false, false, false, false, "急所に当たりやすい(急所ランク:+1)。");
             AddPokemonMove("シャドースチール", "ゴースト", 1, 90, 100, 10, true, false, false, 0, false, false, false, false, "相手のすべての能力ランクの上昇分を0に元に戻して、その分だけ自分の能力ランクを上げ、その後に攻撃のダメージを与える。相手のランクの下降分には影響しない。相手の『みがわり』状態を貫通する。");
             AddPokemonMove("シャドーダイブ", "ゴースト", 1, 120, 100, 5, true, false, false, 0, false, false, false, false, "1ターン目に消えて、2ターン目に攻撃する。消えている間はほとんどの技を受けない。相手の『まもる』『みきり』『たたみがえし』『トーチカ』『キングシールド』『ニードルガード』『ブロッキング』『スレッドトラップ』の効果を受けない(『ダイウォール』を除く)。");
