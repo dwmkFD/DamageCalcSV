@@ -231,7 +231,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("くすぐる", "ノーマル", 0, 0, 100, 20, false, false, false, 0, false, false, false, false, "相手の『こうげき』『ぼうぎょ』ランクを1段階ずつ下げる。");
             AddPokemonMove("くちばしキャノン", "ひこう", 1, 100, 100, 15, false, false, false, 0, false, false, false, false, "必ず後攻になる(優先度:-3)。技が発動する前に直接攻撃を受けると、そのポケモンを『やけど』状態にする。技はそのまま受ける。");
             AddPokemonMove("くらいつく", "あく", 1, 80, 100, 10, true, true, false, 0, false, false, false, false, "自分と相手のどちらかが『ひんし』になるまで、どちらも逃げたり交代できなくなる。自分か相手が『ゴースト』タイプの場合は追加効果はない。");
-            AddPokemonMove("グラススライダー", "くさ", 1, 70, 100, 20, true, false, false, 0, false, false, false, false, "場の状態が『グラスフィールド』で、自分が『ひこう』タイプや特性『ふゆう』などではなく地面にいる時、必ず先制できる(優先度:+1)。");
+            AddPokemonMove("グラススライダー", "くさ", 1, 55, 100, 20, true, false, false, 0, false, false, false, false, "場の状態が『グラスフィールド』で、自分が『ひこう』タイプや特性『ふゆう』などではなく地面にいる時、必ず先制できる(優先度:+1)。");
             AddPokemonMove("グラスフィールド", "くさ", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, "5ターンの間、場の状態を『グラスフィールド』にする。『ひこう』タイプや特性『ふゆう』などではない地面にいるすべてのポケモンは、毎ターン最大HPの1/16ずつ回復し、また『くさ』タイプの技の威力が1.3倍になり(第7世代までは1.5倍)、技『じしん』『じならし』『マグニチュード』の受けるダメージが半減する。道具『グラスシード』を持ったポケモンは『ぼうぎょ』ランクが1段階上がる。");
             AddPokemonMove("グラスミキサー", "くさ", 2, 65, 90, 10, false, false, false, 0, false, false, false, false, "50%の確率で相手の命中率を1段階下げる。");
             AddPokemonMove("クラブハンマー", "みず", 1, 100, 90, 10, true, false, false, 1, false, false, false, false, "急所に当たりやすい(急所ランク:+1)。");
@@ -333,6 +333,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("しぼりとる", "ノーマル", 2, 0, 100, 5, true, false, false, 0, false, false, false, false, "相手の残りHPが多いほど威力が高くなる。(120No相手の残りHP÷相手の最大HP)が威力になる。");
             AddPokemonMove("しめつける", "ノーマル", 1, 15, 85, 20, true, false, false, 0, false, false, false, false, "4～5ターンの間、毎ターン終了後最大HPの1/8のダメージを与え、その間『ゴースト』タイプではない相手は逃げたり交代できない。");
             AddPokemonMove("ジャイロボール", "はがね", 1, 0, 100, 5, true, false, false, 0, false, false, false, false, "相手より『すばやさ』が低いほど威力が高くなる。(25No相手のすばやさ÷自分のすばやさ)+1が威力になる。ただし最大威力は150。小数点以下は切り捨て。");
+            AddPokemonMove("シャカシャカほう", "くさ", 2, 80, 90, 15, false, false, false, 0, false, false, false, false, "相手全体が対象。相手に与えたダメージの半分だけ自分のHPが回復する。また、20%の確率で相手を『やけど』状態にする。自分が『こおり』状態の時でも使う事ができ、使うと『こおり』状態が治る。また、相手の『こおり』状態を治す。");
             AddPokemonMove("シャドークロー", "ゴースト", 1, 70, 100, 15, true, false, false, 1, false, false, false, false, "急所に当たりやすい(急所ランク:+1)。");
             AddPokemonMove("シャドースチール", "ゴースト", 1, 90, 100, 10, true, false, false, 0, false, false, false, false, "相手のすべての能力ランクの上昇分を0に元に戻して、その分だけ自分の能力ランクを上げ、その後に攻撃のダメージを与える。相手のランクの下降分には影響しない。相手の『みがわり』状態を貫通する。");
             AddPokemonMove("シャドーダイブ", "ゴースト", 1, 120, 100, 5, true, false, false, 0, false, false, false, false, "1ターン目に消えて、2ターン目に攻撃する。消えている間はほとんどの技を受けない。相手の『まもる』『みきり』『たたみがえし』『トーチカ』『キングシールド』『ニードルガード』『ブロッキング』『スレッドトラップ』の効果を受けない(『ダイウォール』を除く)。");
@@ -644,7 +645,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("フラワーガード", "フェアリー", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, "すべての『くさ』タイプのポケモンの『ぼうぎょ』ランクが1段階上がる。");
             AddPokemonMove("フラワーヒール", "フェアリー", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, "相手は最大HPの1/2回復する。ただし、『グラスフィールド』の時は最大HPの2/3回復する。(ダブルバトルで味方に使うと良い)");
             AddPokemonMove("フリーズドライ", "こおり", 2, 70, 100, 20, false, false, false, 0, false, false, false, false, "10%の確率で相手を『こおり』状態にする。この技は『みず』タイプにも効果抜群になる。");
-            AddPokemonMove("ブリザードランス", "こおり", 1, 130, 100, 5, false, false, false, 0, false, false, false, true, "相手全体が対象。通常攻撃。");
+            AddPokemonMove("ブリザードランス", "こおり", 1, 120, 100, 5, false, false, false, 0, false, false, false, true, "相手全体が対象。通常攻撃。");
             AddPokemonMove("プリズムレーザー", "エスパー", 2, 160, 100, 10, false, false, false, 0, false, false, false, false, "使用した次のターンは行動できない。");
             AddPokemonMove("ふるいたてる", "ノーマル", 0, 0, 0, 30, false, false, false, 0, false, false, false, false, "自分の『こうげき』『とくこう』ランクが1段階ずつ上がる。");
             AddPokemonMove("フルールカノン", "フェアリー", 2, 130, 90, 5, false, false, false, 0, false, false, false, false, "攻撃後、自分の『とくこう』ランクが2段階下がる。");
@@ -719,6 +720,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("みきり", "かくとう", 0, 0, 0, 5, false, false, false, 0, false, false, false, false, "必ず先制でき(優先度:+4)、そのターンの間、相手の技を受けない。連続で使うと失敗しやすくなる。ダイマックス技や第7世代のZワザの攻撃技は貫通し、1/4のダメージを受ける。");
             AddPokemonMove("ミサイルばり", "むし", 1, 25, 95, 20, false, false, false, 0, false, false, false, false, "1ターンに2～5回連続で攻撃する。");
             AddPokemonMove("みずあそび", "みず", 0, 0, 0, 15, false, false, false, 0, false, false, false, false, "5ターンの間、『ほのお』タイプの技の威力が1/3になる。");
+            AddPokemonMove("みずあめボム", "みず", 2, 60, 85, 10, false, false, false, 0, false, false, false, false, "100%の確率で、相手を『あめまみれ』状態にする。3ターンの間、毎ターン終了時に相手の『すばやさ』ランクが1段階下がる。");
             AddPokemonMove("みずしゅりけん", "みず", 2, 15, 100, 20, false, false, false, 0, false, false, false, false, "必ず先制できる(優先度:+1)。1ターンに2～5回連続で攻撃する。(第6世代は物理技)");
             AddPokemonMove("みずでっぽう", "みず", 2, 40, 100, 25, false, false, false, 0, false, false, false, false, "通常攻撃。");
             AddPokemonMove("ミストバースト", "フェアリー", 2, 100, 100, 5, false, false, false, 0, false, false, false, false, "自分以外全員が対象。攻撃後、自分が『ひんし』状態になる。場の状態が『ミストフィールド』で、自分が『ひこう』タイプや特性『ふゆう』などではなく地面にいる時、威力が1.5倍になる。");
