@@ -26,8 +26,8 @@
         <MudLayout>
             <MudMainContent>
                 <MudGrid Spacing="@spacing" Justify="Justify.Center">
-                    <MudItem lg="4" />
-                    <MudItem lg="4">
+                    <MudItem lg="4" xs="1"/>
+                    <MudItem lg="4" xs="10">
                         <MudPaper Class="d-flex align-center justify-center mud-width-full py-1">
                     <MudForm>
                                 <MudRadioGroup T="int" SelectedOptionChanged="OnBattleStyleChanged">
@@ -37,7 +37,7 @@
                         </MudForm>
                         </MudPaper>
                     </MudItem>
-                    <MudItem lg="4" />
+                    <MudItem lg="4" xs="1"/>
 
                     <MudItem lg="6">
                             <MudForm>
@@ -67,8 +67,8 @@
                     <MudItem lg="6">
                             <MudForm>
                             <MudRadioGroup T="int" SelectedOptionChanged="OnFieldChanged">
-                                    <MudGrid Spacing="@spacing" Justify="Justify.Center">
-                                    <MudItem lg="1" />
+                                    <MudGrid Spacing="1" Justify="Justify.Center">
+                                    <MudItem lg="1" xs="0"/>
                                     <MudItem lg="2">
                                     <MudRadio Option="0" Size="Size.Small">‐</MudRadio>
                                     </MudItem>
@@ -84,7 +84,7 @@
                                     <MudItem lg="2">
                                         <MudRadio Option="4" Size="Size.Small">ミスト</MudRadio>
                                     </MudItem>
-                                    <MudItem lg="1" />
+                                    <MudItem lg="1" xs="0"/>
                                 </MudGrid>
                             </MudRadioGroup>
                             </MudForm>
