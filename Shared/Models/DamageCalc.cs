@@ -31,7 +31,7 @@ namespace DamageCalcSV.Shared.Models
         public static bool Gravity, WonderRoom, PlasmaShower, FairyAura, DarkAura, AuraBreak;
         public static int SelectedBattleStyle, SelectedWeatherSettings, SelectedFieldSettings;
 
-        private PokemonMoveManager? MoveManager = null;
+        public PokemonMoveManager? MoveManager = null;
         private PokemonType? TypeCompatible = null;
         public DamageCalc()
         {

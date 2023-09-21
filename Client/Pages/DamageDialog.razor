@@ -3,18 +3,21 @@
     <DialogContent>
         <MudContainer Style="max-height: 300px; overflow-y: scroll">
             <MudGrid>
-                <MudItem xs="4">
+                <MudItem lg="4" xs="4">
                     <MudText>@damageDetail.Key</MudText>
                 </MudItem>
-                <MudItem xs="8" />
-                <MudItem xs="4">通常ダメージ</MudItem>
-                <MudItem xs="8" />
+                <MudItem lg="8" xs="8">@moveDetail.StrExp</MudItem>
+                <MudItem lg="6" xs="6">威力：@moveDetail.Power</MudItem>
+                <MudItem lg="6" xs="6">タイプ：@moveDetail.Type</MudItem>
+
+                <MudItem lg="4" xs="4">通常ダメージ</MudItem>
+                <MudItem lg="8" xs="8" />
                     @foreach (var dam in damage_normal)
                     {
                         <MudText> @dam,</MudText>
                     }
-                <MudItem xs="4">急所ダメージ</MudItem>
-                <MudItem xs="8" />
+                <MudItem lg="4" xs="4">急所ダメージ</MudItem>
+                <MudItem lg="8" xs="8" />
                     @foreach (var dam in damage_critical)
                     {
                         <MudText> @dam,</MudText>
@@ -31,6 +34,7 @@
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
     [Parameter] public KeyValuePair<string, List<long>> damageDetail { get; set; }
+    [Parameter] public DamageCalcSV.Shared.Models.PokemonMove moveDetail { get; set; }
     private List<long> damage_normal = new List<long>();
     private List<long> damage_critical = new List<long>();
 

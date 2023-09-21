@@ -62,6 +62,8 @@
     [Parameter] public Dictionary<string, string>? damage_exp { get; set; } = null;
     [Parameter] public Dictionary<string, Color>? HP_Bar_Color { get; set; } = null;
 
+    [Parameter] public DamageCalcSV.Shared.Models.DamageCalc? damage { get; set; } = null;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -71,7 +73,8 @@
 
     private void OpenDamageDialog( KeyValuePair<string, List<long>> d )
     {
-        var parameters = new DialogParameters<DamageCalcSV.Client.Pages.DamageDialog> { { x => x.damageDetail, d } };
+        var move = damage.MoveManager.GetMoveInfo(d.Key);
+        var parameters = new DialogParameters<DamageCalcSV.Client.Pages.DamageDialog> { { x => x.damageDetail, d }, { y => y.moveDetail, move } };
         DialogService.Show<DamageCalcSV.Client.Pages.DamageDialog>("ダメージ詳細", parameters );
     }
 }
