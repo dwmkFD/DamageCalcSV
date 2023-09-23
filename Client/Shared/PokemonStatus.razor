@@ -103,6 +103,14 @@
                 </MudItem>
                 </MudItem>
                 <MudItem lg="2" xs="2">
+                    @if ( total_efv > 510 )
+                    {
+                        <MudText Color="Color.Error"><b>@total_efv</b> / 510</MudText>
+                    }
+                    else
+                    {
+                        <MudText>@total_efv / 510</MudText>
+                    }
                 </MudItem>
                 <MudItem lg="10" xs="10">
                     <MudItem lg="12" xs="12">
@@ -540,6 +548,13 @@
         if (p == null) // そんな名前のポケモンは存在しない！
             return;
 
+        // 努力値の合計を算出する
+        total_efv = 0;
+        for (int i = 12; i < 18; ++i)
+        {
+            total_efv += status[i];
+        }
+
         if ( PokemonName.Contains( "オーガポン" ) )
         {
             // オーガポンで、みどりのめん以外の場合は持ち物を(内部的に)固定する
@@ -693,6 +708,8 @@
 
     private int[] status = new int[18];
     private int[] rank = { 0, 0, 0, 0, 0 };
+
+    private int total_efv = 0;
 
     private int[] special_values = {
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
