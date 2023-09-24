@@ -401,6 +401,14 @@ namespace DamageCalcSV.Shared.Models
                 }
             }
 
+            // 特性「きれあじ」で切る技なら威力1.5倍
+            if (atk.ability == "きれあじ" && move.Slice)
+            {
+                power *= 6144;
+                power += 2048;
+                power /= 4096;
+            }
+
             // オーガポンで、みどりのめん以外の場合は全ての技の威力が1.2倍
             if ( atk.Name.Contains( "オーガポン" ) && atk.Name.Contains( "みどり" ) == false )
             {
@@ -855,6 +863,7 @@ namespace DamageCalcSV.Shared.Models
                 }
             }
 
+            // トランジスタは第九世代では1.3倍に弱体化
             if (atk.ability == "トランジスタ" )
             {
                 if (move.Type == "でんき")

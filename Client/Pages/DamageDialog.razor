@@ -7,21 +7,46 @@
                     <MudText>@damageDetail.Key</MudText>
                 </MudItem>
                 <MudItem lg="8" xs="8">@moveDetail.StrExp</MudItem>
-                <MudItem lg="6" xs="6">威力：@moveDetail.Power</MudItem>
-                <MudItem lg="6" xs="6">タイプ：@moveDetail.Type</MudItem>
-
+                <MudItem lg="4" xs="4">威力：@moveDetail.Power</MudItem>
+                <MudItem lg="4" xs="4">タイプ：@moveDetail.Type</MudItem>
+                <MudItem lg="4" xs="4">
+                    @if (moveDetail.Bite)
+                    {
+                        <span>噛みつく技</span>
+                    }
+                    @if (moveDetail.Pulse)
+                    {
+                        <span>波動技</span>
+                    }
+                    @if (moveDetail.Punch)
+                    {
+                        <span>パンチ技</span>
+                    }
+                    @if (moveDetail.Slice)
+                    {
+                        <span>切る技</span>
+                    }
+                    @if (moveDetail.Sound)
+                    {
+                        <span>音技</span>
+                    }
+                </MudItem>
                 <MudItem lg="4" xs="4">通常ダメージ</MudItem>
                 <MudItem lg="8" xs="8" />
+                <MudItem lg="12" xs="12">
                     @foreach (var dam in damage_normal)
                     {
-                        <MudText> @dam,</MudText>
+                        <span> @dam,</span>
                     }
+                </MudItem>
                 <MudItem lg="4" xs="4">急所ダメージ</MudItem>
                 <MudItem lg="8" xs="8" />
+                <MudItem lg="12" xs="12">
                     @foreach (var dam in damage_critical)
                     {
-                        <MudText> @dam,</MudText>
+                        <span> @dam,</span>
                     }
+                </MudItem>
             </MudGrid>
         </MudContainer>
     </DialogContent>
