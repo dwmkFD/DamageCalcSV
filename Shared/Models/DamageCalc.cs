@@ -1669,7 +1669,16 @@ namespace DamageCalcSV.Shared.Models
                 for (int i = 0; i < 16; ++i)
                 {
                     result[move.Name][i] /= 4096;
+                    if ( result[move.Name][i] <= 0 && typecomp_res > 0 )
+                    {
+                        result[move.Name][i] = 1; // 相性で無効化されないなら、最低ダメージ1が保証される
+                    }
+
                     result_critical[move.Name][i] /= 4096;
+                    if ( result_critical[move.Name][i] <= 0 && typecomp_res > 0 )
+                    {
+                        result_critical[move.Name][i] = 1;
+                    }
                 }
 
                 /* STEP14. 期待値を計算する */
