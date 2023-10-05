@@ -696,7 +696,7 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 // 防御側が「こおり」タイプを持っていて雪の場合は防御を1.5倍する
-                if ( ( def.type.Contains( "こおり" ) || ( def.TeraType == "こおり" && def.Options[14]) ) && SelectedWeatherSettings == 4 )
+                if ( ( ( def.type.Contains( "こおり" ) && ( def.Options[14] == false ) ) || ( def.TeraType == "こおり" && def.Options[14]) ) && SelectedWeatherSettings == 4 )
                 {
                     D *= 6144;
                     D += 2048;
@@ -715,7 +715,7 @@ namespace DamageCalcSV.Shared.Models
                     D *= def.Block;
 
                     // 防御側が「こおり」タイプを持っていて雪の場合は防御を1.5倍する
-                    if ( ( def.type.Contains("こおり") || (def.TeraType == "こおり" && def.Options[14]) ) && SelectedWeatherSettings == 4)
+                    if ( ( ( def.type.Contains("こおり") && ( def.Options[14] == false ) ) || (def.TeraType == "こおり" && def.Options[14]) ) && SelectedWeatherSettings == 4)
                     {
                         D *= 6144;
                         D += 2048;
@@ -776,7 +776,7 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 // 防御側が「いわ」タイプを持っていて砂嵐の場合は特防を1.5倍する
-                if ( ( def.type.Contains("いわ") || (def.TeraType == "いわ" && def.Options[14]) ) && SelectedWeatherSettings == 3)
+                if ( ( ( def.type.Contains("いわ") && ( def.Options[14] == false ) ) || (def.TeraType == "いわ" && def.Options[14]) ) && SelectedWeatherSettings == 3)
                 {
                     D *= 6144;
                     D += 2048;
