@@ -1144,9 +1144,10 @@ namespace DamageCalcSV.Shared.Models
                     result_critical[move.Name].Add( tmp_critical );
                 }
 
-                // STEP8-0. スキン系特性の場合、ノーマルタイプの技をスキンのタイプに変更する
+                // STEP8-0-1. スキン系特性の場合、ノーマルタイプの技をスキンのタイプに変更する
+                // ただし、テラスタイプがノーマルで、テラスタルした状態でテラバーストを撃つ時は、そのままノーマルタイプの技として撃つので除外する
                 bool isSkinAbility = true;
-                if (move.Type == "ノーマル")
+                if (move.Type == "ノーマル" && ( ( move.Name == "テラバースト" ) && ( ( atk.TeraType == "ノーマル" ) && atk.Options[14] ) ) == false )
                 {
                     switch (atk.ability)
                     {
@@ -1154,13 +1155,20 @@ namespace DamageCalcSV.Shared.Models
                         case "エレキスキン": move.Type = "でんき"; break;
                         case "フリーズスキン": move.Type = "こおり"; break;
                         case "スカイスキン": move.Type = "ひこう"; break;
-                        case "うるおいボイス": if (move.Sound) move.Type = "みず"; else isSkinAbility = false; break; // これも一緒にやっちゃう
                         default: isSkinAbility = false; break;
                     }
                 }
                 else
                 {
                     isSkinAbility = false;
+                }
+
+                // STEP8-0-2. うるおいボイスの場合、音技をみずタイプに変更する
+                String orgSoundType = "";
+                if ( move.Sound && atk.ability == "うるおいボイス" )
+                {
+                    orgSoundType = move.Type; // 元のタイプをバックアップしておく
+                    move.Type = "みず";
                 }
 
                 /* STEP8. タイプ一致補正 */
@@ -1312,10 +1320,16 @@ namespace DamageCalcSV.Shared.Models
                     result_critical[move.Name][i] *= 4096;
                 }
 
-                // STEP9-LAST. スキン系補正を適用した技のタイプをノーマルに戻す
+                // STEP9-LAST-1. スキン系補正を適用した技のタイプをノーマルに戻す
                 if ( isSkinAbility )
                 {
                     move.Type = "ノーマル";
+                }
+
+                // STEP9-LAST-2. うるおいボイスを適用した技のタイプをもとに戻す
+                if ( orgSoundType.IsNullOrEmpty() == false )
+                {
+                    move.Type = orgSoundType;
                 }
 
                 /* STEP10. 火傷補正 */
