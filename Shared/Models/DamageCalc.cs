@@ -410,6 +410,7 @@ namespace DamageCalcSV.Shared.Models
             }
 
             // オーガポンで、みどりのめん以外の場合は全ての技の威力が1.2倍
+            // マジックルーム中はこの効果も失われるらしいが、現状マジックルームはまず対戦で使われないので放置しておく
             if ( atk.Name.Contains( "オーガポン" ) && atk.Name.Contains( "みどり" ) == false )
             {
                 power *= 4915;
@@ -1217,13 +1218,44 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 long type_match_attack = 0;
-                if (atk.ability != "へんげんじざい" && atk.ability != "リベロ")
+                if ( atk.ability == "てきおうりょく" && atk.Options[14] )
+                {
+                    // てきおうりょくで、テラスタイプと元タイプが一致する場合は 9216 / 4096倍
+                    // 同、テラスタイプと元タイプが不一致なら、テラスタイプと一致した時は 8192 / 4096倍、不一致なら 6144 / 4096倍
+                    if ( atk.type.Contains( atk.TeraType ) )
+                    {
+                        if ( move.Type == atk.TeraType )
+                        {
+                            type_match_attack += 5120;
+                        }
+                        else if ( atk.type.Contains( move.Type ) )
+                        {
+                            type_match_attack += 2048; // テラスタイプと技のタイプが一致せず、ただし元タイプと技のタイプが一致する場合は、通常のタイプ一致ボーナス
+                        }
+                    }
+                    else
+                    {
+                        if ( move.Type == atk.TeraType )
+                        {
+                            type_match_attack += 4096; // テラスタイプと一致なら2.0倍
+                        }
+                        else if (atk.type.Contains(move.Type))
+                        {
+                            type_match_attack += 2048;
+                        }
+                    }
+                }
+                else if (atk.ability != "へんげんじざい" && atk.ability != "リベロ")
                 {
                     foreach (var t in TypeCheck)
                     {
                         if (t == move.Type)
                         {
                             type_match_attack += 2048;
+                            if ( atk.ability == "てきおうりょく" )
+                            {
+                                type_match_attack += 2048; // てきおうりょくならタイプ一致ボーナスは2.0倍
+                            }
                         }
                     }
                 }
