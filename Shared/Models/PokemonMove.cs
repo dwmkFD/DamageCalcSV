@@ -464,6 +464,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("てだすけ", "ノーマル", 0, 0, 0, 20, false, false, false, 0, false, false, false, false, false, "必ず先制できる(優先度:+5)。使用したターンの間、味方の技の威力を1.5倍にする。");
             AddPokemonMove("てっていこうせん", "はがね", 2, 140, 95, 5, false, false, false, 0, false, false, false, false, false, "自分のHPを最大HPの半分だけ減らす。『まもる』などで技が防がれた場合も、自分のHPは減る。");
             AddPokemonMove("てっぺき", "はがね", 0, 0, 0, 15, false, false, false, 0, false, false, false, false, false, "自分の『ぼうぎょ』ランクを2段階上げる。");
+            AddPokemonMove("テラクラスター", "ノーマル", 2, 120, 100, 5, false, false, false, 0, false, false, false, false, false, "結晶の力を 照射し 敵を 排除する。テラパゴスがステラフォルムで放つとすべての相手にダメージを与える。");
             AddPokemonMove("テラバースト", "ノーマル", 2, 80, 100, 10, false, false, false, 0, false, false, false, false, false, "自分がテラスタル状態の時、技のタイプが自分のテラスタイプになる。その際、この技の分類は、自分の攻撃と特攻の高い方となるため、『こうげき』のほうが高い場合は物理技となる。");
             AddPokemonMove("テレキネシス", "エスパー", 0, 0, 0, 15, false, false, false, 0, false, false, false, false, false, "3ターンの間、相手を『テレキネシス』状態にする。『じめん』タイプの技が当たらなくなるが、それ以外の技が必ず命中するようになる。ただし、一撃必殺の技は変化しない。");
             AddPokemonMove("テレポート", "エスパー", 0, 0, 0, 20, false, false, false, 0, false, false, false, false, false, "必ず後攻になる(優先度:-6)。手持ちのポケモンと入れ替わる。(第7世代までは、野生のポケモンとの戦闘を終了する効果だった)");
