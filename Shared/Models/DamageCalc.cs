@@ -1251,10 +1251,21 @@ namespace DamageCalcSV.Shared.Models
                     {
                         if (t == move.Type)
                         {
+                            // へんげんじざいとリベロ以外の特性なら単なるタイプ一致判定（1.5倍）
                             type_match_attack += 2048;
-                            if ( atk.ability == "てきおうりょく" )
+                            if ( atk.TeraType == "ステラ" && atk.Options[14] )
                             {
-                                type_match_attack += 2048; // てきおうりょくならタイプ一致ボーナスは2.0倍
+                                // テラスタイプがステラでテラスタルしている時、タイプ一致ボーナスは2倍
+                                // 本当は一度きりで、その後は通常通り1.5倍だが、計算機上は別に良い(ステラを解除すれば1.5倍で計算できるから)
+                                type_match_attack += 2048;
+                            }
+                        }
+                        else
+                        {
+                            if (atk.TeraType == "ステラ" && atk.Options[14])
+                            {
+                                // テラスタイプがステラでテラスタルしている時、タイプ不一致でもボーナス1.2倍がつく
+                                type_match_attack += 819;
                             }
                         }
                     }

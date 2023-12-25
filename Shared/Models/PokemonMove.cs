@@ -304,6 +304,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("さばきのつぶて", "ノーマル", 2, 100, 100, 10, false, false, false, 0, false, false, false, false, false, "持たせた『プレート』によって『タイプ』が変わる。");
             AddPokemonMove("さむいギャグ", "こおり", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, false, "手持ちのポケモンと入れ替わる。また、5ターンの間、天気を『ゆき』にする(『こおり』タイプのポケモンは、『ぼうぎょ』が1.5倍になる)。");
             AddPokemonMove("さわぐ", "ノーマル", 2, 90, 100, 10, false, false, false, 0, false, false, true, false, false, "3ターン連続で攻撃し、その間はすべてのポケモンが『ねむり』状態にならない。音系の技。相手の『みがわり』状態を貫通する。");
+            AddPokemonMove("サンダーダイブ", "でんき", 1, 100, 95, 15, true, false, false, 0, false, false, false, false, false, "攻撃が外れたり、相手の技『まもる』などで失敗すると、自分の最大HPの半分のダメージを自分が受ける。");
             AddPokemonMove("サンダープリズン", "でんき", 2, 80, 90, 15, false, false, false, 0, false, false, false, false, false, "4～5ターンの間、毎ターン終了後最大HPの1/8のダメージを与え、その間『ゴースト』タイプではない相手は逃げたり交代できない。");
             AddPokemonMove("ジェットパンチ", "みず", 1, 60, 100, 15, true, false, true, 0, false, false, false, false, false, "必ず先制できる(優先度:+1)。特性『てつのこぶし』の時、威力が1.2倍になる。");
             AddPokemonMove("シェルブレード", "みず", 1, 75, 95, 10, true, false, false, 0, false, false, false, false, true, "50%の確率で相手の『ぼうぎょ』ランクを1段階下げる。");
