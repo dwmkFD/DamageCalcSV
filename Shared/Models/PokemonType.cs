@@ -178,6 +178,9 @@ namespace DamageCalcSV.Shared.Models
             TypeCompatibility["フェアリー"]["ほのお"]
                 = TypeCompatibility["フェアリー"]["どく"]
                 = TypeCompatibility["フェアリー"]["はがね"] = 0.5;
+
+            // ステラ（全タイプに対して等倍、テラスタルに対してのみ抜群(別処理)）
+            TypeCompatibility["ステラ"] = new Dictionary<string, double>();
         }
 
         public double CompatibilityCheck( string atktype, string deftype ) // atk -> defの倍率を返す

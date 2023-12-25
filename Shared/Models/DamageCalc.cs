@@ -1049,6 +1049,20 @@ namespace DamageCalcSV.Shared.Models
                     }
                 }
 
+                // テラクラスターの設定を変える
+                if (move.Name == "テラクラスター")
+                {
+                    if (atk.TeraType.IsNullOrEmpty() == false && atk.Options[14])
+                    {
+                        // テラスタイプが入力されている＆テラスタルしている
+                        move.Type = "ステラ";
+                    }
+                    else
+                    {
+                        move.Type = "ノーマル";
+                    }
+                }
+
                 // ツタこんぼうのタイプを変える
                 if ( move.Name == "ツタこんぼう" && atk.Name.Contains( "オーガポン" ) )
                 {
@@ -1349,6 +1363,22 @@ namespace DamageCalcSV.Shared.Models
                     foreach (var type in TypeCheck_def)
                     {
                         typecomp_res *= TypeCompatible.CompatibilityCheck(move.Type, type);
+                    }
+                }
+
+                // 攻撃側のテラスタイプがステラでテラスタルしている時
+                if (atk.TeraType == "ステラ" && atk.Options[14])
+                {
+                    if (move.Type == "ステラ")
+                    {
+                        if (def.Options[14])
+                        {
+                            typecomp_res = 2.0; // タイプがステラの攻撃は、防御側がテラスタルしていれば問答無用で抜群となる
+                        }
+                        else
+                        {
+                            typecomp_res = 1.0; // そうでなければ問答無用で等倍となる
+                        }
                     }
                 }
 
