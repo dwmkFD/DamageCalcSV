@@ -1040,12 +1040,23 @@ namespace DamageCalcSV.Shared.Models
                         {
                             move.Category = 2;
                         }
+
+                        // テラスタイプがステラの場合は威力が100になる
+                        if ( atk.TeraType == "ステラ" )
+                        {
+                            move.Power = 100;
+                        }
+                        else
+                        {
+                            move.Power = 80;
+                        }
                     }
                     else
                     {
                         // テラスタルしてない場合はノーマル・特殊技として扱う(ノーマルがタイプ一致の場合もこれで安心)
                         move.Type = "ノーマル";
                         move.Category = 0x2;
+                        move.Power = 80;
                     }
                 }
 
@@ -1228,7 +1239,11 @@ namespace DamageCalcSV.Shared.Models
                     // -> これたぶんタイプ変更技の後にテラスタルすると、テラスタイプ一致の補正がかかるはず？
                     //    例：もりののろいを受けたリザードンが使うソーラービームはタイプ一致補正が1.5倍から2倍になるはず？(交代するまでは)
                     //      -> 変幻自在とかリベロの仕様と一緒なら
-                    TypeCheck.Add(atk.TeraType);
+                    if (atk.TeraType != "ステラ")
+                    {
+                        // ステラの場合、テラバーストはタイプ一致ではない（倍率1.2倍になる）ため、除外する
+                        TypeCheck.Add(atk.TeraType);
+                    }
                 }
 
                 long type_match_attack = 0;
