@@ -1341,7 +1341,7 @@ namespace DamageCalcSV.Shared.Models
 
                 /* STEP9. 相性補正 */
                 double typecomp_res = 1.0;
-                if ( def.TeraType.IsNullOrEmpty() == false && def.Options[14] )
+                if ( def.TeraType.IsNullOrEmpty() == false && ( def.Options[14] && def.TeraType != "ステラ" ) )
                 {
                     // 防御側にテラスタイプが設定されている場合は、相性はテラスタイプを使って計算する
                     typecomp_res *= TypeCompatible.CompatibilityCheck( move.Type, def.TeraType );
@@ -1349,6 +1349,7 @@ namespace DamageCalcSV.Shared.Models
                 else
                 {
                     // テラスタイプ未設定の場合は、本来持つタイプで計算する
+                    // 防御側がテラスタルしているが、テラスタイプがステラの場合は、元の相性で計算する
                     List<string> TypeCheck_def = new List<string>();
                     if (def.Options[10])
                     {
@@ -1395,6 +1396,12 @@ namespace DamageCalcSV.Shared.Models
                             typecomp_res = 1.0; // そうでなければ問答無用で等倍となる
                         }
                     }
+                }
+
+                // 防御側の特性がテラスシェルで、HPが満タンの場合、全て今ひとつになる
+                if (def.ability == "テラスシェル")
+                {
+                    typecomp_res = 0.5;
                 }
 
                 for (int i = 0; i < 16; ++i) // STEP毎にループ書くの微妙なんだけどね…
