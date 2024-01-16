@@ -1067,10 +1067,12 @@ namespace DamageCalcSV.Shared.Models
                     {
                         // テラスタイプが入力されている＆テラスタルしている
                         move.Type = "ステラ";
+                        move.Range = true; // 範囲技になる
                     }
                     else
                     {
                         move.Type = "ノーマル";
+                        move.Range = false; // 単体攻撃になる
                     }
                 }
 
