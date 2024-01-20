@@ -1092,6 +1092,10 @@ namespace DamageCalcSV.Shared.Models
                     {
                         move.Type = "いわ";
                     }
+                    else
+                    {
+                        move.Type = "くさ";
+                    }
                 }
 
                 // ダメージ計算式↓
