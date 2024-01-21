@@ -74,6 +74,12 @@ namespace DamageCalcSV.Shared.Models
                 int atkS = atk.Speed;
                 int defS = def.Speed;
 
+                // くろいてっきゅうを持っている場合は素早さ半減
+                if (atk.Item == "くろいてっきゅう")
+                    atkS /= 2;
+                if (def.Item == "くろいてっきゅう")
+                    defS /= 2;
+
                 if (atkS <= defS)
                     power = 40;
                 else if (atkS <= defS * 2)
