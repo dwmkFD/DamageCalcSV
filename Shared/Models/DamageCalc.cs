@@ -118,9 +118,6 @@ namespace DamageCalcSV.Shared.Models
                     power = 60;
                 else
                     power = 40;
-
-                if (def.Options[19]) // 相手がちいさくなっていた場合は威力2倍
-                    power *= 2;
             }
             // けたぐり、くさむすびは相手の体重によって威力決定
             if (move.Name == "けたぐり" || move.Name == "くさむすび" )
@@ -137,6 +134,12 @@ namespace DamageCalcSV.Shared.Models
                     power = 100;
                 else
                     power = 120;
+            }
+
+            // 相手がちいさくなっていた場合、対象の技は威力2倍
+            if (def.Options[19] && move.Minimize)
+            {
+                power *= 2;
             }
 
             // サイコブレイドはエレキフィールドで威力1.5倍

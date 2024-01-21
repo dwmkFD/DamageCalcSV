@@ -677,7 +677,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("ヘドロばくだん", "どく", 2, 90, 100, 10, false, false, false, 0, false, false, false, false, false, "30%の確率で相手を『どく』状態にする。");
             AddPokemonMove("ベノムショック", "どく", 2, 65, 100, 10, false, false, false, 0, false, false, false, false, false, "相手が『どく』状態の時、威力が2倍になる。");
             AddPokemonMove("ベノムトラップ", "どく", 0, 0, 100, 20, false, false, false, 0, false, false, false, true, false, "相手全体が対象。『どく』『もうどく』状態のすべての相手の『こうげき』『とくこう』『すばやさ』ランクを1段階ずつ下げる。");
-            AddPokemonMove("ヘビーボンバー", "はがね", 1, 0, 100, 10, true, false, false, 0, false, false, true, false, false, "自分の『おもさ』が相手より重いほど威力が高くなる。相手の『おもさ』が自分の1/5以下なら120、1/4以下なら100、1/3以下なら80、1/2以下なら60、それより大きければ40。相手が技『ちいさくなる』を使用していると必ず命中し、威力が2倍になる(第7世代以降)。ダイマックスしている相手には無効。");
+            AddPokemonMove("ヘビーボンバー", "はがね", 1, 0, 100, 10, true, false, false, 0, false, true, false, false, false, "自分の『おもさ』が相手より重いほど威力が高くなる。相手の『おもさ』が自分の1/5以下なら120、1/4以下なら100、1/3以下なら80、1/2以下なら60、それより大きければ40。相手が技『ちいさくなる』を使用していると必ず命中し、威力が2倍になる(第7世代以降)。ダイマックスしている相手には無効。");
             AddPokemonMove("へびにらみ", "ノーマル", 0, 0, 100, 30, false, false, false, 0, false, false, false, false, false, "相手を『まひ』状態にする。『でんき』タイプには無効。");
             AddPokemonMove("へんしん", "ノーマル", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, false, "一時的に、相手と同じナンバー・グラフィックス・能力値・個体値・ランク・特性・技になる。ただしHP・持ち物・状態異常などはコピーされずそのままとなり、技のPPはすべて5になる。交代すると元に戻る。ダイマックスしている相手をコピーすると、元のポケモンの姿になる。");
             AddPokemonMove("ホイールスピン", "はがね", 1, 100, 100, 5, true, false, false, 0, false, false, false, false, false, "攻撃後、自分の『すばやさ』ランクが2段階下がる。");
