@@ -80,6 +80,12 @@ namespace DamageCalcSV.Shared.Models
                 if (def.Item == "くろいてっきゅう")
                     defS /= 2;
 
+                // こだわりスカーフを持っている場合は素早さ1.5倍
+                if (atk.Item == "こだわりスカーフ")
+                    atkS = (int)( atkS * 1.5 );
+                if (def.Item == "こだわりスカーフ")
+                    defS = (int)(atkS * 1.5);
+
                 if (atkS <= defS)
                     power = 40;
                 else if (atkS <= defS * 2)
@@ -95,6 +101,19 @@ namespace DamageCalcSV.Shared.Models
             {
                 int atkS = atk.Speed;
                 int defS = def.Speed;
+
+                // くろいてっきゅうを持っている場合は素早さ半減
+                if (atk.Item == "くろいてっきゅう")
+                    atkS /= 2;
+                if (def.Item == "くろいてっきゅう")
+                    defS /= 2;
+
+                // こだわりスカーフを持っている場合は素早さ1.5倍
+                if (atk.Item == "こだわりスカーフ")
+                    atkS = (int)(atkS * 1.5);
+                if (def.Item == "こだわりスカーフ")
+                    defS = (int)(atkS * 1.5);
+
                 power = (25 * defS / atkS) + 1;
                 power = Math.Min(power, 150);
             }
