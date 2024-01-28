@@ -142,6 +142,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("エレキネット", "でんき", 2, 55, 95, 15, false, false, false, 0, false, false, false, true, false, "相手全体が対象。100%の確率で相手の『すばやさ』ランクを1段階下げる。");
             AddPokemonMove("エレキフィールド", "でんき", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, false, "5ターンの間、場の状態を『エレキフィールド』にする。『ひこう』タイプや特性『ふゆう』などではない地面にいるすべてのポケモンは、『ねむり』『あくび』(ねむけ)状態にならず、また『でんき』タイプの技の威力が1.3倍になる(第7世代までは1.5倍)。すでに『ねむり』状態の場合は回復しない。道具『エレキシード』を持ったポケモンは『ぼうぎょ』ランクが1段階上がる。");
             AddPokemonMove("エレキボール", "でんき", 2, 0, 100, 10, false, false, false, 0, false, false, false, false, false, "相手より『すばやさ』が高いほど威力が高くなる。1倍未満は40、2倍未満は60、3倍未満は80、4倍未満は120、それ以上は150。");
+            AddPokemonMove("エレクトロビーム", "でんき", 2, 130, 100, 10, false, false, false, 0, false, false, false, false, false, "1ターン目に100%の確率で自分の『とくこう』ランクを1段階上げ、2ターン目で攻撃する。天気が『あめ』の時は1ターンためずに攻撃できる。");
             AddPokemonMove("えんまく", "ノーマル", 0, 0, 100, 20, false, false, false, 0, false, false, false, false, false, "相手の命中率を1段階下げる。");
             AddPokemonMove("おいうち", "あく", 1, 40, 100, 20, true, false, false, 0, false, false, false, false, false, "相手がポケモンを交代する時に攻撃すると、交代前のポケモンに2倍のダメージを与える。");
             AddPokemonMove("おいかぜ", "ひこう", 0, 0, 0, 15, false, false, false, 0, false, false, false, false, false, "4ターンの間、自分と味方の『すばやさ』が2倍になる。");
@@ -217,6 +218,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("きつけ", "ノーマル", 1, 70, 100, 10, true, false, false, 0, false, false, false, false, false, "相手が『まひ』状態の時、ダメージが2倍になるが、『まひ』状態は治る。");
             AddPokemonMove("キノコのほうし", "くさ", 0, 0, 100, 15, false, false, false, 0, false, false, false, false, false, "相手を2～4ターン(実質1～3ターン)の間『ねむり』状態にする。『くさ』タイプや特性『ぼうじん』、道具『ぼうじんゴーグル』を持っているポケモンには無効。");
             AddPokemonMove("ギフトパス", "ノーマル", 0, 0, 0, 15, false, false, false, 0, false, false, false, false, false, "自分の持っている道具を相手に渡す。相手が道具を持っている時は失敗する。");
+            AddPokemonMove("きまぐレーザー", "ドラゴン", 2, 80, 100, 5, false, false, false, 0, false, false, false, false, false, "30%の確率で、威力が2倍になる");
             AddPokemonMove("きゅうけつ", "むし", 1, 80, 100, 10, true, false, false, 0, false, false, false, false, false, "相手に与えたダメージの半分だけ自分のHPが回復する。(第6世代は威力:20、PP:15)");
             AddPokemonMove("きょけんとつげき", "ドラゴン", 1, 120, 100, 5, true, false, false, 0, false, false, false, false, false, "次のターン、相手から自分への攻撃が必ず命中し、受けるダメージが2倍になる。");
             AddPokemonMove("きょじゅうざん", "はがね", 1, 100, 100, 5, true, false, false, 0, false, false, false, false, true, "通常攻撃。(第8世代では相手がダイマックスしていると、ダメージが2倍になる)");
