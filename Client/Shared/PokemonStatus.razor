@@ -196,6 +196,12 @@
                         <MudCheckBox T="bool" Checked="@options[12]" Size="Size.Small" Label="HPが満タンの時ダメージ半減" Margin="Margin.Dense" CheckedChanged="@(x => OnOptionsChanged(12,x))"/>
                     </MudForm>
                 }
+                else if ( ability_value == "テラスシェル" )
+                {
+                    <MudForm>
+                        <MudCheckBox T="bool" Checked="@options[12]" Size="Size.Small" Label="HPが満タンの時全タイプいまひとつ" Margin="Margin.Dense" CheckedChanged="@(x => OnOptionsChanged(12,x))" />
+                    </MudForm>
+                }
                 else if ( ability_value == "しんりょく" || ability_value == "もうか" || ability_value == "げきりゅう" || ability_value == "むしのしらせ" || ability_value == "もらいび" )
                 {
                     <MudForm>

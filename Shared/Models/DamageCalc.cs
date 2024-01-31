@@ -603,6 +603,12 @@ namespace DamageCalcSV.Shared.Models
                 result /= 24.0;
             }
 
+            // 防御側の特性がシェルアーマーなら絶対に急所に当たらない
+            if ( def.ability == "シェルアーマー" )
+            {
+                result = 0;
+            }
+
             return (result);
         }
         Tuple<long, long> calcAD( long A, long D, PokemonDataReal atk, PokemonDataReal def, PokemonMove move, int category ) {
@@ -1433,7 +1439,7 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 // 防御側の特性がテラスシェルで、HPが満タンの場合、全て今ひとつになる
-                if (def.ability == "テラスシェル")
+                if (def.ability == "テラスシェル" && def.Options[12] && atk.Options[20] == false )
                 {
                     typecomp_res = 0.5;
                 }
