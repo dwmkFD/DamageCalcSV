@@ -770,6 +770,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("メテオドライブ", "はがね", 1, 100, 100, 5, true, false, false, 0, false, false, false, false, false, "相手の特性の影響を受けずに攻撃する。");
             AddPokemonMove("メテオビーム", "いわ", 2, 120, 90, 10, false, false, false, 0, false, false, false, false, false, "1ターン目に100%の確率で自分の『とくこう』ランクを1段階上げ、2ターン目で攻撃する。");
             AddPokemonMove("メロメロ", "ノーマル", 0, 0, 100, 15, false, false, false, 0, false, false, false, false, false, "相手が自分とは異なる性別の場合、相手を『メロメロ』状態にする。『メロメロ』状態になると、50%の確率で相手は自分に攻撃できなくなる。自分と相手の性別が同じ時や、どちらかが性別不明の場合は失敗する。");
+            AddPokemonMove("もえあがるいかり", "あく", 2, 90, 100, 10, false, false, false, 0, false, false, false, true, false, "相手全体が対象。20%の確率で相手をひるませる。");
             AddPokemonMove("もえつきる", "ほのお", 2, 130, 100, 5, false, false, false, 0, false, false, false, false, false, "攻撃後、自分は『ほのお』タイプではなくなる。自分が『ほのお』タイプではない時は失敗する。自分が『こおり』状態の時でも使う事ができ、使うと『こおり』状態が治る。");
             AddPokemonMove("ものまね", "ノーマル", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, false, "一時的に、相手が最後に自分に使った技が使えるようになる。PPはコピーした技のポイントアップ未使用時の最大値となる。交代すると元に戻る。相手の技が第7世代のZワザの場合は失敗する。");
             AddPokemonMove("もりののろい", "くさ", 0, 0, 100, 20, false, false, false, 0, false, false, false, false, false, "相手の『タイプ』に『くさ』タイプを追加する。");
