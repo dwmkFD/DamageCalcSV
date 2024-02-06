@@ -105,6 +105,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("いたみわけ", "ノーマル", 0, 0, 0, 20, false, false, false, 0, false, false, false, false, false, "自分と相手のHPを2匹の残りHPの平均値にする(足して2で割る)。ダイマックス時は、もとのHPで平均値を計算して、もとのHPと平均値との差分値を現在のダイマックス時のHPから増減する。");
             AddPokemonMove("いちゃもん", "あく", 0, 0, 100, 15, false, false, false, 0, false, false, false, false, false, "使用後、相手は同じ技を連続で出せなくなる。ダイマックスしている相手には無効。");
             AddPokemonMove("いっちょうあがり", "ドラゴン", 1, 80, 100, 10, false, false, false, 0, false, false, false, false, false, "ダブルバトルでは口の中にいる味方のシャリタツの姿によって能力のランクが上がる。『シャリタツ(そった)』の時は『こうげき』ランク、『シャリタツ(たれた)』の時は『ぼうぎょ』ランク、『シャリタツ(のびた)』の時は『すばやさ』ランクが1段階上がる(v1.2.0より前のバージョンでは、技が外れても発動する)。");
+            AddPokemonMove("いてつくしせん", "エスパー", 2, 90, 100, 10, false, false, false, 0, false, false, false, false, false, "10%の確率で相手を『こおり』状態にする。");
             AddPokemonMove("いとをはく", "むし", 0, 0, 95, 40, false, false, false, 0, false, false, false, true, false, "相手全体が対象。相手の『すばやさ』ランクを2段階下げる。");
             AddPokemonMove("イナズマドライブ", "でんき", 2, 100, 100, 5, true, false, false, 0, false, false, false, false, false, "相手の弱点をつくと、ダメージが4/3倍(1.33倍)になる。");
             AddPokemonMove("いにしえのうた", "ノーマル", 2, 75, 100, 10, false, false, false, 0, false, false, true, true, false, "相手全体が対象。それぞれ10%の確率で相手を2～4ターン(実質1～3ターン)の間『ねむり』状態にする。音系の技。相手の『みがわり』状態を貫通する。");
@@ -308,7 +309,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("さばきのつぶて", "ノーマル", 2, 100, 100, 10, false, false, false, 0, false, false, false, false, false, "持たせた『プレート』によって『タイプ』が変わる。");
             AddPokemonMove("さむいギャグ", "こおり", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, false, "手持ちのポケモンと入れ替わる。また、5ターンの間、天気を『ゆき』にする(『こおり』タイプのポケモンは、『ぼうぎょ』が1.5倍になる)。");
             AddPokemonMove("さわぐ", "ノーマル", 2, 90, 100, 10, false, false, false, 0, false, false, true, false, false, "3ターン連続で攻撃し、その間はすべてのポケモンが『ねむり』状態にならない。音系の技。相手の『みがわり』状態を貫通する。");
-            AddPokemonMove("サンダーダイブ", "でんき", 1, 100, 95, 15, true, false, false, 0, false, true, false, false, false, "攻撃が外れたり、相手の技『まもる』などで失敗すると、自分の最大HPの半分のダメージを自分が受ける。");
+            AddPokemonMove("サンダーダイブ", "でんき", 1, 100, 95, 15, true, false, false, 0, false, false, false, false, false, "攻撃が外れたり、相手の技『まもる』などで失敗すると、自分の最大HPの半分のダメージを自分が受ける。");
             AddPokemonMove("サンダープリズン", "でんき", 2, 80, 90, 15, false, false, false, 0, false, false, false, false, false, "4～5ターンの間、毎ターン終了後最大HPの1/8のダメージを与え、その間『ゴースト』タイプではない相手は逃げたり交代できない。");
             AddPokemonMove("ジェットパンチ", "みず", 1, 60, 100, 15, true, false, true, 0, false, false, false, false, false, "必ず先制できる(優先度:+1)。特性『てつのこぶし』の時、威力が1.2倍になる。");
             AddPokemonMove("シェルブレード", "みず", 1, 75, 95, 10, true, false, false, 0, false, false, false, false, true, "50%の確率で相手の『ぼうぎょ』ランクを1段階下げる。");
@@ -793,6 +794,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("よこどり", "あく", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, false, "必ず先制でき(優先度:+4)、相手が使おうとした、能力ランクを変化させる技や回復系の技の効果を奪い、自分にかける。");
             AddPokemonMove("らいげき", "でんき", 1, 130, 85, 5, true, false, false, 0, false, false, false, false, false, "20%の確率で相手を『まひ』状態にする。");
             AddPokemonMove("ライジングボルト", "でんき", 2, 70, 100, 20, false, false, false, 0, false, false, false, false, false, "場の状態が『エレキフィールド』で、なおかつ相手が『ひこう』タイプや特性『ふゆう』などではなく地面にいる時、威力が2倍になる(自分も地面にいれば、フィールドの1.3倍の効果もさらに加わる)。");
+            AddPokemonMove("らいめいげり", "かくとう", 1, 90, 100, 10, true, false, false, 0, false, false, false, false, false, "100%の確率で、相手の『ぼうぎょ』ランクを1段階下げる。");
             AddPokemonMove("ラスターカノン", "はがね", 2, 80, 100, 10, false, false, false, 0, false, false, false, false, false, "10%の確率で相手の『とくぼう』ランクを1段階下げる。");
             AddPokemonMove("ラスターパージ", "エスパー", 2, 70, 100, 5, false, false, false, 0, false, false, false, false, false, "50%の確率で相手の『とくぼう』ランクを1段階下げる。");
             AddPokemonMove("リーフストーム", "くさ", 2, 130, 90, 5, false, false, false, 0, false, false, false, false, false, "攻撃後、100%の確率で自分の『とくこう』ランクが2段階下がる。");
