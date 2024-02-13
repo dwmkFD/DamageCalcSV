@@ -43,6 +43,19 @@ namespace DamageCalcSV.Shared.Models
             // 技の威力が変わる場合に補正する処理
             long power = move.Power;
 
+            if ( move.Name == "アクロバット" )
+            {
+                if ( atk.Item.IsNullOrEmpty() == false )
+                {
+                    power = 55;
+                }
+                else
+                {
+                    power = 110; // 持ち物なしなら威力2倍
+                    // 本当はブーストエナジー等のために「持ち物なし」チェックボックスを作りたい。。
+                }
+            }
+
             // サイコフィールドでワイドフォースを撃つ場合は威力1.5倍かつ全体技
             if (move.Name == "ワイドフォース")
             {

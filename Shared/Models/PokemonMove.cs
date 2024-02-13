@@ -611,6 +611,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("ハバネロエキス", "くさ", 0, 0, 0, 15, false, false, false, 0, false, false, false, false, false, "相手の『こうげき』ランクを2段階上げ、『ぼうぎょ』ランクを2段階下げる。");
             AddPokemonMove("バブルこうせん", "みず", 2, 65, 100, 20, false, false, false, 0, false, false, false, false, false, "10%の確率で相手の『すばやさ』ランクを1段階下げる。");
             AddPokemonMove("はめつのねがい", "はがね", 2, 140, 100, 5, false, false, false, 0, false, false, false, false, false, "2ターン後に攻撃する。交代した場合は同じ位置にいるポケモンに攻撃する。タイプ相性の影響を受ける。");
+            AddPokemonMove("はやてがえし", "かくとう", 1, 65, 100, 15, true, false, false, 0, false, false, false, false, false, "必ず先制できる(優先度:+3)。相手を100%の確率でひるませる。ただし、そのターン相手が選んだ技が先制技ではない場合や、すでに攻撃を終えていた場合は失敗する。");
             AddPokemonMove("はらだいこ", "ノーマル", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, false, "自分のHPを最大HPの半分だけ減らす代わりに、自分の『こうげき』ランクを最大まで上げる。");
             AddPokemonMove("パラボラチャージ", "でんき", 2, 65, 100, 20, false, false, false, 0, false, false, false, false, false, "自分以外全員が対象。相手に与えたダメージの半分だけ自分のHPが回復する。(第6世代は威力:50)");
             AddPokemonMove("バリアーラッシュ", "エスパー", 1, 70, 90, 10, true, false, false, 0, false, false, false, false, false, "攻撃後、100%の確率で自分の『ぼうぎょ』ランクが1段階上がる。");
@@ -753,6 +754,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("ミラータイプ", "ノーマル", 0, 0, 0, 15, false, false, false, 0, false, false, false, false, false, "自分の『タイプ』を相手と同じ『タイプ』にする。");
             AddPokemonMove("みらいよち", "エスパー", 2, 120, 100, 10, false, false, false, 0, false, false, false, false, false, "2ターン後に攻撃する。交代した場合は同じ位置にいるポケモンに攻撃する。タイプ相性の影響を受ける。");
             AddPokemonMove("ミルクのみ", "ノーマル", 0, 0, 0, 5, false, false, false, 0, false, false, false, false, false, "HPが最大HPの半分回復する。");
+            AddPokemonMove("みわくのボイス", "フェアリー", 2, 80, 100, 10, false, false, false, 0, false, false, true, false, false, "100%の確率で、そのターンの間に能力ランクが上がった相手ポケモンを1～4ターンの間『こんらん』状態にする(通常は後攻で攻撃する必要があるが、場に出た時に能力ランクが上がった場合も対象となる)。音系の技。相手の『みがわり』状態を貫通する。");
             AddPokemonMove("みをけずる", "ノーマル", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, false, "自分のHPを最大HPの半分だけ減らす代わりに、自分の『こうげき』『とくこう』『すばやさ』ランクが2段階ずつ上がる。");
             AddPokemonMove("ムーンフォース", "フェアリー", 2, 95, 100, 15, false, false, false, 0, false, false, false, false, false, "30%の確率で相手の『とくこう』ランクを1段階下げる。");
             AddPokemonMove("むしくい", "むし", 1, 60, 100, 20, true, false, false, 0, false, false, false, false, false, "相手が持っているバトルに効果のある『きのみ』を奪って、自分に使う。");
