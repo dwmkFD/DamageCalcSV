@@ -15,13 +15,14 @@ namespace DamageCalcSV.Shared.Models
             = TypeCompatibility["ノーマル"]["はがね"] = 0.5;
             TypeCompatibility["ノーマル"]["ゴースト"] = 0;
 
-            // ほのお（弱点：くさ・こおり・むし・はがね、半減：みず・いわ・ドラゴン、無効：なし）
+            // ほのお（弱点：くさ・こおり・むし・はがね、半減：ほのお、みず・いわ・ドラゴン、無効：なし）
             TypeCompatibility["ほのお"] = new Dictionary<string, double>();
             TypeCompatibility["ほのお"]["くさ"]
                 = TypeCompatibility["ほのお"]["こおり"]
                 = TypeCompatibility["ほのお"]["むし"]
                 = TypeCompatibility["ほのお"]["はがね"] = 2;
-            TypeCompatibility["ほのお"]["みず"]
+            TypeCompatibility["ほのお"]["ほのお"]
+                = TypeCompatibility["ほのお"]["みず"]
                 = TypeCompatibility["ほのお"]["いわ"]
                 = TypeCompatibility["ほのお"]["ドラゴン"] = 0.5;
 
