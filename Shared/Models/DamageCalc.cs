@@ -1079,6 +1079,10 @@ namespace DamageCalcSV.Shared.Models
                 {
                     atk.Options[20] = true;
                 }
+                if ( atk.ability == "かたやぶり" )
+                {
+                    atk.Options[20] = true;
+                }
 
                 // テラバーストの設定を変える
                 if (move.Name == "テラバースト")
@@ -1478,6 +1482,42 @@ namespace DamageCalcSV.Shared.Models
                     result_critical[move.Name][i] *= 4096;
                 }
 
+                // 防御側の特性がふゆうの場合、じめんタイプ無効
+                if ( def.ability == "ふゆう" && move.Type == "じめん" && atk.Options[20] == false )
+                {
+                    typecomp_res = 0.0;
+                }
+
+                // 防御側の特性がもらいび/こんがりボディの場合、ほのおタイプ無効
+                if ((def.ability == "もらいび" || def.ability == "こんがりボディ") && move.Type == "ほのお" && atk.Options[20] == false)
+                {
+                    typecomp_res = 0.0;
+                }
+
+                // 防御側の特性がちょすい/よびみずの場合、みずタイプ無効
+                if ( ( def.ability == "ちょすい" || def.ability == "よびみず" ) && move.Type == "みず" && atk.Options[20] == false)
+                {
+                    typecomp_res = 0.0;
+                }
+
+                // 防御側の特性がそうしょくの場合、くさタイプ無効
+                if (def.ability == "そうしょく" && move.Type == "くさ" && atk.Options[20] == false)
+                {
+                    typecomp_res = 0.0;
+                }
+
+                // 防御側の特性がひらいしん/でんきエンジンの場合、でんきタイプ無効
+                if ((def.ability == "ひらいしん" || def.ability == "でんきエンジン") && move.Type == "でんき" && atk.Options[20] == false)
+                {
+                    typecomp_res = 0.0;
+                }
+
+                // 防御側の特性がきよめのしおの場合、ゴーストタイプ半減
+                if (def.ability == "きよめのしお" && move.Type == "ゴースト" && atk.Options[20] == false)
+                {
+                    typecomp_res *= 0.5;
+                }
+
                 // STEP9-LAST-1. スキン系補正を適用した技のタイプをノーマルに戻す
                 if ( isSkinAbility )
                 {
@@ -1493,7 +1533,7 @@ namespace DamageCalcSV.Shared.Models
                 /* STEP10. 火傷補正 */
                 for (int i = 0; i < 16; ++i)
                 {
-                    // 物理技で火傷状態ならダメージ半減(こんじょう、からげんきは除く)
+                    // 物理技で火傷状態ならダメージ半減(こんじょう、からげんきは除く) // ←からげんき自体に火傷無視の効果は無いのでは…？（要確認）
                     if ( atk.Options[16] && move.Category == 1 && move.Name != "からげんき" && atk.ability != "こんじょう" )
                     {
                         result[move.Name][i] *= 2048;
