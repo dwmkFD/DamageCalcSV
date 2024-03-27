@@ -1465,29 +1465,6 @@ namespace DamageCalcSV.Shared.Models
                     }
                 }
 
-                // 防御側の特性がテラスシェルで、HPが満タンの場合、全て今ひとつになる
-                if (def.ability == "テラスシェル" && def.Options[12] && atk.Options[20] == false )
-                {
-                    typecomp_res = 0.5;
-                }
-
-                for (int i = 0; i < 16; ++i) // STEP毎にループ書くの微妙なんだけどね…
-                {
-                    result[move.Name][i] = (long)( result[move.Name][i] * typecomp_res );
-                    result[move.Name][i] /= 4096;
-                    result[move.Name][i] *= 4096;
-
-                    result_critical[move.Name][i] = (long)(result_critical[move.Name][i] * typecomp_res);
-                    result_critical[move.Name][i] /= 4096;
-                    result_critical[move.Name][i] *= 4096;
-                }
-
-                // 防御側の特性がふゆうの場合、じめんタイプ無効
-                if ( def.ability == "ふゆう" && move.Type == "じめん" && atk.Options[20] == false )
-                {
-                    typecomp_res = 0.0;
-                }
-
                 // 防御側の特性がもらいび/こんがりボディの場合、ほのおタイプ無効
                 if ((def.ability == "もらいび" || def.ability == "こんがりボディ") && move.Type == "ほのお" && atk.Options[20] == false)
                 {
@@ -1495,7 +1472,7 @@ namespace DamageCalcSV.Shared.Models
                 }
 
                 // 防御側の特性がちょすい/よびみずの場合、みずタイプ無効
-                if ( ( def.ability == "ちょすい" || def.ability == "よびみず" ) && move.Type == "みず" && atk.Options[20] == false)
+                if ((def.ability == "ちょすい" || def.ability == "よびみず") && move.Type == "みず" && atk.Options[20] == false)
                 {
                     typecomp_res = 0.0;
                 }
@@ -1512,10 +1489,33 @@ namespace DamageCalcSV.Shared.Models
                     typecomp_res = 0.0;
                 }
 
+                // 防御側の特性がふゆうの場合、じめんタイプ無効
+                if (def.ability == "ふゆう" && move.Type == "じめん" && atk.Options[20] == false)
+                {
+                    typecomp_res = 0.0;
+                }
+
                 // 防御側の特性がきよめのしおの場合、ゴーストタイプ半減
                 if (def.ability == "きよめのしお" && move.Type == "ゴースト" && atk.Options[20] == false)
                 {
                     typecomp_res *= 0.5;
+                }
+
+                // 防御側の特性がテラスシェルで、HPが満タンの場合、全て今ひとつになる
+                if (def.ability == "テラスシェル" && def.Options[12] && atk.Options[20] == false )
+                {
+                    typecomp_res = 0.5;
+                }
+
+                for (int i = 0; i < 16; ++i) // STEP毎にループ書くの微妙なんだけどね…
+                {
+                    result[move.Name][i] = (long)( result[move.Name][i] * typecomp_res );
+                    result[move.Name][i] /= 4096;
+                    result[move.Name][i] *= 4096;
+
+                    result_critical[move.Name][i] = (long)(result_critical[move.Name][i] * typecomp_res);
+                    result_critical[move.Name][i] /= 4096;
+                    result_critical[move.Name][i] *= 4096;
                 }
 
                 // STEP9-LAST-1. スキン系補正を適用した技のタイプをノーマルに戻す
