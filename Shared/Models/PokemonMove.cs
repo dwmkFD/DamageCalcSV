@@ -355,6 +355,7 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("じゅうでん", "でんき", 0, 0, 0, 20, false, false, false, 0, false, false, false, false, false, "次のターン、自分の『でんき』タイプの技の威力が2倍になる。自分の『とくぼう』ランクが1段階上がる。");
             AddPokemonMove("じゅうりょく", "エスパー", 0, 0, 0, 5, false, false, false, 0, false, false, false, false, false, "5ターンの間、すべてのポケモンの命中率が5/3倍(約1.67倍、1.6倍の説もあり)になる。また、特性『ふゆう』や、『ひこう』タイプのポケモンに『じめん』タイプの技が当たるようになる。技『そらをとぶ』『はねる』『とびげり』『とびひざげり』『とびはねる』『でんじふゆう』『フライングプレス』『フリーフォール』が使えなくなり、使用している場合は解除される。『テレキネシス』を受けなくなり、受けている場合は解除される。技『Gのちから』の威力が1.5倍になる。");
             AddPokemonMove("じょうか", "どく", 0, 0, 0, 20, false, false, false, 0, false, false, false, false, false, "相手の状態異常を回復し、自分のHPも最大HPの1/2回復する。相手が状態異常ではない時は失敗する。");
+            AddPokemonMove("しょうりのまい", "かくとう", 0, 0, 0, 10, false, false, false, 0, false, false, false, false, false, "自分の『こうげき』『ぼうぎょ』『すばやさ』ランクを1段階ずつ上げる。");
             AddPokemonMove("しろいきり", "こおり", 0, 0, 0, 30, false, false, false, 0, false, false, false, false, false, "5ターンの間、自分と味方のポケモンは能力ランクを下げられなくなる。交代しても効果は続く。");
             AddPokemonMove("じわれ", "じめん", 1, 0, 30, 5, false, false, false, 0, false, false, false, false, false, "相手を『ひんし』状態にする。相手のレベルが自分より高いと失敗する。(30＋自分のレベル－相手のレベル)が命中率になる。『ひこう』タイプには無効だが、それ以外のタイプ相性の影響を受けない。ダイマックスしている相手には無効。");
             AddPokemonMove("しんくうは", "かくとう", 2, 40, 100, 30, false, false, false, 0, false, false, false, false, false, "必ず先制できる(優先度:+1)。");
