@@ -75,7 +75,7 @@ namespace DamageCalcSV.Shared.Models
             // からげんきを状態異常で撃つと威力2倍かつ火傷無効
             if (move.Name == "からげんき")
             {
-                if (atk.Options[15] || atk.Options[16] || atk.Options[17] || atk.Options[18])
+                if (atk.Options[15] || atk.Options[16] || atk.Options[17] )
                 {
                     power *= 2;
                 }
