@@ -1240,7 +1240,10 @@ namespace DamageCalcSV.Shared.Models
                 // STEP8-0-1. スキン系特性の場合、ノーマルタイプの技をスキンのタイプに変更する
                 // ただし、テラスタイプがノーマルで、テラスタルした状態でテラバーストを撃つ時は、そのままノーマルタイプの技として撃つので除外する
                 bool isSkinAbility = true;
-                if (move.Type == "ノーマル" && ( ( move.Name == "テラバースト" ) && ( ( atk.TeraType == "ノーマル" ) && atk.Options[14] ) ) == false )
+                if ( move.Type == "ノーマル" && ( 
+                    ( ( ( move.Name == "テラバースト" ) && ( ( atk.TeraType == "ノーマル" ) && atk.Options[14] ) ) == false ) &&
+                    ( move.Name != "ウェザーボール" ) // ウェザーボールはノーマルタイプだがスキン系特性は効果なし
+                    ) )
                 {
                     switch (atk.ability)
                     {
