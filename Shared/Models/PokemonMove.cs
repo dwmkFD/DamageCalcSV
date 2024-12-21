@@ -635,7 +635,8 @@ namespace DamageCalcSV.Shared.Models
             AddPokemonMove("ひのこ", "ほのお", 2, 40, 100, 25, false, false, false, 0, false, false, false, false, false, "10%の確率で相手を『やけど』状態にする。");
             AddPokemonMove("ひみつのちから", "ノーマル", 1, 70, 100, 20, false, false, false, 0, false, false, false, false, false, "30%の確率で相手に以下の追加効果を与える。地形が草むらやグラスフィールドの時は『ねむり』状態、水上の時は『こうげき』ランクを1段階下げ、砂地の時は命中率を1段階下げ、岩場と洞窟の時はひるませ、雪原と氷上の時は『こおり』状態、火山の時は『やけど』状態、ミストフィールドの時は『とくこう』ランクを1段階下げ、サイコフィールドの時は『すばやさ』ランクを1段階下げ、ウルトラスペースの時は『ぼうぎょ』を1段階下げ、その他は『まひ』状態にする。また、ORASではフィールドで使うと秘密基地を作ることができる。");
             AddPokemonMove("ひやみず", "みず", 2, 50, 100, 20, false, false, false, 0, false, false, false, false, false, "100%の確率で相手の『こうげき』ランクを1段階下げる。");
-            AddPokemonMove("びりびりちくちく", "でんき", 1, 80, 100, 10, true, false, false, 0, false, false, false, false, false, "30%の確率で相手をひるませる。");
+            AddPokemonMove( "ひゃっきやこう", "ゴースト", 2, 60, 100, 15, false, false, false, 0, false, false, false, false, false, "30%の確率で相手を『やけど』状態にする。相手が状態異常の時、威力が2倍になる。" );
+            AddPokemonMove( "びりびりちくちく", "でんき", 1, 80, 100, 10, true, false, false, 0, false, false, false, false, false, "30%の確率で相手をひるませる。");
             AddPokemonMove("ビルドアップ", "かくとう", 0, 0, 0, 20, false, false, false, 0, false, false, false, false, false, "自分の『こうげき』『ぼうぎょ』ランクを1段階ずつ上げる。");
             AddPokemonMove("ファストガード", "かくとう", 0, 0, 0, 15, false, false, false, 0, false, false, false, false, false, "必ず先制でき(優先度:+3)、そのターンの間、自分と味方は相手の先制攻撃の技を受けない。特性の効果による先制攻撃も受けない。");
             AddPokemonMove("ふいうち", "あく", 1, 70, 100, 5, true, false, false, 0, false, false, false, false, false, "必ず先制できる(優先度:+1)。相手が使う技が攻撃技ではない場合や、優先度などの関係ですでに攻撃を終えていた場合は失敗する。相手が『ねむり』『こおり』状態でも攻撃技を選択していれば成功する。(第6世代は威力:80)");
